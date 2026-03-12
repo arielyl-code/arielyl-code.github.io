@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>Flex Message Share</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6f8;
+text-align:center;
+padding:40px;
+}
+
+.card{
+background:white;
+max-width:500px;
+margin:auto;
+padding:40px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+button{
+background:#06C755;
+border:none;
+color:white;
+padding:15px 30px;
+font-size:18px;
+border-radius:10px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Flex Message 分享</h2>
+
+<p>按下按鈕即可分享 Flex Message</p>
+
+<button onclick="shareFlex()">分享卡片</button>
+
+</div>
+
+
+<script>
+
+const LIFF_ID = "你的LIFF_ID";
+
+
+async function init(){
+
+await liff.init({ liffId: LIFF_ID });
+
+if(!liff.isLoggedIn()){
+liff.login();
+}
+
+}
+
+async function shareFlex(){
+
+const message = {
+
+type:"flex",
+
+altText:"Flex Message",
+
+contents:{
+"type":"bubble",
+"body":{
+"type":"box",
+"layout":"vertical",
+"contents":[
+{
+"type":"text",
+"text":"Flex Message 測試",
+"size":"xl",
+"weight":"bold"
+},
+{
+"type":"text",
+"text":"這是一張測試卡片"
+}
+]
+}
+}
+
+};
+
+await liff.shareTargetPicker([message]);
+
+}
+
+init();
+
+</script>
+
+</body>
+</html>
