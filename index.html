@@ -53,423 +53,430 @@ cursor:pointer;
 
 
 <script>
-
 const LIFF_ID = "2009433190-yHg23ZGB";
 
+async function init() {
+  try {
+    await liff.init({
+      liffId: LIFF_ID,
+      withLoginOnExternalBrowser: true
+    });
 
-async function init(){
-
-await liff.init({ liffId: LIFF_ID });
-
-if(!liff.isLoggedIn()){
-liff.login();
-}
-
-}
-
-async function shareFlex(){
-
-const message = {
-
-type:"flex",
-
-altText:"Flex Message",
-
-contents:{
-  "type": "carousel",
-  "contents": [
-    {
-      "type": "bubble",
-      "size": "mega",
-      "hero": {
-        "type": "image",
-        "url": "https://image2url.com/r2/default/images/1773303968179-d8f37576-a306-4e76-8b6b-6f59d2313521.png",
-        "size": "full",
-        "aspectMode": "cover",
-        "aspectRatio": "320:213"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "weight": "bold",
-                "size": "lg",
-                "wrap": true,
-                "align": "center",
-                "contents": [
-                  {
-                    "type": "span",
-                    "text": "⧁ 香港行，倒數"
-                  },
-                  {
-                    "type": "span",
-                    "text": " 5 ",
-                    "color": "#427594"
-                  },
-                  {
-                    "type": "span",
-                    "text": "天 ⧀"
-                  }
-                ]
-              }
-            ],
-            "height": "30px"
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "三天、五場對話、多體系的碰撞",
-                "wrap": true,
-                "color": "#427594",
-                "size": "md",
-                "weight": "regular",
-                "align": "center"
-              },
-              {
-                "type": "separator",
-                "color": "#427594",
-                "margin": "lg"
-              },
-              {
-                "type": "text",
-                "text": "從歐洲王室的傳承哲學，到華爾街的資本定價，再到亞洲最前沿的家辦實踐。 倒數 5 天，我們把五個值得深究的機構，逐一攤開來看",
-                "wrap": true,
-                "color": "#000000",
-                "size": "md",
-                "margin": "lg"
-              }
-            ],
-            "margin": "sm",
-            "height": "210px"
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "separator",
-                "color": "#427594",
-                "margin": "lg"
-              },
-              {
-                "type": "text",
-                "text": "往右滑，看更多 ➟",
-                "wrap": true,
-                "color": "#427594",
-                "size": "md",
-                "align": "center",
-                "margin": "lg"
-              }
-            ]
-          }
-        ],
-        "spacing": "sm",
-        "paddingAll": "13px"
-      }
-    },
-    {
-      "type": "bubble",
-      "size": "mega",
-      "hero": {
-        "type": "image",
-        "url": "https://image2url.com/r2/default/images/1773364434652-1abd8713-90e9-48f3-b55d-d9aa92b9d24f.jpeg",
-        "size": "full",
-        "aspectMode": "cover",
-        "aspectRatio": "320:213"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "weight": "bold",
-                "size": "lg",
-                "wrap": true,
-                "align": "center",
-                "contents": [],
-                "text": "LGT｜列支敦士登王室家辦"
-              }
-            ],
-            "height": "30px"
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "九百年傳承哲學的現代實踐者",
-                "wrap": true,
-                "color": "#427594",
-                "size": "md",
-                "weight": "regular",
-                "align": "center"
-              },
-              {
-                "type": "separator",
-                "color": "#427594",
-                "margin": "lg"
-              },
-              {
-                "type": "text",
-                "text": "1719 年，列支敦士登親王家族在阿爾卑斯山腳下取得領地。三百年後，這個家族用同一套邏輯，管理著全球逾 4,300 億美元的資產。王朝可以更迭，財富的結構卻被他們完整保留了下來。五天後，我們將走進他們的香港辦公室。",
-                "wrap": true,
-                "color": "#000000",
-                "size": "md",
-                "margin": "lg"
-              }
-            ],
-            "margin": "sm",
-            "height": "230px"
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "📎 延伸閱讀",
-                    "color": "#ffffff"
-                  }
-                ],
-                "backgroundColor": "#427594",
-                "cornerRadius": "md",
-                "height": "40px",
-                "alignItems": "center",
-                "justifyContent": "center",
-                "action": {
-                  "type": "uri",
-                  "label": "action",
-                  "uri": "https://www.lgt.com/sg-tc"
-                }
-              }
-            ]
-          }
-        ],
-        "spacing": "sm",
-        "paddingAll": "13px"
-      }
-    },
-    {
-      "type": "bubble",
-      "size": "mega",
-      "hero": {
-        "type": "image",
-        "url": "https://image2url.com/r2/default/images/1773303788307-e94ee5f1-6c24-4488-98d7-39b3fd17e6b3.webp",
-        "size": "full",
-        "aspectMode": "cover",
-        "aspectRatio": "320:213"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "weight": "bold",
-                "size": "lg",
-                "wrap": true,
-                "align": "center",
-                "contents": [],
-                "text": "穿越世紀的風險哲學"
-              }
-            ],
-            "height": "30px"
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "不以季報為錨，以世代為單位",
-                "wrap": true,
-                "color": "#427594",
-                "size": "md",
-                "weight": "regular",
-                "align": "center"
-              },
-              {
-                "type": "separator",
-                "color": "#427594",
-                "margin": "lg"
-              },
-              {
-                "type": "text",
-                "text": "LGT 對「風險」的定義，從一開始就與眾不同。不追短期波動，以世代為單位設計資產結構。這套哲學歷經戰爭、金融危機與政權更迭仍完整存續，本身就是對其有效性最有力的驗證。不同於受制於股東季報的上市銀行，LGT 隸屬親王基金會，具備主權級別的穩定性與決策獨立性。",
-                "wrap": true,
-                "color": "#000000",
-                "size": "md",
-                "margin": "lg"
-              }
-            ],
-            "margin": "sm",
-            "height": "230px"
-          }
-        ],
-        "spacing": "sm",
-        "paddingAll": "13px"
-      }
-    },
-    {
-      "type": "bubble",
-      "size": "mega",
-      "hero": {
-        "type": "image",
-        "url": "https://image2url.com/r2/default/images/1773305434610-a4fbb5b2-db73-4146-a5ad-bcb929078a46.webp",
-        "size": "full",
-        "aspectMode": "cover",
-        "aspectRatio": "320:213"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "weight": "bold",
-                "size": "lg",
-                "wrap": true,
-                "align": "center",
-                "contents": [],
-                "text": "共同投資原則"
-              }
-            ],
-            "height": "30px"
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "利益一致的架構設計",
-                "wrap": true,
-                "color": "#427594",
-                "size": "md",
-                "weight": "regular",
-                "align": "center"
-              },
-              {
-                "type": "separator",
-                "color": "#427594",
-                "margin": "lg"
-              },
-              {
-                "type": "text",
-                "text": "王室資金與客戶資產遵循同一套邏輯，進入相同標的與風險框架。這不只是信任背書，而是從制度層面消除利益衝突的根本性設計。當一般私人銀行仍在推銷標準化產品，LGT 已憑藉王室網絡布局獨家另類投資與家族辦公室級別的稀缺標的。在私人銀行業，這樣的架構極為罕見。",
-                "wrap": true,
-                "color": "#000000",
-                "size": "md",
-                "margin": "lg"
-              }
-            ],
-            "margin": "sm",
-            "height": "230px"
-          }
-        ],
-        "spacing": "sm",
-        "paddingAll": "13px"
-      }
-    },
-    {
-      "type": "bubble",
-      "size": "mega",
-      "hero": {
-        "type": "image",
-        "url": "https://image2url.com/r2/default/images/1773303920113-5ba4fff9-94ed-4ec4-9609-a7d9ad73465e.webp",
-        "size": "full",
-        "aspectMode": "cover",
-        "aspectRatio": "320:213"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "weight": "bold",
-                "size": "lg",
-                "wrap": true,
-                "align": "center",
-                "contents": [],
-                "text": "實體資產的戰略角色"
-              }
-            ],
-            "height": "30px"
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "不以季報為錨，以世代為單位",
-                "wrap": true,
-                "color": "#427594",
-                "size": "md",
-                "weight": "regular",
-                "align": "center"
-              },
-              {
-                "type": "separator",
-                "color": "#427594",
-                "margin": "lg"
-              },
-              {
-                "type": "text",
-                "text": "LGT 同時是全球第二大私人藝術收藏機構，也是奧地利最大地主。這不是家族喜好的偶然積累，而是將實體資產系統性納入跨世代配置邏輯的刻意選擇。在當前貨幣體系承壓的環境下，這類資產的戰略意義正在被重新估值——這也是這次進門最值得深問的問題之一。",
-                "wrap": true,
-                "color": "#000000",
-                "size": "md",
-                "margin": "lg"
-              }
-            ],
-            "margin": "sm",
-            "height": "230px"
-          }
-        ],
-        "spacing": "sm",
-        "paddingAll": "13px"
-      }
+    if (!liff.isLoggedIn()) {
+      liff.login();
+      return;
     }
-  ]
-};
 
-await liff.shareTargetPicker([message]);
+    if (!liff.isApiAvailable("shareTargetPicker")) {
+      alert("目前這個開啟方式不支援分享，請用 LINE App 開啟 LIFF URL。");
+      return;
+    }
 
+    console.log("LIFF 初始化成功");
+  } catch (error) {
+    console.error("LIFF 初始化失敗：", error);
+    alert("LIFF 初始化失敗：" + (error?.message || error));
+  }
 }
 
+async function shareFlex() {
+  try {
+    const message = {
+      type: "flex",
+      altText: "Flex Message",
+      contents: {
+        "type": "carousel",
+        "contents": [
+          {
+            "type": "bubble",
+            "size": "mega",
+            "hero": {
+              "type": "image",
+              "url": "https://image2url.com/r2/default/images/1773303968179-d8f37576-a306-4e76-8b6b-6f59d2313521.png",
+              "size": "full",
+              "aspectMode": "cover",
+              "aspectRatio": "320:213"
+            },
+            "body": {
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "weight": "bold",
+                      "size": "lg",
+                      "wrap": true,
+                      "align": "center",
+                      "contents": [
+                        { "type": "span", "text": "⧁ 香港行，倒數" },
+                        { "type": "span", "text": " 5 ", "color": "#427594" },
+                        { "type": "span", "text": "天 ⧀" }
+                      ]
+                    }
+                  ],
+                  "height": "30px"
+                },
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "三天、五場對話、多體系的碰撞",
+                      "wrap": true,
+                      "color": "#427594",
+                      "size": "md",
+                      "weight": "regular",
+                      "align": "center"
+                    },
+                    {
+                      "type": "separator",
+                      "color": "#427594",
+                      "margin": "lg"
+                    },
+                    {
+                      "type": "text",
+                      "text": "從歐洲王室的傳承哲學，到華爾街的資本定價，再到亞洲最前沿的家辦實踐。 倒數 5 天，我們把五個值得深究的機構，逐一攤開來看",
+                      "wrap": true,
+                      "color": "#000000",
+                      "size": "md",
+                      "margin": "lg"
+                    }
+                  ],
+                  "margin": "sm",
+                  "height": "210px"
+                },
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "contents": [
+                    {
+                      "type": "separator",
+                      "color": "#427594",
+                      "margin": "lg"
+                    },
+                    {
+                      "type": "text",
+                      "text": "往右滑，看更多 ➟",
+                      "wrap": true,
+                      "color": "#427594",
+                      "size": "md",
+                      "align": "center",
+                      "margin": "lg"
+                    }
+                  ]
+                }
+              ],
+              "spacing": "sm",
+              "paddingAll": "13px"
+            }
+          },
+          {
+            "type": "bubble",
+            "size": "mega",
+            "hero": {
+              "type": "image",
+              "url": "https://image2url.com/r2/default/images/1773364434652-1abd8713-90e9-48f3-b55d-d9aa92b9d24f.jpeg",
+              "size": "full",
+              "aspectMode": "cover",
+              "aspectRatio": "320:213"
+            },
+            "body": {
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "weight": "bold",
+                      "size": "lg",
+                      "wrap": true,
+                      "align": "center",
+                      "text": "LGT｜列支敦士登王室家辦"
+                    }
+                  ],
+                  "height": "30px"
+                },
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "九百年傳承哲學的現代實踐者",
+                      "wrap": true,
+                      "color": "#427594",
+                      "size": "md",
+                      "weight": "regular",
+                      "align": "center"
+                    },
+                    {
+                      "type": "separator",
+                      "color": "#427594",
+                      "margin": "lg"
+                    },
+                    {
+                      "type": "text",
+                      "text": "1719 年，列支敦士登親王家族在阿爾卑斯山腳下取得領地。三百年後，這個家族用同一套邏輯，管理著全球逾 4,300 億美元的資產。王朝可以更迭，財富的結構卻被他們完整保留了下來。五天後，我們將走進他們的香港辦公室。",
+                      "wrap": true,
+                      "color": "#000000",
+                      "size": "md",
+                      "margin": "lg"
+                    }
+                  ],
+                  "margin": "sm",
+                  "height": "230px"
+                },
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "contents": [
+                    {
+                      "type": "box",
+                      "layout": "vertical",
+                      "contents": [
+                        {
+                          "type": "text",
+                          "text": "📎 延伸閱讀",
+                          "color": "#ffffff"
+                        }
+                      ],
+                      "backgroundColor": "#427594",
+                      "cornerRadius": "md",
+                      "height": "40px",
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                      "action": {
+                        "type": "uri",
+                        "label": "action",
+                        "uri": "https://www.lgt.com/sg-tc"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "spacing": "sm",
+              "paddingAll": "13px"
+            }
+          },
+          {
+            "type": "bubble",
+            "size": "mega",
+            "hero": {
+              "type": "image",
+              "url": "https://image2url.com/r2/default/images/1773303788307-e94ee5f1-6c24-4488-98d7-39b3fd17e6b3.webp",
+              "size": "full",
+              "aspectMode": "cover",
+              "aspectRatio": "320:213"
+            },
+            "body": {
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "weight": "bold",
+                      "size": "lg",
+                      "wrap": true,
+                      "align": "center",
+                      "text": "穿越世紀的風險哲學"
+                    }
+                  ],
+                  "height": "30px"
+                },
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "不以季報為錨，以世代為單位",
+                      "wrap": true,
+                      "color": "#427594",
+                      "size": "md",
+                      "weight": "regular",
+                      "align": "center"
+                    },
+                    {
+                      "type": "separator",
+                      "color": "#427594",
+                      "margin": "lg"
+                    },
+                    {
+                      "type": "text",
+                      "text": "LGT 對「風險」的定義，從一開始就與眾不同。不追短期波動，以世代為單位設計資產結構。這套哲學歷經戰爭、金融危機與政權更迭仍完整存續，本身就是對其有效性最有力的驗證。不同於受制於股東季報的上市銀行，LGT 隸屬親王基金會，具備主權級別的穩定性與決策獨立性。",
+                      "wrap": true,
+                      "color": "#000000",
+                      "size": "md",
+                      "margin": "lg"
+                    }
+                  ],
+                  "margin": "sm",
+                  "height": "230px"
+                }
+              ],
+              "spacing": "sm",
+              "paddingAll": "13px"
+            }
+          },
+          {
+            "type": "bubble",
+            "size": "mega",
+            "hero": {
+              "type": "image",
+              "url": "https://image2url.com/r2/default/images/1773305434610-a4fbb5b2-db73-4146-a5ad-bcb929078a46.webp",
+              "size": "full",
+              "aspectMode": "cover",
+              "aspectRatio": "320:213"
+            },
+            "body": {
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "weight": "bold",
+                      "size": "lg",
+                      "wrap": true,
+                      "align": "center",
+                      "text": "共同投資原則"
+                    }
+                  ],
+                  "height": "30px"
+                },
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "利益一致的架構設計",
+                      "wrap": true,
+                      "color": "#427594",
+                      "size": "md",
+                      "weight": "regular",
+                      "align": "center"
+                    },
+                    {
+                      "type": "separator",
+                      "color": "#427594",
+                      "margin": "lg"
+                    },
+                    {
+                      "type": "text",
+                      "text": "王室資金與客戶資產遵循同一套邏輯，進入相同標的與風險框架。這不只是信任背書，而是從制度層面消除利益衝突的根本性設計。當一般私人銀行仍在推銷標準化產品，LGT 已憑藉王室網絡布局獨家另類投資與家族辦公室級別的稀缺標的。在私人銀行業，這樣的架構極為罕見。",
+                      "wrap": true,
+                      "color": "#000000",
+                      "size": "md",
+                      "margin": "lg"
+                    }
+                  ],
+                  "margin": "sm",
+                  "height": "230px"
+                }
+              ],
+              "spacing": "sm",
+              "paddingAll": "13px"
+            }
+          },
+          {
+            "type": "bubble",
+            "size": "mega",
+            "hero": {
+              "type": "image",
+              "url": "https://image2url.com/r2/default/images/1773303920113-5ba4fff9-94ed-4ec4-9609-a7d9ad73465e.webp",
+              "size": "full",
+              "aspectMode": "cover",
+              "aspectRatio": "320:213"
+            },
+            "body": {
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "weight": "bold",
+                      "size": "lg",
+                      "wrap": true,
+                      "align": "center",
+                      "text": "實體資產的戰略角色"
+                    }
+                  ],
+                  "height": "30px"
+                },
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "不以季報為錨，以世代為單位",
+                      "wrap": true,
+                      "color": "#427594",
+                      "size": "md",
+                      "weight": "regular",
+                      "align": "center"
+                    },
+                    {
+                      "type": "separator",
+                      "color": "#427594",
+                      "margin": "lg"
+                    },
+                    {
+                      "type": "text",
+                      "text": "LGT 同時是全球第二大私人藝術收藏機構，也是奧地利最大地主。這不是家族喜好的偶然積累，而是將實體資產系統性納入跨世代配置邏輯的刻意選擇。在當前貨幣體系承壓的環境下，這類資產的戰略意義正在被重新估值——這也是這次進門最值得深問的問題之一。",
+                      "wrap": true,
+                      "color": "#000000",
+                      "size": "md",
+                      "margin": "lg"
+                    }
+                  ],
+                  "margin": "sm",
+                  "height": "230px"
+                }
+              ],
+              "spacing": "sm",
+              "paddingAll": "13px"
+            }
+          }
+        ]
+      }
+    };
+
+    const result = await liff.shareTargetPicker([message], { isMultiple: true });
+
+    if (result) {
+      alert("分享成功");
+    } else {
+      alert("你取消了分享");
+    }
+  } catch (error) {
+    console.error("分享失敗：", error);
+    alert("分享失敗：" + (error?.message || error));
+  }
+}
+
+init();
+</script>
 init();
 
 </script>
