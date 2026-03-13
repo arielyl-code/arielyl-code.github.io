@@ -1,497 +1,362 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-  <meta charset="utf-8">
-  <title>Flex Message Share</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>分享投資洞察</title>
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:    #1a1510;
+      --paper:  #f5f0e8;
+      --gold:   #b8962e;
+      --gold-lt:#e8d48a;
+      --smoke:  #8c8070;
+      --line-green: #06C755;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Noto Serif TC', serif;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px 20px;
+      background-image:
+        radial-gradient(ellipse at 20% 10%, rgba(184,150,46,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 90%, rgba(184,150,46,0.06) 0%, transparent 55%);
+    }
+
+    /* ── header ── */
+    .header {
       text-align: center;
-      padding: 40px;
-      margin: 0;
+      margin-bottom: 36px;
+    }
+    .eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: .04em;
+    }
+    .subtitle {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--smoke);
+      letter-spacing: .05em;
     }
 
-    .card {
+    /* ── divider ── */
+    .divider {
+      width: 48px;
+      height: 1px;
+      background: var(--gold);
+      margin: 20px auto;
+      opacity: .6;
+    }
+
+    /* ── preview cards ── */
+    .cards-preview {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 36px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      max-width: 360px;
+      width: 100%;
+    }
+    .cards-preview::-webkit-scrollbar { display: none; }
+
+    .mini-card {
+      flex: 0 0 80px;
+      height: 100px;
       background: white;
-      max-width: 500px;
-      margin: 40px auto;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    }
-
-    button {
-      background: #06C755;
-      border: none;
-      color: white;
-      padding: 15px 30px;
-      font-size: 18px;
+      border: 1px solid rgba(184,150,46,0.25);
       border-radius: 10px;
-      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px;
+      text-align: center;
+    }
+    .mini-card .icon { font-size: 22px; }
+    .mini-card .label {
+      font-size: 9px;
+      color: var(--smoke);
+      line-height: 1.3;
+      letter-spacing: .04em;
     }
 
-    button:disabled {
-      background: #9ccfaf;
+    /* ── share button ── */
+    .btn-share {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 320px;
+      padding: 16px 24px;
+      background: var(--line-green);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      cursor: pointer;
+      transition: opacity .2s, transform .1s;
+      box-shadow: 0 4px 20px rgba(6,199,85,0.35);
+    }
+    .btn-share:hover:not(:disabled) { opacity: .88; }
+    .btn-share:active:not(:disabled) { transform: scale(.97); }
+    .btn-share:disabled {
+      background: #ccc;
+      box-shadow: none;
       cursor: not-allowed;
     }
+    .btn-share svg { flex-shrink: 0; }
 
-    #status {
+    /* ── status area ── */
+    .status {
       margin-top: 20px;
-      font-size: 14px;
-      color: #555;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      letter-spacing: .06em;
+      text-align: center;
+      min-height: 18px;
+      color: var(--smoke);
+    }
+    .status.ok    { color: #2e8b57; }
+    .status.err   { color: #c0392b; }
+    .status.warn  { color: #b8962e; }
+
+    /* ── debug box (hidden by default) ── */
+    #debug {
+      display: none;
+      margin-top: 24px;
+      width: 100%;
+      max-width: 360px;
+      background: #fff8;
+      border: 1px solid rgba(0,0,0,.1);
+      border-radius: 10px;
+      padding: 14px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      line-height: 1.7;
+      color: var(--ink);
       white-space: pre-wrap;
-      text-align: left;
+      word-break: break-all;
+    }
+    .debug-toggle {
+      margin-top: 14px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--smoke);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      letter-spacing: .06em;
     }
   </style>
 </head>
-
 <body>
-  <div class="card">
-    <h2>Flex Message 分享</h2>
-    <p>按下按鈕即可分享 Flex Message</p>
-    <button id="shareBtn" onclick="shareFlex()" disabled>分享卡片</button>
-    <div id="status">初始化中...</div>
+
+  <div class="header">
+    <p class="eyebrow">LINE · Flex Message</p>
+    <h1>投資洞察<br>卡片分享</h1>
+    <p class="subtitle">Hong Kong · Family Office · 實體資產</p>
   </div>
 
-  <script>
-    const LIFF_ID = "2009433190-yHg23ZGB";
+  <div class="divider"></div>
 
-    function setStatus(message) {
-      document.getElementById("status").textContent = message;
-      console.log(message);
+  <div class="cards-preview">
+    <div class="mini-card"><div class="icon">✈️</div><div class="label">香港行<br>倒數</div></div>
+    <div class="mini-card"><div class="icon">🏛️</div><div class="label">LGT<br>王室家辦</div></div>
+    <div class="mini-card"><div class="icon">⚖️</div><div class="label">風險<br>哲學</div></div>
+    <div class="mini-card"><div class="icon">🤝</div><div class="label">共同<br>投資</div></div>
+    <div class="mini-card"><div class="icon">🏢</div><div class="label">實體<br>資產</div></div>
+  </div>
+
+  <button class="btn-share" id="shareBtn" disabled onclick="shareFlex()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+      <polyline points="16 6 12 2 8 6"/>
+      <line x1="12" y1="2" x2="12" y2="15"/>
+    </svg>
+    分享卡片給好友
+  </button>
+
+  <p class="status" id="status">初始化中…</p>
+
+  <button class="debug-toggle" onclick="toggleDebug()">顯示診斷資訊</button>
+  <pre id="debug"></pre>
+
+<script>
+// ──────────────────────────────────────────
+//  ★ 只需修改這裡
+// ──────────────────────────────────────────
+const LIFF_ID = "2009433190-yHg23ZGB";   // ← 填你的 LIFF ID
+
+// ──────────────────────────────────────────
+//  Flex Message JSON
+// ──────────────────────────────────────────
+const flexMessage = {
+  type: "flex",
+  altText: "投資洞察卡片分享",
+  contents: {
+    type: "carousel",
+    contents: [
+      makeBubble("✈️", "香港行倒數", "#1a3a5c", "出發前最後準備，王室辦公室行程確認中", "查看行程"),
+      makeBubble("🏛️", "LGT 王室家辦", "#2c4a1e", "Liechtenstein 家族辦公室的資產管理哲學", "了解更多"),
+      makeBubble("⚖️", "風險哲學", "#3d2c1e", "不對稱風險回報：下行保護優先於上行追求", "閱讀全文"),
+      makeBubble("🤝", "共同投資", "#1e2c3d", "與家辦並肩投資，對齊利益的合作結構", "探索機會"),
+      makeBubble("🏢", "實體資產", "#2c1e3d", "香港核心地段商業不動產的長期價值錨定", "查看標的"),
+    ]
+  }
+};
+
+function makeBubble(icon, title, color, body, cta) {
+  return {
+    type: "bubble",
+    body: {
+      type: "box",
+      layout: "vertical",
+      backgroundColor: color,
+      paddingAll: "20px",
+      contents: [
+        { type: "text", text: icon, size: "3xl", margin: "none" },
+        { type: "text", text: title, color: "#ffffff", weight: "bold", size: "lg", margin: "md", wrap: true },
+        { type: "text", text: body, color: "#cccccc", size: "sm", margin: "sm", wrap: true }
+      ]
+    },
+    footer: {
+      type: "box",
+      layout: "vertical",
+      backgroundColor: color,
+      paddingAll: "16px",
+      contents: [{
+        type: "button",
+        style: "primary",
+        color: "#b8962e",
+        action: { type: "uri", label: cta, uri: "https://line.me" }
+      }]
+    }
+  };
+}
+
+// ──────────────────────────────────────────
+//  狀態 helpers
+// ──────────────────────────────────────────
+const statusEl = document.getElementById("status");
+const shareBtn = document.getElementById("shareBtn");
+const debugEl  = document.getElementById("debug");
+const logs = [];
+
+function log(...args) {
+  const msg = args.map(a => typeof a === "object" ? JSON.stringify(a) : String(a)).join(" ");
+  logs.push(msg);
+  debugEl.textContent = logs.join("\n");
+}
+
+function setStatus(msg, type = "") {
+  statusEl.textContent = msg;
+  statusEl.className = "status " + type;
+  log("[status]", msg);
+}
+
+function toggleDebug() {
+  debugEl.style.display = debugEl.style.display === "block" ? "none" : "block";
+}
+
+// ──────────────────────────────────────────
+//  LIFF 初始化
+// ──────────────────────────────────────────
+async function initLiff() {
+  try {
+    log("[init] LIFF ID:", LIFF_ID);
+    await liff.init({ liffId: LIFF_ID });
+    log("[init] liff.init OK");
+    log("[init] isInClient:", liff.isInClient());
+    log("[init] isLoggedIn:", liff.isLoggedIn());
+
+    if (!liff.isLoggedIn()) {
+      setStatus("請先登入 LINE…", "warn");
+      liff.login();
+      return;
     }
 
-    async function init() {
-      try {
-        await liff.init({
-          liffId: LIFF_ID,
-          withLoginOnExternalBrowser: true
-        });
+    const available = liff.isApiAvailable("shareTargetPicker");
+    log("[init] shareTargetPicker available:", available);
 
-        if (!liff.isLoggedIn()) {
-          setStatus("尚未登入，準備登入 LINE...");
-          liff.login();
-          return;
-        }
-
-        if (!liff.isApiAvailable("shareTargetPicker")) {
-          setStatus("目前環境不支援 shareTargetPicker。\n請用 LINE App 開啟 LIFF URL，不要直接用 GitHub 網址。");
-          return;
-        }
-
-        document.getElementById("shareBtn").disabled = false;
-        setStatus("LIFF 初始化成功，可以分享。");
-      } catch (error) {
-        console.error("LIFF 初始化失敗：", error);
-        setStatus("LIFF 初始化失敗：\n" + (error?.message || error));
-        alert("LIFF 初始化失敗：" + (error?.message || error));
-      }
+    if (!available) {
+      setStatus("⚠️ 此帳號無法使用 shareTargetPicker", "err");
+      shareBtn.title = "需要在 LINE app 內開啟，且 channel 需開啟 shareTargetPicker 功能";
+      return;
     }
 
-    async function shareFlex() {
-      try {
-        const message = {
-          type: "flex",
-          altText: "Flex Message",
-          contents: {
-            "type": "carousel",
-            "contents": [
-              {
-                "type": "bubble",
-                "size": "mega",
-                "hero": {
-                  "type": "image",
-                  "url": "https://image2url.com/r2/default/images/1773303968179-d8f37576-a306-4e76-8b6b-6f59d2313521.png",
-                  "size": "full",
-                  "aspectMode": "cover",
-                  "aspectRatio": "320:213"
-                },
-                "body": {
-                  "type": "box",
-                  "layout": "vertical",
-                  "contents": [
-                    {
-                      "type": "box",
-                      "layout": "vertical",
-                      "contents": [
-                        {
-                          "type": "text",
-                          "weight": "bold",
-                          "size": "lg",
-                          "wrap": true,
-                          "align": "center",
-                          "contents": [
-                            { "type": "span", "text": "⧁ 香港行，倒數" },
-                            { "type": "span", "text": " 5 ", "color": "#427594" },
-                            { "type": "span", "text": "天 ⧀" }
-                          ]
-                        }
-                      ],
-                      "height": "30px"
-                    },
-                    {
-                      "type": "box",
-                      "layout": "vertical",
-                      "contents": [
-                        {
-                          "type": "text",
-                          "text": "三天、五場對話、多體系的碰撞",
-                          "wrap": true,
-                          "color": "#427594",
-                          "size": "md",
-                          "weight": "regular",
-                          "align": "center"
-                        },
-                        {
-                          "type": "separator",
-                          "color": "#427594",
-                          "margin": "lg"
-                        },
-                        {
-                          "type": "text",
-                          "text": "從歐洲王室的傳承哲學，到華爾街的資本定價，再到亞洲最前沿的家辦實踐。倒數 5 天，我們把五個值得深究的機構，逐一攤開來看。",
-                          "wrap": true,
-                          "color": "#000000",
-                          "size": "md",
-                          "margin": "lg"
-                        }
-                      ],
-                      "margin": "sm",
-                      "height": "210px"
-                    },
-                    {
-                      "type": "box",
-                      "layout": "vertical",
-                      "contents": [
-                        {
-                          "type": "separator",
-                          "color": "#427594",
-                          "margin": "lg"
-                        },
-                        {
-                          "type": "text",
-                          "text": "往右滑，看更多 ➟",
-                          "wrap": true,
-                          "color": "#427594",
-                          "size": "md",
-                          "align": "center",
-                          "margin": "lg"
-                        }
-                      ]
-                    }
-                  ],
-                  "spacing": "sm",
-                  "paddingAll": "13px"
-                }
-              },
-              {
-                "type": "bubble",
-                "size": "mega",
-                "hero": {
-                  "type": "image",
-                  "url": "https://image2url.com/r2/default/images/1773364434652-1abd8713-90e9-48f3-b55d-d9aa92b9d24f.jpeg",
-                  "size": "full",
-                  "aspectMode": "cover",
-                  "aspectRatio": "320:213"
-                },
-                "body": {
-                  "type": "box",
-                  "layout": "vertical",
-                  "contents": [
-                    {
-                      "type": "box",
-                      "layout": "vertical",
-                      "contents": [
-                        {
-                          "type": "text",
-                          "weight": "bold",
-                          "size": "lg",
-                          "wrap": true,
-                          "align": "center",
-                          "text": "LGT｜列支敦士登王室家辦"
-                        }
-                      ],
-                      "height": "30px"
-                    },
-                    {
-                      "type": "box",
-                      "layout": "vertical",
-                      "contents": [
-                        {
-                          "type": "text",
-                          "text": "九百年傳承哲學的現代實踐者",
-                          "wrap": true,
-                          "color": "#427594",
-                          "size": "md",
-                          "weight": "regular",
-                          "align": "center"
-                        },
-                        {
-                          "type": "separator",
-                          "color": "#427594",
-                          "margin": "lg"
-                        },
-                        {
-                          "type": "text",
-                          "text": "1719 年，列支敦士登親王家族在阿爾卑斯山腳下取得領地。三百年後，這個家族用同一套邏輯，管理著全球逾 4,300 億美元的資產。王朝可以更迭，財富的結構卻被他們完整保留了下來。五天後，我們將走進他們的香港辦公室。",
-                          "wrap": true,
-                          "color": "#000000",
-                          "size": "md",
-                          "margin": "lg"
-                        }
-                      ],
-                      "margin": "sm",
-                      "height": "230px"
-                    },
-                    {
-                      "type": "box",
-                      "layout": "vertical",
-                      "contents": [
-                        {
-                          "type": "box",
-                          "layout": "vertical",
-                          "contents": [
-                            {
-                              "type": "text",
-                              "text": "📎 延伸閱讀",
-                              "color": "#ffffff"
-                            }
-                          ],
-                          "backgroundColor": "#427594",
-                          "cornerRadius": "md",
-                          "height": "40px",
-                          "alignItems": "center",
-                          "justifyContent": "center",
-                          "action": {
-                            "type": "uri",
-                            "label": "action",
-                            "uri": "https://www.lgt.com/sg-tc"
-                          }
-                        }
-                      ]
-                    }
-                  ],
-                  "spacing": "sm",
-                  "paddingAll": "13px"
-                }
-              },
-              {
-                "type": "bubble",
-                "size": "mega",
-                "hero": {
-                  "type": "image",
-                  "url": "https://image2url.com/r2/default/images/1773303788307-e94ee5f1-6c24-4488-98d7-39b3fd17e6b3.webp",
-                  "size": "full",
-                  "aspectMode": "cover",
-                  "aspectRatio": "320:213"
-                },
-                "body": {
-                  "type": "box",
-                  "layout": "vertical",
-                  "contents": [
-                    {
-                      "type": "box",
-                      "layout": "vertical",
-                      "contents": [
-                        {
-                          "type": "text",
-                          "weight": "bold",
-                          "size": "lg",
-                          "wrap": true,
-                          "align": "center",
-                          "text": "穿越世紀的風險哲學"
-                        }
-                      ],
-                      "height": "30px"
-                    },
-                    {
-                      "type": "box",
-                      "layout": "vertical",
-                      "contents": [
-                        {
-                          "type": "text",
-                          "text": "不以季報為錨，以世代為單位",
-                          "wrap": true,
-                          "color": "#427594",
-                          "size": "md",
-                          "weight": "regular",
-                          "align": "center"
-                        },
-                        {
-                          "type": "separator",
-                          "color": "#427594",
-                          "margin": "lg"
-                        },
-                        {
-                          "type": "text",
-                          "text": "LGT 對「風險」的定義，從一開始就與眾不同。不追短期波動，以世代為單位設計資產結構。這套哲學歷經戰爭、金融危機與政權更迭仍完整存續，本身就是對其有效性最有力的驗證。不同於受制於股東季報的上市銀行，LGT 隸屬親王基金會，具備主權級別的穩定性與決策獨立性。",
-                          "wrap": true,
-                          "color": "#000000",
-                          "size": "md",
-                          "margin": "lg"
-                        }
-                      ],
-                      "margin": "sm",
-                      "height": "230px"
-                    }
-                  ],
-                  "spacing": "sm",
-                  "paddingAll": "13px"
-                }
-              },
-              {
-                "type": "bubble",
-                "size": "mega",
-                "hero": {
-                  "type": "image",
-                  "url": "https://image2url.com/r2/default/images/1773305434610-a4fbb5b2-db73-4146-a5ad-bcb929078a46.webp",
-                  "size": "full",
-                  "aspectMode": "cover",
-                  "aspectRatio": "320:213"
-                },
-                "body": {
-                  "type": "box",
-                  "layout": "vertical",
-                  "contents": [
-                    {
-                      "type": "box",
-                      "layout": "vertical",
-                      "contents": [
-                        {
-                          "type": "text",
-                          "weight": "bold",
-                          "size": "lg",
-                          "wrap": true,
-                          "align": "center",
-                          "text": "共同投資原則"
-                        }
-                      ],
-                      "height": "30px"
-                    },
-                    {
-                      "type": "box",
-                      "layout": "vertical",
-                      "contents": [
-                        {
-                          "type": "text",
-                          "text": "利益一致的架構設計",
-                          "wrap": true,
-                          "color": "#427594",
-                          "size": "md",
-                          "weight": "regular",
-                          "align": "center"
-                        },
-                        {
-                          "type": "separator",
-                          "color": "#427594",
-                          "margin": "lg"
-                        },
-                        {
-                          "type": "text",
-                          "text": "王室資金與客戶資產遵循同一套邏輯，進入相同標的與風險框架。這不只是信任背書，而是從制度層面消除利益衝突的根本性設計。當一般私人銀行仍在推銷標準化產品，LGT 已憑藉王室網絡布局獨家另類投資與家族辦公室級別的稀缺標的。在私人銀行業，這樣的架構極為罕見。",
-                          "wrap": true,
-                          "color": "#000000",
-                          "size": "md",
-                          "margin": "lg"
-                        }
-                      ],
-                      "margin": "sm",
-                      "height": "230px"
-                    }
-                  ],
-                  "spacing": "sm",
-                  "paddingAll": "13px"
-                }
-              },
-              {
-                "type": "bubble",
-                "size": "mega",
-                "hero": {
-                  "type": "image",
-                  "url": "https://image2url.com/r2/default/images/1773303920113-5ba4fff9-94ed-4ec4-9609-a7d9ad73465e.webp",
-                  "size": "full",
-                  "aspectMode": "cover",
-                  "aspectRatio": "320:213"
-                },
-                "body": {
-                  "type": "box",
-                  "layout": "vertical",
-                  "contents": [
-                    {
-                      "type": "box",
-                      "layout": "vertical",
-                      "contents": [
-                        {
-                          "type": "text",
-                          "weight": "bold",
-                          "size": "lg",
-                          "wrap": true,
-                          "align": "center",
-                          "text": "實體資產的戰略角色"
-                        }
-                      ],
-                      "height": "30px"
-                    },
-                    {
-                      "type": "box",
-                      "layout": "vertical",
-                      "contents": [
-                        {
-                          "type": "text",
-                          "text": "不以季報為錨，以世代為單位",
-                          "wrap": true,
-                          "color": "#427594",
-                          "size": "md",
-                          "weight": "regular",
-                          "align": "center"
-                        },
-                        {
-                          "type": "separator",
-                          "color": "#427594",
-                          "margin": "lg"
-                        },
-                        {
-                          "type": "text",
-                          "text": "LGT 同時是全球第二大私人藝術收藏機構，也是奧地利最大地主。這不是家族喜好的偶然積累，而是將實體資產系統性納入跨世代配置邏輯的刻意選擇。在當前貨幣體系承壓的環境下，這類資產的戰略意義正在被重新估值——這也是這次進門最值得深問的問題之一。",
-                          "wrap": true,
-                          "color": "#000000",
-                          "size": "md",
-                          "margin": "lg"
-                        }
-                      ],
-                      "margin": "sm",
-                      "height": "230px"
-                    }
-                  ],
-                  "spacing": "sm",
-                  "paddingAll": "13px"
-                }
-              }
-            ]
-          }
-        };
+    setStatus("✓ 準備完成，可以分享", "ok");
+    shareBtn.disabled = false;
 
-        const result = await liff.shareTargetPicker([message], { isMultiple: true });
+  } catch (err) {
+    log("[init] ERROR:", err.message || err);
+    setStatus("初始化失敗：" + (err.message || err), "err");
+    debugEl.style.display = "block"; // 自動展開 debug
+  }
+}
 
-        if (result) {
-          setStatus("分享成功");
-          alert("分享成功");
-        } else {
-          setStatus("你取消了分享");
-          alert("你取消了分享");
-        }
-      } catch (error) {
-        console.error("分享失敗：", error);
-        setStatus("分享失敗：\n" + (error?.message || error));
-        alert("分享失敗：" + (error?.message || error));
-      }
+// ──────────────────────────────────────────
+//  分享
+// ──────────────────────────────────────────
+async function shareFlex() {
+  try {
+    shareBtn.disabled = true;
+    setStatus("開啟分享選單…", "");
+    log("[share] calling shareTargetPicker…");
+
+    const result = await liff.shareTargetPicker([flexMessage]);
+
+    if (result) {
+      log("[share] success, method:", result.status);
+      setStatus("✓ 分享成功！", "ok");
+    } else {
+      log("[share] user cancelled");
+      setStatus("已取消分享", "warn");
     }
+  } catch (err) {
+    log("[share] ERROR:", err.message || err);
+    setStatus("分享失敗：" + (err.message || err), "err");
+    debugEl.style.display = "block";
+  } finally {
+    shareBtn.disabled = false;
+  }
+}
 
-    init();
-  </script>
+// ──────────────────────────────────────────
+//  啟動
+// ──────────────────────────────────────────
+initLiff();
+</script>
 </body>
 </html>
