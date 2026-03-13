@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>Flex Message Share</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      text-align: center;
+      padding: 40px 20px;
+      margin: 0;
+    }
+    .card {
+      background: white;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    button {
+      background: #06C755;
+      border: none;
+      color: white;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      max-width: 300px;
+    }
+    button:disabled {
+      background: #9ccfaf;
+      cursor: not-allowed;
+    }
+    #status {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+      white-space: pre-wrap;
+      text-align: left;
+      line-height: 1.8;
+    }
+    #status.error { color: #c0392b; font-weight: bold; }
+    #status.success { color: #27ae60; font-weight: bold; }
+
+    /* 診斷區塊 */
+    #diagBox {
+      display: none;
+      margin-top: 20px;
+      background: #fff8e1;
+      border: 1px solid #f0c040;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: left;
+      font-size: 13px;
+      line-height: 1.9;
+      color: #333;
+    }
+    #diagBox b { color: #e67e22; }
+    #diagBox code {
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    #debugLog {
+      display: none;
+      margin-top: 16px;
+      background: #f0f0f0;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 11px;
+      font-family: monospace;
+      text-align: left;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .toggle-btn {
+      margin-top: 16px;
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 12px;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+      width: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h2>Flex Message 分享</h2>
+    <p>按下按鈕，選擇好友或群組，即可分享卡片</p>
+    <br>
+    <button id="shareBtn" onclick="shareFlex()" disabled>分享卡片</button>
+    <div id="status">初始化中...</div>
+    <div id="diagBox"></div>
+    <button class="toggle-btn" onclick="toggleDebug()">顯示診斷 Log</button>
+    <pre id="debugLog"></pre>
+  </div>
+
+  <script>
+    // ===== 設定 =====
+    const LIFF_ID = "2009433190-yHg23ZGB";
+
+    // ===== Flex Message =====
+    const FLEX_MESSAGE = {
+      type: "flex",
+      altText: "香港行投資洞察 · 倒數5天",
+      contents: {
+        type: "carousel",
+        contents: [
+          {
+            type: "bubble", size: "mega",
+            hero: { type: "image", url: "https://image2url.com/r2/default/images/1773303968179-d8f37576-a306-4e76-8b6b-6f59d2313521.png", size: "full", aspectMode: "cover", aspectRatio: "320:213" },
+            body: {
+              type: "box", layout: "vertical", spacing: "sm", paddingAll: "13px",
+              contents: [
+                { type: "box", layout: "vertical", height: "30px", contents: [{ type: "text", weight: "bold", size: "lg", wrap: true, align: "center", contents: [{ type: "span", text: "⧁ 香港行，倒數" }, { type: "span", text: " 5 ", color: "#427594" }, { type: "span", text: "天 ⧀" }] }] },
+                { type: "box", layout: "vertical", margin: "sm", height: "210px", contents: [
+                  { type: "text", text: "三天、五場對話、多體系的碰撞", wrap: true, color: "#427594", size: "md", align: "center" },
+                  { type: "separator", color: "#427594", margin: "lg" },
+                  { type: "text", text: "從歐洲王室的傳承哲學，到華爾街的資本定價，再到亞洲最前沿的家辦實踐。倒數 5 天，我們把五個值得深究的機構，逐一攤開來看。", wrap: true, color: "#000000", size: "md", margin: "lg" }
+                ]},
+                { type: "box", layout: "vertical", contents: [
+                  { type: "separator", color: "#427594", margin: "lg" },
+                  { type: "text", text: "往右滑，看更多 ➟", wrap: true, color: "#427594", size: "md", align: "center", margin: "lg" }
+                ]}
+              ]
+            }
+          },
+          {
+            type: "bubble", size: "mega",
+            hero: { type: "image", url: "https://image2url.com/r2/default/images/1773364434652-1abd8713-90e9-48f3-b55d-d9aa92b9d24f.jpeg", size: "full", aspectMode: "cover", aspectRatio: "320:213" },
+            body: {
+              type: "box", layout: "vertical", spacing: "sm", paddingAll: "13px",
+              contents: [
+                { type: "box", layout: "vertical", height: "30px", contents: [{ type: "text", weight: "bold", size: "lg", wrap: true, align: "center", text: "LGT｜列支敦士登王室家辦" }] },
+                { type: "box", layout: "vertical", margin: "sm", height: "230px", contents: [
+                  { type: "text", text: "九百年傳承哲學的現代實踐者", wrap: true, color: "#427594", size: "md", align: "center" },
+                  { type: "separator", color: "#427594", margin: "lg" },
+                  { type: "text", text: "1719 年，列支敦士登親王家族在阿爾卑斯山腳下取得領地。三百年後，這個家族用同一套邏輯，管理著全球逾 4,300 億美元的資產。王朝可以更迭，財富的結構卻被他們完整保留了下來。五天後，我們將走進他們的香港辦公室。", wrap: true, color: "#000000", size: "md", margin: "lg" }
+                ]},
+                { type: "box", layout: "vertical", contents: [
+                  { type: "box", layout: "vertical", backgroundColor: "#427594", cornerRadius: "md", height: "40px", alignItems: "center", justifyContent: "center", action: { type: "uri", label: "action", uri: "https://www.lgt.com/sg-tc" }, contents: [{ type: "text", text: "📎 延伸閱讀", color: "#ffffff" }] }
+                ]}
+              ]
+            }
+          },
+          {
+            type: "bubble", size: "mega",
+            hero: { type: "image", url: "https://image2url.com/r2/default/images/1773303788307-e94ee5f1-6c24-4488-98d7-39b3fd17e6b3.webp", size: "full", aspectMode: "cover", aspectRatio: "320:213" },
+            body: {
+              type: "box", layout: "vertical", spacing: "sm", paddingAll: "13px",
+              contents: [
+                { type: "box", layout: "vertical", height: "30px", contents: [{ type: "text", weight: "bold", size: "lg", wrap: true, align: "center", text: "穿越世紀的風險哲學" }] },
+                { type: "box", layout: "vertical", margin: "sm", height: "230px", contents: [
+                  { type: "text", text: "不以季報為錨，以世代為單位", wrap: true, color: "#427594", size: "md", align: "center" },
+                  { type: "separator", color: "#427594", margin: "lg" },
+                  { type: "text", text: "LGT 對「風險」的定義，從一開始就與眾不同。不追短期波動，以世代為單位設計資產結構。這套哲學歷經戰爭、金融危機與政權更迭仍完整存續，本身就是對其有效性最有力的驗證。不同於受制於股東季報的上市銀行，LGT 隸屬親王基金會，具備主權級別的穩定性與決策獨立性。", wrap: true, color: "#000000", size: "md", margin: "lg" }
+                ]}
+              ]
+            }
+          },
+          {
+            type: "bubble", size: "mega",
+            hero: { type: "image", url: "https://image2url.com/r2/default/images/1773305434610-a4fbb5b2-db73-4146-a5ad-bcb929078a46.webp", size: "full", aspectMode: "cover", aspectRatio: "320:213" },
+            body: {
+              type: "box", layout: "vertical", spacing: "sm", paddingAll: "13px",
+              contents: [
+                { type: "box", layout: "vertical", height: "30px", contents: [{ type: "text", weight: "bold", size: "lg", wrap: true, align: "center", text: "共同投資原則" }] },
+                { type: "box", layout: "vertical", margin: "sm", height: "230px", contents: [
+                  { type: "text", text: "利益一致的架構設計", wrap: true, color: "#427594", size: "md", align: "center" },
+                  { type: "separator", color: "#427594", margin: "lg" },
+                  { type: "text", text: "王室資金與客戶資產遵循同一套邏輯，進入相同標的與風險框架。這不只是信任背書，而是從制度層面消除利益衝突的根本性設計。當一般私人銀行仍在推銷標準化產品，LGT 已憑藉王室網絡布局獨家另類投資與家族辦公室級別的稀缺標的。在私人銀行業，這樣的架構極為罕見。", wrap: true, color: "#000000", size: "md", margin: "lg" }
+                ]}
+              ]
+            }
+          },
+          {
+            type: "bubble", size: "mega",
+            hero: { type: "image", url: "https://image2url.com/r2/default/images/1773303920113-5ba4fff9-94ed-4ec4-9609-a7d9ad73465e.webp", size: "full", aspectMode: "cover", aspectRatio: "320:213" },
+            body: {
+              type: "box", layout: "vertical", spacing: "sm", paddingAll: "13px",
+              contents: [
+                { type: "box", layout: "vertical", height: "30px", contents: [{ type: "text", weight: "bold", size: "lg", wrap: true, align: "center", text: "實體資產的戰略角色" }] },
+                { type: "box", layout: "vertical", margin: "sm", height: "230px", contents: [
+                  { type: "text", text: "不以季報為錨，以世代為單位", wrap: true, color: "#427594", size: "md", align: "center" },
+                  { type: "separator", color: "#427594", margin: "lg" },
+                  { type: "text", text: "LGT 同時是全球第二大私人藝術收藏機構，也是奧地利最大地主。這不是家族喜好的偶然積累，而是將實體資產系統性納入跨世代配置邏輯的刻意選擇。在當前貨幣體系承壓的環境下，這類資產的戰略意義正在被重新估值——這也是這次進門最值得深問的問題之一。", wrap: true, color: "#000000", size: "md", margin: "lg" }
+                ]}
+              ]
+            }
+          }
+        ]
+      }
+    };
+
+    // ===== 工具函式 =====
+    const statusEl  = document.getElementById("status");
+    const diagEl    = document.getElementById("diagBox");
+    const debugEl   = document.getElementById("debugLog");
+    const shareBtn  = document.getElementById("shareBtn");
+    const logLines  = [];
+
+    function log(msg) {
+      logLines.push("[" + new Date().toLocaleTimeString() + "] " + msg);
+      debugEl.textContent = logLines.join("\n");
+    }
+
+    function setStatus(msg, cls) {
+      statusEl.textContent = msg;
+      statusEl.className = cls || "";
+      log(msg);
+    }
+
+    function showDiag(html) {
+      diagEl.innerHTML = html;
+      diagEl.style.display = "block";
+    }
+
+    function toggleDebug() {
+      debugEl.style.display = debugEl.style.display === "block" ? "none" : "block";
+    }
+
+    // ===== 初始化 =====
+    async function init() {
+      try {
+        log("開始初始化，LIFF ID: " + LIFF_ID);
+        log("頁面網址: " + location.href);
+
+        await liff.init({
+          liffId: LIFF_ID,
+          withLoginOnExternalBrowser: true
+        });
+
+        log("liff.init 成功");
+        log("isInClient: " + liff.isInClient());
+        log("isLoggedIn: " + liff.isLoggedIn());
+
+        // 未登入
+        if (!liff.isLoggedIn()) {
+          setStatus("尚未登入，跳轉 LINE 登入中...");
+          liff.login();
+          return;
+        }
+
+        // 不在 LINE 內建瀏覽器
+        if (!liff.isInClient()) {
+          setStatus("⚠️ 請用 LINE 開啟，不要用一般瀏覽器", "error");
+          showDiag(
+            "你現在是用 <b>一般瀏覽器</b> 開啟的，<code>shareTargetPicker</code> 無法使用。<br><br>" +
+            "請把這個網址複製到 <b>LINE 聊天室</b>，點開後再按分享：<br>" +
+            "<code>https://liff.line.me/" + LIFF_ID + "</code>"
+          );
+          return;
+        }
+
+        // 確認 shareTargetPicker 是否可用
+        const canShare = liff.isApiAvailable("shareTargetPicker");
+        log("shareTargetPicker 可用: " + canShare);
+
+        if (!canShare) {
+          setStatus("❌ shareTargetPicker 未啟用", "error");
+          showDiag(
+            "<b>這是按鈕沒有反應的根本原因。</b><br><br>" +
+            "你的 LIFF App 還沒有開啟 <code>shareTargetPicker</code> 權限。<br><br>" +
+            "請照以下步驟修改：<br>" +
+            "1. 打開 <b>LINE Developers</b> → 你的 Channel<br>" +
+            "2. 點選上方 <b>LIFF</b> 頁籤<br>" +
+            "3. 點你的 LIFF App 名稱進去編輯<br>" +
+            "4. 找到 <b>Scopes</b>，確認有勾選：<br>" +
+            "&nbsp;&nbsp;&nbsp;<code>profile</code>　<code>openid</code>　<code>chat_message.write</code><br>" +
+            "5. 儲存後，<b>完全關掉 LINE 重開</b>，再試一次"
+          );
+          debugEl.style.display = "block";
+          return;
+        }
+
+        // 全部正常
+        setStatus("✅ 初始化成功，請按下方按鈕分享", "success");
+        shareBtn.disabled = false;
+
+      } catch (err) {
+        log("初始化錯誤: " + (err?.message || err));
+        setStatus("❌ 初始化失敗：" + (err?.message || err), "error");
+
+        if ((err?.message || "").includes("Invalid LIFF ID")) {
+          showDiag(
+            "<b>錯誤：Invalid LIFF ID</b><br><br>" +
+            "LIFF ID 與 Endpoint URL 不符。<br><br>" +
+            "請到 LINE Developers → LIFF → 編輯你的 LIFF App，<br>" +
+            "確認 <b>Endpoint URL</b> 填的是：<br>" +
+            "<code>https://arielyl-code.github.io</code>"
+          );
+        } else {
+          showDiag(
+            "初始化失敗，請點「顯示診斷 Log」，截圖傳給我看。"
+          );
+        }
+        debugEl.style.display = "block";
+      }
+    }
+
+    // ===== 分享 =====
+    async function shareFlex() {
+      try {
+        shareBtn.disabled = true;
+        setStatus("開啟好友選擇視窗...");
+        log("呼叫 shareTargetPicker");
+
+        const result = await liff.shareTargetPicker([FLEX_MESSAGE], { isMultiple: true });
+
+        if (result && result.status === "success") {
+          setStatus("✅ 分享成功！", "success");
+          log("分享成功");
+        } else {
+          setStatus("已取消分享");
+          log("取消，result: " + JSON.stringify(result));
+        }
+      } catch (err) {
+        log("分享錯誤: " + (err?.message || err));
+        setStatus("❌ 分享失敗：" + (err?.message || err), "error");
+        debugEl.style.display = "block";
+      } finally {
+        shareBtn.disabled = false;
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
