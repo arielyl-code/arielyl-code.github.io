@@ -44,7 +44,9 @@
       cursor: pointer;
       width: 100%;
       transition: background 0.2s, transform 0.1s;
+      margin-top: 12px;
     }
+    .btn:first-of-type { margin-top: 0; }
     .btn:active { transform: scale(0.97); background: #2c5f7a; }
     .btn:disabled { background: #aaa; cursor: not-allowed; }
     .status { margin-top: 20px; font-size: 13px; color: #888; min-height: 20px; }
@@ -57,141 +59,354 @@
     <div class="icon">📨</div>
     <h1>香港行倒數<br>分享給朋友</h1>
     <p>點下方按鈕，選擇要分享的好友或群組，即可將訊息卡片傳送給他們。</p>
-    <button class="btn" id="shareBtn" onclick="shareMessage()">
+
+    <button class="btn" id="shareBtnLGT" onclick="shareMessage('lgt')">
       <span>📤</span> 【倒數 6 天】LGT
     </button>
+
+    <button class="btn" id="shareBtnNotice" onclick="shareMessage('notice')">
+      <span>📋</span> 行前通知
+    </button>
+
     <div class="status" id="status">載入中…</div>
   </div>
 
   <script>
     const LIFF_ID = "2009433190-yHg23ZGB";
 
-    const flexMessage = {
-      type: "flex",
-      altText: "香港行，倒數 6 天",
-      contents: {
-        "type": "carousel",
-        "contents": [
-          {
-            "type": "bubble", "size": "mega",
-            "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773711746231-f7d0678c-81dc-4079-a364-cf6bd426a7fe.png", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
-            "body": {
-              "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
-              "contents": [
-                { "type": "box", "layout": "vertical", "height": "30px", "contents": [
-                  { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center",
-                    "contents": [
-                      { "type": "span", "text": "⧁ 香港行，倒數" },
-                      { "type": "span", "text": " 6 ", "color": "#427594" },
-                      { "type": "span", "text": "天 ⧀" }
-                    ]
-                  }
-                ]},
-                { "type": "box", "layout": "vertical", "margin": "sm", "height": "210px", "contents": [
-                  { "type": "text", "text": "三天、五場對話、多體系的碰撞", "wrap": true, "color": "#427594", "size": "md", "weight": "regular", "align": "center" },
-                  { "type": "separator", "color": "#427594", "margin": "lg" },
-                  { "type": "text", "text": "從歐洲王室的傳承哲學，到華爾街的資本定價，再到亞洲最前沿的家辦實踐。 倒數 5 天，我們把五個值得深究的機構，逐一攤開來看", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
-                ]},
-                { "type": "box", "layout": "vertical", "contents": [
-                  { "type": "separator", "color": "#427594", "margin": "lg" },
-                  { "type": "text", "text": "往右滑，看更多 ➟", "wrap": true, "color": "#427594", "size": "md", "align": "center", "margin": "lg" }
-                ]}
-              ]
+    const messages = {
+      lgt: {
+        type: "flex",
+        altText: "香港行，倒數 6 天",
+        contents: {
+          "type": "carousel",
+          "contents": [
+            {
+              "type": "bubble", "size": "mega",
+              "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773711746231-f7d0678c-81dc-4079-a364-cf6bd426a7fe.png", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
+              "body": {
+                "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
+                "contents": [
+                  { "type": "box", "layout": "vertical", "height": "30px", "contents": [
+                    { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center",
+                      "contents": [
+                        { "type": "span", "text": "⧁ 香港行，倒數" },
+                        { "type": "span", "text": " 6 ", "color": "#427594" },
+                        { "type": "span", "text": "天 ⧀" }
+                      ]
+                    }
+                  ]},
+                  { "type": "box", "layout": "vertical", "margin": "sm", "height": "210px", "contents": [
+                    { "type": "text", "text": "三天、五場對話、多體系的碰撞", "wrap": true, "color": "#427594", "size": "md", "weight": "regular", "align": "center" },
+                    { "type": "separator", "color": "#427594", "margin": "lg" },
+                    { "type": "text", "text": "從歐洲王室的傳承哲學，到華爾街的資本定價，再到亞洲最前沿的家辦實踐。 倒數 5 天，我們把五個值得深究的機構，逐一攤開來看", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
+                  ]},
+                  { "type": "box", "layout": "vertical", "contents": [
+                    { "type": "separator", "color": "#427594", "margin": "lg" },
+                    { "type": "text", "text": "往右滑，看更多 ➟", "wrap": true, "color": "#427594", "size": "md", "align": "center", "margin": "lg" }
+                  ]}
+                ]
+              }
+            },
+            {
+              "type": "bubble", "size": "mega",
+              "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773364434652-1abd8713-90e9-48f3-b55d-d9aa92b9d24f.jpeg", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
+              "body": {
+                "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
+                "contents": [
+                  { "type": "box", "layout": "vertical", "height": "30px", "contents": [
+                    { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "LGT｜列支敦士登王室家辦", "contents": [] }
+                  ]},
+                  { "type": "box", "layout": "vertical", "margin": "sm", "height": "230px", "contents": [
+                    { "type": "text", "text": "九百年傳承哲學的現代實踐者", "wrap": true, "color": "#427594", "size": "md", "weight": "regular", "align": "center" },
+                    { "type": "separator", "color": "#427594", "margin": "lg" },
+                    { "type": "text", "text": "1719 年，列支敦士登親王家族在阿爾卑斯山腳下取得領地。三百年後，這個家族用同一套邏輯，管理著全球逾 4,300 億美元的資產。王朝可以更迭，財富的結構卻被他們完整保留了下來。五天後，我們將走進他們的香港辦公室。", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
+                  ]},
+                  { "type": "box", "layout": "vertical", "contents": [
+                    { "type": "box", "layout": "vertical", "backgroundColor": "#427594", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center",
+                      "action": { "type": "uri", "label": "action", "uri": "https://www.lgt.com/sg-tc" },
+                      "contents": [{ "type": "text", "text": "延伸閱讀 >", "color": "#ffffff" }]
+                    }
+                  ]}
+                ]
+              }
+            },
+            {
+              "type": "bubble", "size": "mega",
+              "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773303788307-e94ee5f1-6c24-4488-98d7-39b3fd17e6b3.webp", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
+              "body": {
+                "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
+                "contents": [
+                  { "type": "box", "layout": "vertical", "height": "30px", "contents": [
+                    { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "穿越世紀的風險哲學", "contents": [] }
+                  ]},
+                  { "type": "box", "layout": "vertical", "margin": "sm", "height": "230px", "contents": [
+                    { "type": "text", "text": "不以季報為錨，以世代為單位", "wrap": true, "color": "#427594", "size": "md", "weight": "regular", "align": "center" },
+                    { "type": "separator", "color": "#427594", "margin": "lg" },
+                    { "type": "text", "text": "LGT 對「風險」的定義，從一開始就與眾不同。不追短期波動，以世代為單位設計資產結構。這套哲學歷經戰爭、金融危機與政權更迭仍完整存續，本身就是對其有效性最有力的驗證。不同於受制於股東季報的上市銀行，LGT 隸屬親王基金會，具備主權級別的穩定性與決策獨立性。", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
+                  ]},
+                  { "type": "box", "layout": "vertical", "contents": [
+                    { "type": "box", "layout": "vertical", "backgroundColor": "#427594", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center",
+                      "action": { "type": "uri", "label": "action", "uri": "https://www.lgt.com/sg-tc/about-lgt/our-company" },
+                      "contents": [{ "type": "text", "text": "延伸閱讀 >", "color": "#ffffff" }]
+                    }
+                  ]}
+                ]
+              }
+            },
+            {
+              "type": "bubble", "size": "mega",
+              "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773305434610-a4fbb5b2-db73-4146-a5ad-bcb929078a46.webp", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
+              "body": {
+                "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
+                "contents": [
+                  { "type": "box", "layout": "vertical", "height": "30px", "contents": [
+                    { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "共同投資原則", "contents": [] }
+                  ]},
+                  { "type": "box", "layout": "vertical", "margin": "sm", "height": "230px", "contents": [
+                    { "type": "text", "text": "利益一致的架構設計", "wrap": true, "color": "#427594", "size": "md", "weight": "regular", "align": "center" },
+                    { "type": "separator", "color": "#427594", "margin": "lg" },
+                    { "type": "text", "text": "王室資金與客戶資產遵循同一套邏輯，進入相同標的與風險框架。這不只是信任背書，而是從制度層面消除利益衝突的根本性設計。當一般私人銀行仍在推銷標準化產品，LGT 已憑藉王室網絡布局獨家另類投資與家族辦公室級別的稀缺標的。在私人銀行業，這樣的架構極為罕見。", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
+                  ]},
+                  { "type": "box", "layout": "vertical", "contents": [
+                    { "type": "box", "layout": "vertical", "backgroundColor": "#427594", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center",
+                      "action": { "type": "uri", "label": "action", "uri": "https://www.wealth.com.tw/articles/59837df3-3080-43d9-a0d0-08c2fe7aa67f" },
+                      "contents": [{ "type": "text", "text": "延伸閱讀 >", "color": "#ffffff" }]
+                    }
+                  ]}
+                ]
+              }
+            },
+            {
+              "type": "bubble", "size": "mega",
+              "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773303920113-5ba4fff9-94ed-4ec4-9609-a7d9ad73465e.webp", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
+              "body": {
+                "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
+                "contents": [
+                  { "type": "box", "layout": "vertical", "height": "30px", "contents": [
+                    { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "實體資產的戰略角色", "contents": [] }
+                  ]},
+                  { "type": "box", "layout": "vertical", "margin": "sm", "height": "230px", "contents": [
+                    { "type": "text", "text": "不以季報為錨，以世代為單位", "wrap": true, "color": "#427594", "size": "md", "weight": "regular", "align": "center" },
+                    { "type": "separator", "color": "#427594", "margin": "lg" },
+                    { "type": "text", "text": "LGT 同時是全球第二大私人藝術收藏機構，也是奧地利最大地主。這不是家族喜好的偶然積累，而是將實體資產系統性納入跨世代配置邏輯的刻意選擇。在當前貨幣體系承壓的環境下，這類資產的戰略意義正在被重新估值——這也是這次進門最值得深問的問題之一。", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
+                  ]},
+                  { "type": "box", "layout": "vertical", "contents": [
+                    { "type": "box", "layout": "vertical", "backgroundColor": "#427594", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center",
+                      "action": { "type": "uri", "label": "action", "uri": "https://ec.ltn.com.tw/article/paper/863925" },
+                      "contents": [{ "type": "text", "text": "延伸閱讀 >", "color": "#ffffff" }]
+                    }
+                  ]}
+                ]
+              }
             }
-          },
-          {
-            "type": "bubble", "size": "mega",
-            "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773364434652-1abd8713-90e9-48f3-b55d-d9aa92b9d24f.jpeg", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
-            "body": {
-              "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
-              "contents": [
-                { "type": "box", "layout": "vertical", "height": "30px", "contents": [
-                  { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "LGT｜列支敦士登王室家辦", "contents": [] }
-                ]},
-                { "type": "box", "layout": "vertical", "margin": "sm", "height": "230px", "contents": [
-                  { "type": "text", "text": "九百年傳承哲學的現代實踐者", "wrap": true, "color": "#427594", "size": "md", "weight": "regular", "align": "center" },
-                  { "type": "separator", "color": "#427594", "margin": "lg" },
-                  { "type": "text", "text": "1719 年，列支敦士登親王家族在阿爾卑斯山腳下取得領地。三百年後，這個家族用同一套邏輯，管理著全球逾 4,300 億美元的資產。王朝可以更迭，財富的結構卻被他們完整保留了下來。五天後，我們將走進他們的香港辦公室。", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
-                ]},
-                { "type": "box", "layout": "vertical", "contents": [
-                  { "type": "box", "layout": "vertical", "backgroundColor": "#427594", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center",
-                    "action": { "type": "uri", "label": "action", "uri": "https://www.lgt.com/sg-tc" },
-                    "contents": [{ "type": "text", "text": "延伸閱讀 >", "color": "#ffffff" }]
+          ]
+        }
+      },
+
+      notice: {
+        type: "flex",
+        altText: "香港行 行前通知",
+        contents: {
+          "type": "carousel",
+          "contents": [
+            {
+              "type": "bubble", "size": "mega",
+              "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773713514273-c20b6046-7fee-4f92-bb96-9f2bec47dd51.png", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
+              "body": {
+                "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
+                "contents": [
+                  { "type": "box", "layout": "vertical", "height": "30px", "contents": [
+                    { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "必備文件", "contents": [] }
+                  ]},
+                  { "type": "box", "layout": "vertical", "margin": "sm", "contents": [
+                    { "type": "separator", "color": "#427594", "margin": "lg" },
+                    { "type": "text", "text": "⟢ 機票", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "⟢ 護照", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "⟢ 香港簽證或台胞證", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "separator", "color": "#427594", "margin": "lg" },
+                    { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "工作團隊聯繫方式", "margin": "md", "contents": [] },
+                    { "type": "text", "text": "⟢ Chester(Line ID: chestertsai0712 )", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "⟢ Kate (Line ID: katechen1983 )", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "⟢ 識富台灣團隊電話：0905323082", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
+                  ]},
+                  { "type": "box", "layout": "vertical", "margin": "md", "contents": [
+                    { "type": "box", "layout": "vertical", "backgroundColor": "#427594", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center",
+                      "action": { "type": "uri", "label": "action", "uri": "https://sites.google.com/angel-investor.org/2026-hk-corporate-visit?usp=sharing" },
+                      "contents": [{ "type": "text", "text": "行程懶人包 >", "color": "#ffffff" }]
+                    }
+                  ]}
+                ]
+              }
+            },
+            {
+              "type": "bubble", "size": "mega",
+              "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773714591870-186dd5d6-7284-45be-a71f-a35c35493217.png", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
+              "body": {
+                "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
+                "contents": [
+                  { "type": "box", "layout": "vertical", "height": "30px", "contents": [
+                    { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "航班資訊", "contents": [] }
+                  ]},
+                  { "type": "box", "layout": "vertical", "margin": "sm", "contents": [
+                    { "type": "separator", "color": "#427594", "margin": "lg" },
+                    { "type": "text", "text": "⟢ 集合說明：台灣出發的夥伴 請於長榮 BR 867 登機門集合", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "⟢  當天抵達香港的夥伴、已於香港的夥伴 請於 13:00 前於午宴餐廳集合 ", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "⟢ 3/23 去程參考航班：", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "｜長榮 BR 867｜09:50 TPE → 11:50 HKG ", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "⟢  3/25 回程參考航班：", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "｜長榮 BR 858｜21:10 HKG → 22:55 TPE", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
+                  ]}
+                ]
+              }
+            },
+            {
+              "type": "bubble", "size": "mega",
+              "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773714072887-ff377b1a-8769-4bd9-8f9d-1a01336659c0.png", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
+              "body": {
+                "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
+                "contents": [
+                  { "type": "box", "layout": "vertical", "height": "30px", "contents": [
+                    { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "注意事項", "contents": [] }
+                  ]},
+                  { "type": "box", "layout": "vertical", "margin": "sm", "contents": [
+                    { "type": "separator", "color": "#427594", "margin": "lg" },
+                    { "type": "text", "text": "⟢ 香港目前氣溫約 18–24°C，早晚偏涼，建議備一件薄外套 ", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "⟢  服裝建議: 建議以 Business / Smart Casual的服裝搭配為原則", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "⟢ 電源轉接頭（香港為三腳方形插頭）", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "⟢  旅遊保險: 本次行程皆有幫參與者投保「旅行綜合保險」，若有額外需求者請自行額外投保", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "⟢  小費:  本次越南參訪行程之司機小費識富已統一支付", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
+                  ]}
+                ]
+              }
+            },
+            {
+              "type": "bubble", "size": "mega",
+              "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773715849468-cbfd913f-e4dd-4f7e-a8d8-ad80ae76ec61.png", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
+              "body": {
+                "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
+                "contents": [
+                  { "type": "box", "layout": "vertical", "height": "30px", "contents": [
+                    { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "住宿資訊", "contents": [] }
+                  ]},
+                  { "type": "box", "layout": "vertical", "margin": "sm", "contents": [
+                    { "type": "separator", "color": "#427594", "margin": "lg" },
+                    { "type": "text", "text": "⟢ 飯店：KIMPTON TSIM SHA TSUI HONG KONG", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "⟢  T： +852 3916 8316       ", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "⟢ M：+852 6435 5081", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "11 Middle Road, Tsim Sha Tsui, Kowloon, Hong Kong", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
+                  ]},
+                  { "type": "box", "layout": "vertical", "margin": "xl", "contents": [
+                    { "type": "box", "layout": "vertical", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center", "borderColor": "#427594", "borderWidth": "light",
+                      "action": { "type": "uri", "label": "action", "uri": "https://www.kimptonhongkong.com/" },
+                      "contents": [{ "type": "text", "text": "飯店資訊", "color": "#427594" }]
+                    },
+                    { "type": "box", "layout": "vertical", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center", "borderColor": "#427594", "borderWidth": "light", "margin": "md",
+                      "action": { "type": "uri", "label": "action", "uri": "https://maps.app.goo.gl/FJHVrbwc3s7h85ms9" },
+                      "contents": [{ "type": "text", "text": "飯店 > 導航", "color": "#427594" }]
+                    }
+                  ]}
+                ]
+              }
+            },
+            {
+              "type": "bubble", "size": "mega",
+              "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773714304143-12a7c444-025f-4930-9088-8b4503356335.png", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
+              "body": {
+                "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
+                "contents": [
+                  { "type": "box", "layout": "vertical", "height": "30px", "contents": [
+                    { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "3/23（一）行程", "contents": [] }
+                  ]},
+                  { "type": "box", "layout": "vertical", "margin": "sm", "contents": [
+                    { "type": "separator", "color": "#427594", "margin": "lg" },
+                    { "type": "text", "text": " ．09:50 前往香港 ", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "．13:00 抵港午宴 ", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "．15:00 列支敦士登王室家辦 LGT ", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "．18:30 與 LGT 晚宴", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
+                  ]}
+                ]
+              },
+              "footer": {
+                "type": "box", "layout": "vertical", "margin": "xl",
+                "contents": [
+                  { "type": "box", "layout": "vertical", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center", "borderColor": "#427594", "borderWidth": "light",
+                    "action": { "type": "uri", "label": "action", "uri": "https://maps.app.goo.gl/a8Lfnr5kGesZ58Lo7" },
+                    "contents": [{ "type": "text", "text": "午宴紫玉蘭餐廳 > 導航", "color": "#427594" }]
+                  },
+                  { "type": "box", "layout": "vertical", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center", "borderColor": "#427594", "borderWidth": "light", "margin": "md",
+                    "action": { "type": "uri", "label": "action", "uri": "https://maps.app.goo.gl/ee73yDgvytVZ4iRa6" },
+                    "contents": [{ "type": "text", "text": "LGT > 導航", "color": "#427594" }]
                   }
-                ]}
-              ]
-            }
-          },
-          {
-            "type": "bubble", "size": "mega",
-            "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773303788307-e94ee5f1-6c24-4488-98d7-39b3fd17e6b3.webp", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
-            "body": {
-              "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
-              "contents": [
-                { "type": "box", "layout": "vertical", "height": "30px", "contents": [
-                  { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "穿越世紀的風險哲學", "contents": [] }
-                ]},
-                { "type": "box", "layout": "vertical", "margin": "sm", "height": "230px", "contents": [
-                  { "type": "text", "text": "不以季報為錨，以世代為單位", "wrap": true, "color": "#427594", "size": "md", "weight": "regular", "align": "center" },
-                  { "type": "separator", "color": "#427594", "margin": "lg" },
-                  { "type": "text", "text": "LGT 對「風險」的定義，從一開始就與眾不同。不追短期波動，以世代為單位設計資產結構。這套哲學歷經戰爭、金融危機與政權更迭仍完整存續，本身就是對其有效性最有力的驗證。不同於受制於股東季報的上市銀行，LGT 隸屬親王基金會，具備主權級別的穩定性與決策獨立性。", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
-                ]},
-                { "type": "box", "layout": "vertical", "contents": [
-                  { "type": "box", "layout": "vertical", "backgroundColor": "#427594", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center",
-                    "action": { "type": "uri", "label": "action", "uri": "https://www.lgt.com/sg-tc/about-lgt/our-company" },
-                    "contents": [{ "type": "text", "text": "延伸閱讀 >", "color": "#ffffff" }]
+                ]
+              }
+            },
+            {
+              "type": "bubble", "size": "mega",
+              "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773715017426-de225479-a5e8-482e-8687-9c55869a2d7e.png", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
+              "body": {
+                "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
+                "contents": [
+                  { "type": "box", "layout": "vertical", "height": "30px", "contents": [
+                    { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "3/24（二）行程", "contents": [] }
+                  ]},
+                  { "type": "box", "layout": "vertical", "margin": "sm", "contents": [
+                    { "type": "separator", "color": "#427594", "margin": "lg" },
+                    { "type": "text", "text": " ． 08:50 摩根士丹利（Morgan Stanley）", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "．11:30 萬方家族辦公室 & 午宴", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "．15:00 WGHK 峰會 & 晚宴 ／保利旗艦藝廊導覽 & 晚宴", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "．18:30 與 LGT 晚宴", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
+                  ]}
+                ]
+              },
+              "footer": {
+                "type": "box", "layout": "vertical", "margin": "xl",
+                "contents": [
+                  { "type": "box", "layout": "vertical", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center", "borderColor": "#427594", "borderWidth": "light",
+                    "action": { "type": "uri", "label": "action", "uri": "https://maps.app.goo.gl/NMjKiTqdfm8irHzW9" },
+                    "contents": [{ "type": "text", "text": "摩根士丹利 > 導航", "color": "#427594" }]
+                  },
+                  { "type": "box", "layout": "vertical", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center", "borderColor": "#427594", "borderWidth": "light", "margin": "md",
+                    "action": { "type": "uri", "label": "action", "uri": "https://maps.app.goo.gl/nQpK44AGzXp1Uc7SA" },
+                    "contents": [{ "type": "text", "text": "萬方家族辦公室 > 導航", "color": "#427594" }]
                   }
-                ]}
-              ]
-            }
-          },
-          {
-            "type": "bubble", "size": "mega",
-            "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773305434610-a4fbb5b2-db73-4146-a5ad-bcb929078a46.webp", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
-            "body": {
-              "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
-              "contents": [
-                { "type": "box", "layout": "vertical", "height": "30px", "contents": [
-                  { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "共同投資原則", "contents": [] }
-                ]},
-                { "type": "box", "layout": "vertical", "margin": "sm", "height": "230px", "contents": [
-                  { "type": "text", "text": "利益一致的架構設計", "wrap": true, "color": "#427594", "size": "md", "weight": "regular", "align": "center" },
-                  { "type": "separator", "color": "#427594", "margin": "lg" },
-                  { "type": "text", "text": "王室資金與客戶資產遵循同一套邏輯，進入相同標的與風險框架。這不只是信任背書，而是從制度層面消除利益衝突的根本性設計。當一般私人銀行仍在推銷標準化產品，LGT 已憑藉王室網絡布局獨家另類投資與家族辦公室級別的稀缺標的。在私人銀行業，這樣的架構極為罕見。", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
-                ]},
-                { "type": "box", "layout": "vertical", "contents": [
-                  { "type": "box", "layout": "vertical", "backgroundColor": "#427594", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center",
-                    "action": { "type": "uri", "label": "action", "uri": "https://www.wealth.com.tw/articles/59837df3-3080-43d9-a0d0-08c2fe7aa67f" },
-                    "contents": [{ "type": "text", "text": "延伸閱讀 >", "color": "#ffffff" }]
+                ]
+              }
+            },
+            {
+              "type": "bubble", "size": "mega",
+              "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773715044716-e2975230-37c3-491d-9214-b046859b3ffe.png", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
+              "body": {
+                "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
+                "contents": [
+                  { "type": "box", "layout": "vertical", "height": "30px", "contents": [
+                    { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "3/25（三）行程", "contents": [] }
+                  ]},
+                  { "type": "box", "layout": "vertical", "margin": "sm", "contents": [
+                    { "type": "separator", "color": "#427594", "margin": "lg" },
+                    { "type": "text", "text": "．08:50 南豐集團家族辦公室 ", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "．12:30 午宴 ", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "．14:00 ．港科大 & 二代菁英交流 ", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" },
+                    { "type": "text", "text": "．21:10 返台", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
+                  ]}
+                ]
+              },
+              "footer": {
+                "type": "box", "layout": "vertical", "margin": "xl",
+                "contents": [
+                  { "type": "box", "layout": "vertical", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center", "borderColor": "#427594", "borderWidth": "light",
+                    "action": { "type": "uri", "label": "action", "uri": "https://maps.app.goo.gl/UKPDqVQAM1J64LkKA" },
+                    "contents": [{ "type": "text", "text": "南豐大廈 > 導航", "color": "#427594" }]
+                  },
+                  { "type": "box", "layout": "vertical", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center", "borderColor": "#427594", "borderWidth": "light", "margin": "md",
+                    "action": { "type": "uri", "label": "action", "uri": "https://maps.app.goo.gl/7aK1DcbXhW4Tt9VM6" },
+                    "contents": [{ "type": "text", "text": "香港科技大學 > 導航", "color": "#427594" }]
                   }
-                ]}
-              ]
+                ]
+              }
             }
-          },
-          {
-            "type": "bubble", "size": "mega",
-            "hero": { "type": "image", "url": "https://image2url.com/r2/default/images/1773303920113-5ba4fff9-94ed-4ec4-9609-a7d9ad73465e.webp", "size": "full", "aspectMode": "cover", "aspectRatio": "320:213" },
-            "body": {
-              "type": "box", "layout": "vertical", "spacing": "sm", "paddingAll": "13px",
-              "contents": [
-                { "type": "box", "layout": "vertical", "height": "30px", "contents": [
-                  { "type": "text", "weight": "bold", "size": "lg", "wrap": true, "align": "center", "text": "實體資產的戰略角色", "contents": [] }
-                ]},
-                { "type": "box", "layout": "vertical", "margin": "sm", "height": "230px", "contents": [
-                  { "type": "text", "text": "不以季報為錨，以世代為單位", "wrap": true, "color": "#427594", "size": "md", "weight": "regular", "align": "center" },
-                  { "type": "separator", "color": "#427594", "margin": "lg" },
-                  { "type": "text", "text": "LGT 同時是全球第二大私人藝術收藏機構，也是奧地利最大地主。這不是家族喜好的偶然積累，而是將實體資產系統性納入跨世代配置邏輯的刻意選擇。在當前貨幣體系承壓的環境下，這類資產的戰略意義正在被重新估值——這也是這次進門最值得深問的問題之一。", "wrap": true, "color": "#000000", "size": "md", "margin": "lg" }
-                ]},
-                { "type": "box", "layout": "vertical", "contents": [
-                  { "type": "box", "layout": "vertical", "backgroundColor": "#427594", "cornerRadius": "md", "height": "40px", "alignItems": "center", "justifyContent": "center",
-                    "action": { "type": "uri", "label": "action", "uri": "https://ec.ltn.com.tw/article/paper/863925" },
-                    "contents": [{ "type": "text", "text": "延伸閱讀 >", "color": "#ffffff" }]
-                  }
-                ]}
-              ]
-            }
-          }
-        ]
+          ]
+        }
       }
     };
 
@@ -200,27 +415,32 @@
         await liff.init({ liffId: LIFF_ID });
         if (!liff.isLoggedIn()) { liff.login(); return; }
         document.getElementById("status").textContent = "準備好了，可以分享！";
-        document.getElementById("shareBtn").disabled = false;
+        document.getElementById("shareBtnLGT").disabled = false;
+        document.getElementById("shareBtnNotice").disabled = false;
       } catch (e) {
         document.getElementById("status").textContent = "初始化失敗，請在 LINE 內開啟此頁面";
         document.getElementById("status").className = "status error";
-        document.getElementById("shareBtn").disabled = true;
       }
     }
 
-    async function shareMessage() {
-      const btn = document.getElementById("shareBtn");
+    async function shareMessage(type) {
       const status = document.getElementById("status");
+      const btnLGT = document.getElementById("shareBtnLGT");
+      const btnNotice = document.getElementById("shareBtnNotice");
+
       if (!liff.isApiAvailable("shareTargetPicker")) {
         status.textContent = "⚠️ 此環境不支援分享功能，請在 LINE 內開啟";
         status.className = "status error";
         return;
       }
-      btn.disabled = true;
+
+      btnLGT.disabled = true;
+      btnNotice.disabled = true;
       status.textContent = "開啟好友選擇器…";
       status.className = "status";
+
       try {
-        const res = await liff.shareTargetPicker([flexMessage], { isMultiple: true });
+        const res = await liff.shareTargetPicker([messages[type]], { isMultiple: true });
         if (res) {
           status.textContent = "✅ 分享成功！";
           status.className = "status success";
@@ -232,11 +452,13 @@
         status.textContent = "❌ 分享失敗：" + e.message;
         status.className = "status error";
       } finally {
-        btn.disabled = false;
+        btnLGT.disabled = false;
+        btnNotice.disabled = false;
       }
     }
 
-    document.getElementById("shareBtn").disabled = true;
+    document.getElementById("shareBtnLGT").disabled = true;
+    document.getElementById("shareBtnNotice").disabled = true;
     init();
   </script>
 </body>
