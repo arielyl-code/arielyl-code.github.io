@@ -119,14 +119,21 @@
     };
 
     async function init() {
+      const status = document.getElementById("status");
       try {
+        status.textContent = "初始化中…";
         await liff.init({ liffId: LIFF_ID });
-        if (!liff.isLoggedIn()) { liff.login(); return; }
-        document.getElementById("status").textContent = "準備好了，可以分享！";
+        status.textContent = "驗證登入中…";
+        if (!liff.isLoggedIn()) {
+          status.textContent = "導向登入中…";
+          liff.login();
+          return;
+        }
+        status.textContent = "準備好了，可以分享！";
         document.querySelectorAll(".btn").forEach(b => b.disabled = false);
       } catch (e) {
-        document.getElementById("status").textContent = "初始化失敗，請在 LINE 內開啟此頁面";
-        document.getElementById("status").className = "status error";
+        status.textContent = "錯誤：" + (e.message || JSON.stringify(e));
+        status.className = "status error";
       }
     }
 
