@@ -78,18 +78,18 @@
     async function init() {
       const status = document.getElementById("status");
       try {
-        // 同步載入 LIFF 和 data.json
-        const [_, dataRes] = await Promise.all([
-          liff.init({ liffId: LIFF_ID }),
-          fetch("./data.json?v=" + Date.now())
-        ]);
-        const data = await dataRes.json();
-        messages = data.messages;
+        // 先初始化 LIFF，再載入 data.json
+        await liff.init({ liffId: LIFF_ID });
 
         if (!liff.isLoggedIn()) {
           liff.login();
           return;
         }
+
+        // 登入後才載入資料
+        const dataRes = await fetch("./data.json?v=" + Date.now());
+        const data = await dataRes.json();
+        messages = data.messages;
 
         // 動態產生按鈕
         const area = document.getElementById("btnArea");
