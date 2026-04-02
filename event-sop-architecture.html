@@ -49,22 +49,22 @@
 
   .arch-section { padding: 48px 24px 32px; max-width: 1100px; margin: 0 auto; }
   .arch-title { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 600; text-align: center; color: var(--dark); margin-bottom: 32px; letter-spacing: 1px; }
-  .lifecycle { display: flex; align-items: stretch; gap: 0; overflow-x: auto; padding: 0 0 20px; }
-  .phase-group { flex: 1; min-width: 140px; position: relative; }
-  .phase-header { text-align: center; padding: 14px 8px; }
-  .phase-number { font-family: 'Noto Serif TC', serif; font-size: 28px; font-weight: 900; color: var(--gold); line-height: 1; opacity: 0.3; }
-  .phase-name { font-size: 11px; font-weight: 600; letter-spacing: 2px; color: var(--dark); margin-top: 4px; }
-  .phase-bar { height: 4px; margin: 0 2px; border-radius: 2px; }
-  .pb-plan { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
-  .pb-content { background: linear-gradient(90deg, var(--accent-blue), #5A7A93); }
-  .pb-guest { background: linear-gradient(90deg, var(--accent-green), #6A8B7A); }
-  .pb-mkt { background: linear-gradient(90deg, #D4884A, #E8A86A); }
-  .pb-ops { background: linear-gradient(90deg, var(--grey-warm), var(--grey-mid)); }
-  .pb-partner { background: linear-gradient(90deg, var(--accent-wine), #9A5B6E); }
-  .phase-tags { padding: 10px 6px; display: flex; flex-direction: column; gap: 3px; }
-  .phase-tag { font-size: 9.5px; color: var(--grey-warm); text-align: center; line-height: 1.4; padding: 2px 4px; }
-  .arrow-connector { display: flex; align-items: center; justify-content: center; min-width: 20px; color: var(--gold-light); font-size: 16px; padding-bottom: 60px; }
-  .flow-bands { max-width: 1100px; margin: 0 auto 40px; padding: 0 24px; display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+  .pipeline { display: flex; align-items: stretch; gap: 0; overflow-x: auto; padding: 0; }
+  .pipe-step { flex: 1; min-width: 130px; position: relative; display: flex; flex-direction: column; align-items: center; }
+  .pipe-arrow-wrap { display: flex; align-items: center; width: 100%; position: relative; height: 48px; }
+  .pipe-arrow { flex: 1; height: 48px; display: flex; align-items: center; justify-content: center; position: relative; clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%, 16px 50%); }
+  .pipe-step:first-child .pipe-arrow { clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%); border-radius: 4px 0 0 4px; }
+  .pipe-step:last-child .pipe-arrow { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 16px 50%); border-radius: 0 4px 4px 0; }
+  .pa-plan { background: var(--gold); }
+  .pa-content { background: var(--accent-blue); }
+  .pa-guest { background: var(--accent-green); }
+  .pa-mkt { background: #D4884A; }
+  .pa-ops { background: var(--grey-warm); }
+  .pa-close { background: var(--accent-wine); }
+  .pipe-label { font-size: 12px; font-weight: 700; color: var(--white); letter-spacing: 2px; position: relative; z-index: 1; white-space: nowrap; }
+  .pipe-detail { padding: 10px 6px 0; display: flex; flex-direction: column; gap: 2px; text-align: center; }
+  .pipe-detail-text { font-size: 10px; color: var(--grey-mid); line-height: 1.5; }
+  .flow-bands { max-width: 1100px; margin: 20px auto 40px; padding: 0 24px; display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
   .flow-band { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 500; color: var(--grey-warm); letter-spacing: 0.5px; }
   .flow-dot { width: 8px; height: 8px; border-radius: 50%; }
   .fd-plan { background: var(--gold); } .fd-partner { background: var(--accent-wine); } .fd-ops { background: var(--grey-warm); }
@@ -93,8 +93,8 @@
   .footer { text-align: center; padding: 32px 24px 48px; font-size: 11px; color: var(--grey-light); letter-spacing: 1px; }
   @media (max-width: 768px) {
     .header { padding: 40px 20px 36px; } .header h1 { font-size: 24px; }
-    .lifecycle { flex-wrap: wrap; gap: 4px; } .phase-group { min-width: 30%; flex: 0 0 30%; }
-    .arrow-connector { display: none; }
+    .pipeline { flex-wrap: wrap; gap: 4px; } .pipe-step { min-width: 45%; flex: 0 0 45%; }
+    .pipe-step:first-child .pipe-arrow, .pipe-step:last-child .pipe-arrow, .pipe-arrow { clip-path: none; border-radius: 4px; }
     .cat-item { grid-template-columns: 1fr; padding-left: 24px; }
     .item-tags { justify-content: flex-start; margin-top: 4px; }
     .filter-tags { gap: 6px; } .filter-tag { font-size: 11px; padding: 5px 12px; }
@@ -135,18 +135,13 @@
 
 <div class="arch-section">
   <div class="arch-title">活動生命週期｜Event Lifecycle</div>
-  <div class="lifecycle">
-    <div class="phase-group"><div class="phase-header"><div class="phase-number">01</div><div class="phase-name">策劃期</div></div><div class="phase-bar pb-plan"></div><div class="phase-tags"><div class="phase-tag">企劃 ∙ 預算</div><div class="phase-tag">風險預案</div></div></div>
-    <div class="arrow-connector">›</div>
-    <div class="phase-group"><div class="phase-header"><div class="phase-number">02</div><div class="phase-name">內容期</div></div><div class="phase-bar pb-content"></div><div class="phase-tags"><div class="phase-tag">議程 ∙ 講者</div><div class="phase-tag">Panel 設計</div></div></div>
-    <div class="arrow-connector">›</div>
-    <div class="phase-group"><div class="phase-header"><div class="phase-number">03</div><div class="phase-name">邀請期</div></div><div class="phase-bar pb-guest"></div><div class="phase-tags"><div class="phase-tag">名單 ∙ 報名</div><div class="phase-tag">VIP 分級</div></div></div>
-    <div class="arrow-connector">›</div>
-    <div class="phase-group"><div class="phase-header"><div class="phase-number">04</div><div class="phase-name">推廣期</div></div><div class="phase-bar pb-mkt"></div><div class="phase-tags"><div class="phase-tag">行銷 ∙ 媒體</div><div class="phase-tag">倒數曝光</div></div></div>
-    <div class="arrow-connector">›</div>
-    <div class="phase-group"><div class="phase-header"><div class="phase-number">05</div><div class="phase-name">執行期</div></div><div class="phase-bar pb-ops"></div><div class="phase-tags"><div class="phase-tag">場地 ∙ 設計</div><div class="phase-tag">現場執行</div></div></div>
-    <div class="arrow-connector">›</div>
-    <div class="phase-group"><div class="phase-header"><div class="phase-number">06</div><div class="phase-name">收尾期</div></div><div class="phase-bar pb-partner"></div><div class="phase-tags"><div class="phase-tag">復盤 ∙ 財務</div><div class="phase-tag">會員轉換</div></div></div>
+  <div class="pipeline">
+    <div class="pipe-step"><div class="pipe-arrow-wrap"><div class="pipe-arrow pa-plan"><span class="pipe-label">策劃期</span></div></div><div class="pipe-detail"><div class="pipe-detail-text">企劃 ∙ 預算 ∙ 風險預案</div></div></div>
+    <div class="pipe-step"><div class="pipe-arrow-wrap"><div class="pipe-arrow pa-content"><span class="pipe-label">內容期</span></div></div><div class="pipe-detail"><div class="pipe-detail-text">議程 ∙ 講者 ∙ Panel</div></div></div>
+    <div class="pipe-step"><div class="pipe-arrow-wrap"><div class="pipe-arrow pa-guest"><span class="pipe-label">邀請期</span></div></div><div class="pipe-detail"><div class="pipe-detail-text">名單 ∙ 報名 ∙ VIP 分級</div></div></div>
+    <div class="pipe-step"><div class="pipe-arrow-wrap"><div class="pipe-arrow pa-mkt"><span class="pipe-label">推廣期</span></div></div><div class="pipe-detail"><div class="pipe-detail-text">行銷 ∙ 媒體 ∙ 倒數曝光</div></div></div>
+    <div class="pipe-step"><div class="pipe-arrow-wrap"><div class="pipe-arrow pa-ops"><span class="pipe-label">執行期</span></div></div><div class="pipe-detail"><div class="pipe-detail-text">場地 ∙ 設計 ∙ 現場執行</div></div></div>
+    <div class="pipe-step"><div class="pipe-arrow-wrap"><div class="pipe-arrow pa-close"><span class="pipe-label">收尾期</span></div></div><div class="pipe-detail"><div class="pipe-detail-text">復盤 ∙ 財務 ∙ 會員轉換</div></div></div>
   </div>
   <div class="flow-bands">
     <div class="flow-band"><div class="flow-dot fd-partner"></div>合作/贊助</div>
