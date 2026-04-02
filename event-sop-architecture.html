@@ -55,19 +55,10 @@
   .pipe-arrow { flex: 1; height: 48px; display: flex; align-items: center; justify-content: center; position: relative; clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%, 16px 50%); }
   .pipe-step:first-child .pipe-arrow { clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%); border-radius: 4px 0 0 4px; }
   .pipe-step:last-child .pipe-arrow { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 16px 50%); border-radius: 0 4px 4px 0; }
-  .pa-plan { background: var(--gold); }
-  .pa-content { background: var(--accent-blue); }
-  .pa-guest { background: var(--accent-green); }
-  .pa-mkt { background: #D4884A; }
-  .pa-ops { background: var(--grey-warm); }
-  .pa-close { background: var(--accent-wine); }
+  .pa-plan, .pa-content, .pa-guest, .pa-mkt, .pa-ops, .pa-close { background: var(--grey-light); }
   .pipe-label { font-size: 12px; font-weight: 700; color: var(--white); letter-spacing: 2px; position: relative; z-index: 1; white-space: nowrap; }
   .pipe-detail { padding: 10px 6px 0; display: flex; flex-direction: column; gap: 2px; text-align: center; }
   .pipe-detail-text { font-size: 10px; color: var(--grey-mid); line-height: 1.5; }
-  .flow-bands { max-width: 1100px; margin: 20px auto 40px; padding: 0 24px; display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
-  .flow-band { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 500; color: var(--grey-warm); letter-spacing: 0.5px; }
-  .flow-dot { width: 8px; height: 8px; border-radius: 50%; }
-  .fd-plan { background: var(--gold); } .fd-partner { background: var(--accent-wine); } .fd-ops { background: var(--grey-warm); }
 
   .details { max-width: 960px; margin: 0 auto; padding: 0 24px 60px; }
   .cat-section { margin-bottom: 36px; background: var(--white); border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.05); transition: opacity 0.3s ease; }
@@ -142,12 +133,6 @@
     <div class="pipe-step"><div class="pipe-arrow-wrap"><div class="pipe-arrow pa-mkt"><span class="pipe-label">推廣期</span></div></div><div class="pipe-detail"><div class="pipe-detail-text">行銷 ∙ 媒體 ∙ 倒數曝光</div></div></div>
     <div class="pipe-step"><div class="pipe-arrow-wrap"><div class="pipe-arrow pa-ops"><span class="pipe-label">執行期</span></div></div><div class="pipe-detail"><div class="pipe-detail-text">場地 ∙ 設計 ∙ 現場執行</div></div></div>
     <div class="pipe-step"><div class="pipe-arrow-wrap"><div class="pipe-arrow pa-close"><span class="pipe-label">收尾期</span></div></div><div class="pipe-detail"><div class="pipe-detail-text">復盤 ∙ 財務 ∙ 會員轉換</div></div></div>
-  </div>
-  <div class="flow-bands">
-    <div class="flow-band"><div class="flow-dot fd-partner"></div>合作/贊助</div>
-    <div class="flow-band"><div class="flow-dot fd-ops"></div>場地/飲食</div>
-    <div class="flow-band"><div class="flow-dot fd-plan"></div>財務</div>
-    <div class="flow-band" style="margin-left:16px; color:var(--grey-light); font-style:italic;">── 貫穿全週期</div>
   </div>
 </div>
 
