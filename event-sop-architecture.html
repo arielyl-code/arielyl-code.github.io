@@ -21,10 +21,15 @@
     --accent-blue: #3D5A73;
     --accent-green: #4A6B5A;
     --accent-wine: #7A3B4E;
+    --tag-forum: #3D5A73;
+    --tag-workshop: #6B8E5B;
+    --tag-pitch: #C47D2E;
+    --tag-course: #8B6BAE;
+    --tag-overseas: #C9A94E;
+    --tag-gathering: #5B8E8E;
+    --tag-annual: #B8475E;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     background: var(--cream);
     color: var(--dark);
@@ -50,143 +55,110 @@
     background: linear-gradient(135deg, rgba(201,169,78,0.08) 0%, transparent 50%, rgba(201,169,78,0.05) 100%);
   }
   .header-label {
-    font-size: 11px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 16px;
-    position: relative;
+    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px; position: relative;
   }
   .header h1 {
-    font-family: 'Noto Serif TC', serif;
-    font-weight: 700;
-    font-size: 32px;
-    letter-spacing: 2px;
-    position: relative;
-    margin-bottom: 8px;
+    font-family: 'Noto Serif TC', serif; font-weight: 700; font-size: 32px;
+    letter-spacing: 2px; position: relative; margin-bottom: 8px;
   }
   .header-sub {
-    font-size: 13px;
-    color: var(--grey-light);
-    font-weight: 300;
-    position: relative;
+    font-size: 13px; color: var(--grey-light); font-weight: 300; position: relative;
   }
   .header-line {
-    width: 48px;
-    height: 1px;
-    background: var(--gold);
-    margin: 20px auto 0;
-    position: relative;
+    width: 48px; height: 1px; background: var(--gold); margin: 20px auto 0; position: relative;
   }
 
-  /* ── ARCHITECTURE VISUAL ── */
-  .arch-section {
-    padding: 48px 24px 32px;
-    max-width: 1100px;
-    margin: 0 auto;
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--cream-deep);
+    padding: 16px 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
   }
+  .filter-inner { max-width: 960px; margin: 0 auto; }
+  .filter-label {
+    font-size: 11px; font-weight: 600; color: var(--grey-mid);
+    letter-spacing: 2px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .filter-label svg { width: 14px; height: 14px; }
+  .filter-count {
+    margin-left: auto; font-weight: 400; letter-spacing: 0;
+    font-size: 12px; color: var(--grey-light);
+  }
+  .filter-tags {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  }
+  .filter-tag {
+    font-size: 12.5px; font-weight: 500; padding: 6px 16px;
+    border-radius: 20px; cursor: pointer; transition: all 0.2s ease;
+    border: 1.5px solid; user-select: none; white-space: nowrap;
+  }
+  .filter-tag.inactive { background: var(--white); opacity: 0.45; }
+  .filter-tag.active { color: var(--white); opacity: 1; }
+  .ft-forum { border-color: var(--tag-forum); }
+  .ft-forum.active { background: var(--tag-forum); }
+  .ft-forum.inactive { color: var(--tag-forum); }
+  .ft-workshop { border-color: var(--tag-workshop); }
+  .ft-workshop.active { background: var(--tag-workshop); }
+  .ft-workshop.inactive { color: var(--tag-workshop); }
+  .ft-pitch { border-color: var(--tag-pitch); }
+  .ft-pitch.active { background: var(--tag-pitch); }
+  .ft-pitch.inactive { color: var(--tag-pitch); }
+  .ft-course { border-color: var(--tag-course); }
+  .ft-course.active { background: var(--tag-course); }
+  .ft-course.inactive { color: var(--tag-course); }
+  .ft-overseas { border-color: var(--tag-overseas); }
+  .ft-overseas.active { background: var(--tag-overseas); }
+  .ft-overseas.inactive { color: var(--tag-overseas); }
+  .ft-gathering { border-color: var(--tag-gathering); }
+  .ft-gathering.active { background: var(--tag-gathering); }
+  .ft-gathering.inactive { color: var(--tag-gathering); }
+  .ft-annual { border-color: var(--tag-annual); }
+  .ft-annual.active { background: var(--tag-annual); }
+  .ft-annual.inactive { color: var(--tag-annual); }
+  .filter-reset {
+    font-size: 11px; color: var(--grey-mid); cursor: pointer;
+    padding: 6px 12px; border: 1px dashed var(--grey-light);
+    border-radius: 20px; transition: all 0.2s; white-space: nowrap;
+  }
+  .filter-reset:hover { border-color: var(--grey-warm); color: var(--dark); }
+
+  /* ── LIFECYCLE ── */
+  .arch-section { padding: 48px 24px 32px; max-width: 1100px; margin: 0 auto; }
   .arch-title {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 18px;
-    font-weight: 600;
-    text-align: center;
-    color: var(--dark);
-    margin-bottom: 32px;
-    letter-spacing: 1px;
+    font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 600;
+    text-align: center; color: var(--dark); margin-bottom: 32px; letter-spacing: 1px;
   }
-
-  .lifecycle {
-    display: flex;
-    align-items: stretch;
-    gap: 0;
-    overflow-x: auto;
-    padding: 0 0 20px;
-  }
-  .phase-group {
-    flex: 1;
-    min-width: 140px;
-    position: relative;
-  }
-  .phase-header {
-    text-align: center;
-    padding: 14px 8px;
-    position: relative;
-  }
+  .lifecycle { display: flex; align-items: stretch; gap: 0; overflow-x: auto; padding: 0 0 20px; }
+  .phase-group { flex: 1; min-width: 140px; position: relative; }
+  .phase-header { text-align: center; padding: 14px 8px; }
   .phase-number {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 28px;
-    font-weight: 900;
-    color: var(--gold);
-    line-height: 1;
-    opacity: 0.3;
+    font-family: 'Noto Serif TC', serif; font-size: 28px; font-weight: 900;
+    color: var(--gold); line-height: 1; opacity: 0.3;
   }
-  .phase-name {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    color: var(--dark);
-    margin-top: 4px;
-  }
-  .phase-bar {
-    height: 4px;
-    margin: 0 2px;
-    border-radius: 2px;
-  }
+  .phase-name { font-size: 11px; font-weight: 600; letter-spacing: 2px; color: var(--dark); margin-top: 4px; }
+  .phase-bar { height: 4px; margin: 0 2px; border-radius: 2px; }
   .pb-plan { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
   .pb-content { background: linear-gradient(90deg, var(--accent-blue), #5A7A93); }
   .pb-guest { background: linear-gradient(90deg, var(--accent-green), #6A8B7A); }
   .pb-mkt { background: linear-gradient(90deg, #D4884A, #E8A86A); }
-  .pb-partner { background: linear-gradient(90deg, var(--accent-wine), #9A5B6E); }
   .pb-ops { background: linear-gradient(90deg, var(--grey-warm), var(--grey-mid)); }
-
-  .phase-tags {
-    padding: 10px 6px;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-  .phase-tag {
-    font-size: 9.5px;
-    color: var(--grey-warm);
-    text-align: center;
-    line-height: 1.4;
-    padding: 2px 4px;
-  }
-
+  .pb-partner { background: linear-gradient(90deg, var(--accent-wine), #9A5B6E); }
+  .phase-tags { padding: 10px 6px; display: flex; flex-direction: column; gap: 3px; }
+  .phase-tag { font-size: 9.5px; color: var(--grey-warm); text-align: center; line-height: 1.4; padding: 2px 4px; }
   .arrow-connector {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 20px;
-    color: var(--gold-light);
-    font-size: 16px;
-    padding-bottom: 60px;
+    display: flex; align-items: center; justify-content: center;
+    min-width: 20px; color: var(--gold-light); font-size: 16px; padding-bottom: 60px;
   }
-
-  /* ── FLOW BANDS ── */
   .flow-bands {
-    max-width: 1100px;
-    margin: 0 auto 40px;
-    padding: 0 24px;
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    justify-content: center;
+    max-width: 1100px; margin: 0 auto 40px; padding: 0 24px;
+    display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
   }
-  .flow-band {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--grey-warm);
-    letter-spacing: 0.5px;
-  }
-  .flow-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-  }
+  .flow-band { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 500; color: var(--grey-warm); letter-spacing: 0.5px; }
+  .flow-dot { width: 8px; height: 8px; border-radius: 50%; }
   .fd-plan { background: var(--gold); }
   .fd-content { background: var(--accent-blue); }
   .fd-guest { background: var(--accent-green); }
@@ -195,33 +167,17 @@
   .fd-ops { background: var(--grey-warm); }
 
   /* ── DETAIL SECTIONS ── */
-  .details {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 0 24px 60px;
-  }
-
+  .details { max-width: 960px; margin: 0 auto; padding: 0 24px 60px; }
   .cat-section {
-    margin-bottom: 36px;
-    background: var(--white);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-    border: 1px solid rgba(0,0,0,0.05);
+    margin-bottom: 36px; background: var(--white); border-radius: 8px;
+    overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.05); transition: opacity 0.3s ease;
   }
-  .cat-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 18px 24px;
-    cursor: default;
-  }
+  .cat-section.dimmed { opacity: 0.25; }
+  .cat-header { display: flex; align-items: center; gap: 14px; padding: 18px 24px; }
   .cat-num {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 24px;
-    font-weight: 900;
-    line-height: 1;
-    min-width: 36px;
+    font-family: 'Noto Serif TC', serif; font-size: 24px; font-weight: 900;
+    line-height: 1; min-width: 36px;
   }
   .cn-plan { color: var(--gold); }
   .cn-content { color: var(--accent-blue); }
@@ -229,73 +185,51 @@
   .cn-mkt { color: #D4884A; }
   .cn-partner { color: var(--accent-wine); }
   .cn-ops { color: var(--grey-warm); }
-
-  .cat-name {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: 1px;
-  }
+  .cat-name { font-family: 'Noto Serif TC', serif; font-size: 17px; font-weight: 700; letter-spacing: 1px; }
   .cat-count {
-    margin-left: auto;
-    font-size: 11px;
-    color: var(--grey-mid);
-    font-weight: 400;
-    background: var(--cream);
-    padding: 3px 10px;
-    border-radius: 10px;
+    margin-left: auto; font-size: 11px; color: var(--grey-mid); font-weight: 400;
+    background: var(--cream); padding: 3px 10px; border-radius: 10px; white-space: nowrap;
   }
-
-  .cat-items {
-    border-top: 1px solid var(--cream-deep);
-  }
+  .cat-items { border-top: 1px solid var(--cream-deep); }
   .cat-item {
-    display: grid;
-    grid-template-columns: 1fr 1.4fr;
-    gap: 8px;
-    padding: 12px 24px 12px 74px;
-    border-bottom: 1px solid var(--cream-deep);
-    align-items: baseline;
+    display: grid; grid-template-columns: 1fr 1.2fr auto; gap: 8px;
+    padding: 12px 24px 12px 74px; border-bottom: 1px solid var(--cream-deep); align-items: baseline;
+    transition: opacity 0.25s ease;
   }
   .cat-item:last-child { border-bottom: none; }
-
-  .item-name {
-    font-size: 13.5px;
-    font-weight: 600;
-    color: var(--dark);
-    line-height: 1.5;
+  .cat-item.filtered-out { display: none; }
+  .item-name { font-size: 13.5px; font-weight: 600; color: var(--dark); line-height: 1.5; }
+  .item-desc { font-size: 12.5px; color: var(--grey-mid); line-height: 1.6; font-weight: 300; }
+  .item-tags { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; align-items: flex-start; padding-top: 2px; }
+  .item-tag {
+    font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 3px;
+    color: var(--white); white-space: nowrap; letter-spacing: 0.5px; line-height: 1.6;
   }
-  .item-desc {
-    font-size: 12.5px;
-    color: var(--grey-mid);
-    line-height: 1.6;
-    font-weight: 300;
-  }
-
-  /* ── FOOTER ── */
+  .it-forum { background: var(--tag-forum); }
+  .it-workshop { background: var(--tag-workshop); }
+  .it-pitch { background: var(--tag-pitch); }
+  .it-course { background: var(--tag-course); }
+  .it-overseas { background: var(--tag-overseas); }
+  .it-gathering { background: var(--tag-gathering); }
+  .it-annual { background: var(--tag-annual); }
   .footer {
-    text-align: center;
-    padding: 32px 24px 48px;
-    font-size: 11px;
-    color: var(--grey-light);
-    letter-spacing: 1px;
+    text-align: center; padding: 32px 24px 48px; font-size: 11px;
+    color: var(--grey-light); letter-spacing: 1px;
   }
 
-  /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
     .header { padding: 40px 20px 36px; }
     .header h1 { font-size: 24px; }
     .lifecycle { flex-wrap: wrap; gap: 4px; }
     .phase-group { min-width: 30%; flex: 0 0 30%; }
     .arrow-connector { display: none; }
-    .cat-item {
-      grid-template-columns: 1fr;
-      padding-left: 24px;
-    }
-    .item-desc { margin-top: 2px; }
+    .cat-item { grid-template-columns: 1fr; padding-left: 24px; }
+    .item-tags { justify-content: flex-start; margin-top: 4px; }
+    .filter-tags { gap: 6px; }
+    .filter-tag { font-size: 11px; padding: 5px 12px; }
   }
-
   @media print {
+    .filter-bar { position: static; box-shadow: none; }
     .cat-section { break-inside: avoid; }
     body { background: white; }
   }
@@ -303,7 +237,6 @@
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-label">識富天使會 Angel Club</div>
   <h1>活動管理 SOP 架構總覽</h1>
@@ -311,83 +244,41 @@
   <div class="header-line"></div>
 </div>
 
-<!-- LIFECYCLE ARCHITECTURE -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <div class="filter-label">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+      依活動類型篩選
+      <span class="filter-count" id="filterCount">顯示全部 60 項</span>
+    </div>
+    <div class="filter-tags">
+      <div class="filter-tag ft-forum active" data-tag="forum" onclick="toggleFilter(this)">論壇</div>
+      <div class="filter-tag ft-workshop active" data-tag="workshop" onclick="toggleFilter(this)">工作坊</div>
+      <div class="filter-tag ft-pitch active" data-tag="pitch" onclick="toggleFilter(this)">Pitch Day</div>
+      <div class="filter-tag ft-course active" data-tag="course" onclick="toggleFilter(this)">課程</div>
+      <div class="filter-tag ft-overseas active" data-tag="overseas" onclick="toggleFilter(this)">海外參訪</div>
+      <div class="filter-tag ft-gathering active" data-tag="gathering" onclick="toggleFilter(this)">會員小聚</div>
+      <div class="filter-tag ft-annual active" data-tag="annual" onclick="toggleFilter(this)">年會</div>
+      <div class="filter-reset" onclick="resetFilters()">全部顯示</div>
+    </div>
+  </div>
+</div>
+
 <div class="arch-section">
   <div class="arch-title">活動生命週期｜Event Lifecycle</div>
   <div class="lifecycle">
-    <div class="phase-group">
-      <div class="phase-header">
-        <div class="phase-number">01</div>
-        <div class="phase-name">策劃期</div>
-      </div>
-      <div class="phase-bar pb-plan"></div>
-      <div class="phase-tags">
-        <div class="phase-tag">企劃 ∙ 預算</div>
-        <div class="phase-tag">風險預案</div>
-      </div>
-    </div>
+    <div class="phase-group"><div class="phase-header"><div class="phase-number">01</div><div class="phase-name">策劃期</div></div><div class="phase-bar pb-plan"></div><div class="phase-tags"><div class="phase-tag">企劃 ∙ 預算</div><div class="phase-tag">風險預案</div></div></div>
     <div class="arrow-connector">›</div>
-    <div class="phase-group">
-      <div class="phase-header">
-        <div class="phase-number">02</div>
-        <div class="phase-name">內容期</div>
-      </div>
-      <div class="phase-bar pb-content"></div>
-      <div class="phase-tags">
-        <div class="phase-tag">議程 ∙ 講者</div>
-        <div class="phase-tag">Panel 設計</div>
-      </div>
-    </div>
+    <div class="phase-group"><div class="phase-header"><div class="phase-number">02</div><div class="phase-name">內容期</div></div><div class="phase-bar pb-content"></div><div class="phase-tags"><div class="phase-tag">議程 ∙ 講者</div><div class="phase-tag">Panel 設計</div></div></div>
     <div class="arrow-connector">›</div>
-    <div class="phase-group">
-      <div class="phase-header">
-        <div class="phase-number">03</div>
-        <div class="phase-name">邀請期</div>
-      </div>
-      <div class="phase-bar pb-guest"></div>
-      <div class="phase-tags">
-        <div class="phase-tag">名單 ∙ 報名</div>
-        <div class="phase-tag">VIP 分級</div>
-      </div>
-    </div>
+    <div class="phase-group"><div class="phase-header"><div class="phase-number">03</div><div class="phase-name">邀請期</div></div><div class="phase-bar pb-guest"></div><div class="phase-tags"><div class="phase-tag">名單 ∙ 報名</div><div class="phase-tag">VIP 分級</div></div></div>
     <div class="arrow-connector">›</div>
-    <div class="phase-group">
-      <div class="phase-header">
-        <div class="phase-number">04</div>
-        <div class="phase-name">推廣期</div>
-      </div>
-      <div class="phase-bar pb-mkt"></div>
-      <div class="phase-tags">
-        <div class="phase-tag">行銷 ∙ 媒體</div>
-        <div class="phase-tag">倒數曝光</div>
-      </div>
-    </div>
+    <div class="phase-group"><div class="phase-header"><div class="phase-number">04</div><div class="phase-name">推廣期</div></div><div class="phase-bar pb-mkt"></div><div class="phase-tags"><div class="phase-tag">行銷 ∙ 媒體</div><div class="phase-tag">倒數曝光</div></div></div>
     <div class="arrow-connector">›</div>
-    <div class="phase-group">
-      <div class="phase-header">
-        <div class="phase-number">05</div>
-        <div class="phase-name">執行期</div>
-      </div>
-      <div class="phase-bar pb-ops"></div>
-      <div class="phase-tags">
-        <div class="phase-tag">場地 ∙ 設計</div>
-        <div class="phase-tag">現場執行</div>
-      </div>
-    </div>
+    <div class="phase-group"><div class="phase-header"><div class="phase-number">05</div><div class="phase-name">執行期</div></div><div class="phase-bar pb-ops"></div><div class="phase-tags"><div class="phase-tag">場地 ∙ 設計</div><div class="phase-tag">現場執行</div></div></div>
     <div class="arrow-connector">›</div>
-    <div class="phase-group">
-      <div class="phase-header">
-        <div class="phase-number">06</div>
-        <div class="phase-name">收尾期</div>
-      </div>
-      <div class="phase-bar pb-partner"></div>
-      <div class="phase-tags">
-        <div class="phase-tag">復盤 ∙ 財務</div>
-        <div class="phase-tag">會員轉換</div>
-      </div>
-    </div>
+    <div class="phase-group"><div class="phase-header"><div class="phase-number">06</div><div class="phase-name">收尾期</div></div><div class="phase-bar pb-partner"></div><div class="phase-tags"><div class="phase-tag">復盤 ∙ 財務</div><div class="phase-tag">會員轉換</div></div></div>
   </div>
-
   <div class="flow-bands">
     <div class="flow-band"><div class="flow-dot fd-partner"></div>合作/贊助</div>
     <div class="flow-band"><div class="flow-dot fd-ops"></div>場地/飲食</div>
@@ -396,386 +287,208 @@
   </div>
 </div>
 
-<!-- DETAILED SOP -->
-<div class="details">
+<div class="details" id="sopDetails">
 
   <!-- 1 企劃 -->
-  <div class="cat-section">
-    <div class="cat-header">
-      <div class="cat-num cn-plan">01</div>
-      <div class="cat-name">企劃</div>
-      <div class="cat-count">3 項</div>
-    </div>
+  <div class="cat-section" data-cat="1">
+    <div class="cat-header"><div class="cat-num cn-plan">01</div><div class="cat-name">企劃</div><div class="cat-count"><span class="visible-count">3</span> / 3 項</div></div>
     <div class="cat-items">
-      <div class="cat-item">
-        <div class="item-name">活動大表 / 行事曆建立</div>
-        <div class="item-desc">統整年度所有活動時程，建立可追蹤的主行事曆，確保跨活動不衝突、資源可調配。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">活動策略 / 企劃表</div>
-        <div class="item-desc">定義單場活動目標、受眾、KPI、預算框架與核心訊息，作為所有執行工作的依據文件。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">風險預案 / 應變計畫</div>
-        <div class="item-desc">預擬講者取消、場地異常、天候影響等情境的 Plan B，確保活動韌性。</div>
-      </div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,overseas,gathering,annual"><div class="item-name">活動大表 / 行事曆建立</div><div class="item-desc">統整年度所有活動時程，建立可追蹤的主行事曆，確保跨活動不衝突、資源可調配。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-gathering">小聚</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,overseas,gathering,annual"><div class="item-name">活動策略 / 企劃表</div><div class="item-desc">定義單場活動目標、受眾、KPI、預算框架與核心訊息，作為所有執行工作的依據文件。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-gathering">小聚</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,overseas,annual"><div class="item-name">風險預案 / 應變計畫</div><div class="item-desc">預擬講者取消、場地異常、天候影響等情境的 Plan B，確保活動韌性。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <!-- 2 議程 -->
-  <div class="cat-section">
-    <div class="cat-header">
-      <div class="cat-num cn-content">02</div>
-      <div class="cat-name">議程</div>
-      <div class="cat-count">7 項</div>
-    </div>
+  <div class="cat-section" data-cat="2">
+    <div class="cat-header"><div class="cat-num cn-content">02</div><div class="cat-name">議程</div><div class="cat-count"><span class="visible-count">7</span> / 7 項</div></div>
     <div class="cat-items">
-      <div class="cat-item">
-        <div class="item-name">[比價] 主持人安排</div>
-        <div class="item-desc">依據活動調性搜尋、比價並確認專業主持人，含中英雙語能力評估。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">主持人講稿、內容授權 / 審核流程</div>
-        <div class="item-desc">撰寫主持人串場稿，並建立講者簡報的合規審核流程（尤其金融機構有 compliance 要求）。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">活動流程表</div>
-        <div class="item-desc">完整時間軸 rundown，含每一環節起訖時間、負責人、轉場提示與技術 cue 點。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">問答題目準備 / Panel 設計</div>
-        <div class="item-desc">為圓桌論壇或 Q&A 環節預擬引導問題，設計互動節奏與議題深度層次。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">機構 / 講者邀請與確認</div>
-        <div class="item-desc">向目標機構與講者發出正式邀約，追蹤回覆狀態直到確認出席。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">講者 rundown、投影片準備 / 索取</div>
-        <div class="item-desc">向已確認講者索取簡報檔案，統一格式與版型，並提供個人化 rundown。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">講者資料收集（bio / 照片）</div>
-        <div class="item-desc">收集講者中英文簡歷、高解析度照片與職稱，供網站、手冊及現場識別使用。</div>
-      </div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">[比價] 主持人安排</div><div class="item-desc">依據活動調性搜尋、比價並確認專業主持人，含中英雙語能力評估。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">主持人講稿、內容授權 / 審核流程</div><div class="item-desc">撰寫主持人串場稿，並建立講者簡報的合規審核流程（尤其金融機構有 compliance 要求）。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,annual"><div class="item-name">活動流程表</div><div class="item-desc">完整時間軸 rundown，含每一環節起訖時間、負責人、轉場提示與技術 cue 點。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,annual"><div class="item-name">問答題目準備 / Panel 設計</div><div class="item-desc">為圓桌論壇或 Q&A 環節預擬引導問題，設計互動節奏與議題深度層次。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,annual"><div class="item-name">機構 / 講者邀請與確認</div><div class="item-desc">向目標機構與講者發出正式邀約，追蹤回覆狀態直到確認出席。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,annual"><div class="item-name">講者 rundown、投影片準備 / 索取</div><div class="item-desc">向已確認講者索取簡報檔案，統一格式與版型，並提供個人化 rundown。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,annual"><div class="item-name">講者資料收集（bio / 照片）</div><div class="item-desc">收集講者中英文簡歷、高解析度照片與職稱，供網站、手冊及現場識別使用。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <!-- 3 來賓 -->
-  <div class="cat-section">
-    <div class="cat-header">
-      <div class="cat-num cn-guest">03</div>
-      <div class="cat-name">來賓</div>
-      <div class="cat-count">5 項</div>
-    </div>
+  <div class="cat-section" data-cat="3">
+    <div class="cat-header"><div class="cat-num cn-guest">03</div><div class="cat-name">來賓</div><div class="cat-count"><span class="visible-count">5</span> / 5 項</div></div>
     <div class="cat-items">
-      <div class="cat-item">
-        <div class="item-name">每週定期名單回顧</div>
-        <div class="item-desc">每週固定追蹤報名狀態、出席率預估與邀請缺口，及時調整推進策略。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">活動報名表</div>
-        <div class="item-desc">設計並上線報名表單，收集與會者基本資料、特殊需求（飲食禁忌、翻譯等）。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">會前出席確認 / 接待安排 / VIP 分級策略</div>
-        <div class="item-desc">會前逐一確認出席，依理事、會員、外部貴賓分級規劃接待規格與動線。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">邀請名單策略討論</div>
-        <div class="item-desc">與主管及 BD 團隊共同定義目標受眾輪廓與名單來源，確保邀請品質。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">邀請名單 push / 追蹤</div>
-        <div class="item-desc">持續推進未回覆名單，透過多管道（電話、LINE、Email）觸及並記錄回覆狀態。</div>
-      </div>
+      <div class="cat-item" data-tags="forum,annual,overseas"><div class="item-name">每週定期名單回顧</div><div class="item-desc">每週固定追蹤報名狀態、出席率預估與邀請缺口，及時調整推進策略。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span><span class="item-tag it-overseas">海外</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,gathering,annual"><div class="item-name">活動報名表</div><div class="item-desc">設計並上線報名表單，收集與會者基本資料、特殊需求（飲食禁忌、翻譯等）。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-gathering">小聚</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,annual,overseas"><div class="item-name">會前出席確認 / 接待安排 / VIP 分級策略</div><div class="item-desc">會前逐一確認出席，依理事、會員、外部貴賓分級規劃接待規格與動線。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span><span class="item-tag it-overseas">海外</span></div></div>
+      <div class="cat-item" data-tags="forum,annual,overseas"><div class="item-name">邀請名單策略討論</div><div class="item-desc">與主管及 BD 團隊共同定義目標受眾輪廓與名單來源，確保邀請品質。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span><span class="item-tag it-overseas">海外</span></div></div>
+      <div class="cat-item" data-tags="forum,annual,overseas"><div class="item-name">邀請名單 push / 追蹤</div><div class="item-desc">持續推進未回覆名單，透過多管道（電話、LINE、Email）觸及並記錄回覆狀態。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span><span class="item-tag it-overseas">海外</span></div></div>
     </div>
   </div>
 
   <!-- 4 行銷 -->
-  <div class="cat-section">
-    <div class="cat-header">
-      <div class="cat-num cn-mkt">04</div>
-      <div class="cat-name">行銷</div>
-      <div class="cat-count">8 項</div>
-    </div>
+  <div class="cat-section" data-cat="4">
+    <div class="cat-header"><div class="cat-num cn-mkt">04</div><div class="cat-name">行銷</div><div class="cat-count"><span class="visible-count">8</span> / 8 項</div></div>
     <div class="cat-items">
-      <div class="cat-item">
-        <div class="item-name">文案撰寫（網站 / 社群）</div>
-        <div class="item-desc">產出活動主文案與各渠道適配版本，維持品牌調性與高淨值受眾語感。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">社群曝光活動</div>
-        <div class="item-desc">依通路特性（官網 / EDM / LINE / WeChat / LinkedIn / FB）發布活動資訊與宣傳素材。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">活動小結公告社群</div>
-        <div class="item-desc">活動結束後產出精華摘要，於全渠道同步發布，強化品牌影響力與社群記憶。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">活動花絮上架網頁、社群露出</div>
-        <div class="item-desc">整理活動照片、短影片與金句圖卡，上架官網並於社群持續露出，延長內容生命週期。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">活動報名表</div>
-        <div class="item-desc">報名頁上線與轉換數據追蹤，監測各渠道帶入的報名數量與轉換率。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">活動資訊上架網頁 Google Site</div>
-        <div class="item-desc">將活動完整資訊（議程、講者、報名連結）上架官方網站，確保資訊一致。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">倒數提醒（D-7 / D-3 / D-1）</div>
-        <div class="item-desc">於活動前固定節點推送提醒訊息，降低 no-show 率並營造期待感。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">新聞稿 / 媒體合作 / PR</div>
-        <div class="item-desc">撰寫新聞稿、洽談媒體露出機會，建立並維護媒體聯絡名單。</div>
-      </div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,overseas,annual"><div class="item-name">文案撰寫（網站 / 社群）</div><div class="item-desc">產出活動主文案與各渠道適配版本，維持品牌調性與高淨值受眾語感。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,overseas,annual"><div class="item-name">社群曝光活動</div><div class="item-desc">依通路特性（官網 / EDM / LINE / WeChat / LinkedIn / FB）發布活動資訊與宣傳素材。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,overseas,annual"><div class="item-name">活動小結公告社群</div><div class="item-desc">活動結束後產出精華摘要，於全渠道同步發布，強化品牌影響力與社群記憶。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,overseas,annual"><div class="item-name">活動花絮上架網頁、社群露出</div><div class="item-desc">整理活動照片、短影片與金句圖卡，上架官網並於社群持續露出，延長內容生命週期。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,annual"><div class="item-name">活動報名頁上線與轉換追蹤</div><div class="item-desc">報名頁上線與轉換數據追蹤，監測各渠道帶入的報名數量與轉換率。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,overseas,annual"><div class="item-name">活動資訊上架網頁 Google Site</div><div class="item-desc">將活動完整資訊（議程、講者、報名連結）上架官方網站，確保資訊一致。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,annual"><div class="item-name">倒數提醒（D-7 / D-3 / D-1）</div><div class="item-desc">於活動前固定節點推送提醒訊息，降低 no-show 率並營造期待感。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">新聞稿 / 媒體合作 / PR</div><div class="item-desc">撰寫新聞稿、洽談媒體露出機會，建立並維護媒體聯絡名單。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <!-- 5 合作/贊助 -->
-  <div class="cat-section">
-    <div class="cat-header">
-      <div class="cat-num cn-partner">05</div>
-      <div class="cat-name">合作 / 贊助</div>
-      <div class="cat-count">6 項</div>
-    </div>
+  <div class="cat-section" data-cat="5">
+    <div class="cat-header"><div class="cat-num cn-partner">05</div><div class="cat-name">合作 / 贊助</div><div class="cat-count"><span class="visible-count">6</span> / 6 項</div></div>
     <div class="cat-items">
-      <div class="cat-item">
-        <div class="item-name">合作方案洽談 / 設計</div>
-        <div class="item-desc">規劃合作權益結構，與潛在夥伴進行需求對接並擬定合作框架。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">合約簽署</div>
-        <div class="item-desc">確認合作條款後推動合約用印流程，確保雙方權責清晰。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">贊助方案設計</div>
-        <div class="item-desc">設計多層級贊助方案（冠名 / 協辦 / 支持），明確各級露出權益與交付物。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">贊助交付（票券 / 名單）</div>
-        <div class="item-desc">依合約提供贊助商應得權益，包含免費票券、與會者名單或展位等。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">贊助成果報告</div>
-        <div class="item-desc">活動後彙整贊助商露出數據、觸及效果與照片，交付正式成果報告。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">KOL / 夥伴曝光</div>
-        <div class="item-desc">協調合作夥伴或意見領袖進行活動前後的社群轉發與背書。</div>
-      </div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">合作方案洽談 / 設計</div><div class="item-desc">規劃合作權益結構，與潛在夥伴進行需求對接並擬定合作框架。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">合約簽署</div><div class="item-desc">確認合作條款後推動合約用印流程，確保雙方權責清晰。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">贊助方案設計</div><div class="item-desc">設計多層級贊助方案（冠名 / 協辦 / 支持），明確各級露出權益與交付物。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">贊助交付（票券 / 名單）</div><div class="item-desc">依合約提供贊助商應得權益，包含免費票券、與會者名單或展位等。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">贊助成果報告</div><div class="item-desc">活動後彙整贊助商露出數據、觸及效果與照片，交付正式成果報告。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,annual"><div class="item-name">KOL / 夥伴曝光</div><div class="item-desc">協調合作夥伴或意見領袖進行活動前後的社群轉發與背書。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <!-- 6 場地 -->
-  <div class="cat-section">
-    <div class="cat-header">
-      <div class="cat-num cn-ops">06</div>
-      <div class="cat-name">場地</div>
-      <div class="cat-count">5 項</div>
-    </div>
+  <div class="cat-section" data-cat="6">
+    <div class="cat-header"><div class="cat-num cn-ops">06</div><div class="cat-name">場地</div><div class="cat-count"><span class="visible-count">5</span> / 5 項</div></div>
     <div class="cat-items">
-      <div class="cat-item">
-        <div class="item-name">[比價] 場地 / 貴賓室搜尋與比較</div>
-        <div class="item-desc">依活動規模、品牌調性與預算搜尋場地，製作比較表供決策。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">[比價] 燈光、攝影 / 錄影、AV 設備 / 直播 / 網路</div>
-        <div class="item-desc">評估並比價視聽設備供應商（投影、音響、麥克風、直播串流、WiFi 增強等）。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">交通動線 / 停車 / 接駁資訊準備</div>
-        <div class="item-desc">整理場地周邊交通、停車場與接駁安排資訊，製作與會者指引。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">場地及相關設備預訂</div>
-        <div class="item-desc">完成場地合約簽訂、設備租借訂單，並鎖定確認日期與撤場時間。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">場地佈置、配置圖 / 座位安排</div>
-        <div class="item-desc">繪製平面配置圖，規劃座位區、報到區、VIP 區與動線，確認佈置時程。</div>
-      </div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,gathering,annual"><div class="item-name">[比價] 場地 / 貴賓室搜尋與比較</div><div class="item-desc">依活動規模、品牌調性與預算搜尋場地，製作比較表供決策。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-gathering">小聚</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">[比價] 燈光、攝影 / 錄影、AV 設備 / 直播 / 網路</div><div class="item-desc">評估並比價視聽設備供應商（投影、音響、麥克風、直播串流、WiFi 增強等）。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">交通動線 / 停車 / 接駁資訊準備</div><div class="item-desc">整理場地周邊交通、停車場與接駁安排資訊，製作與會者指引。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,gathering,annual"><div class="item-name">場地及相關設備預訂</div><div class="item-desc">完成場地合約簽訂、設備租借訂單，並鎖定確認日期與撤場時間。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-gathering">小聚</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">場地佈置、配置圖 / 座位安排</div><div class="item-desc">繪製平面配置圖，規劃座位區、報到區、VIP 區與動線，確認佈置時程。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <!-- 7 設計 -->
-  <div class="cat-section">
-    <div class="cat-header">
-      <div class="cat-num cn-mkt">07</div>
-      <div class="cat-name">設計</div>
-      <div class="cat-count">3 項</div>
-    </div>
+  <div class="cat-section" data-cat="7">
+    <div class="cat-header"><div class="cat-num cn-mkt">07</div><div class="cat-name">設計</div><div class="cat-count"><span class="visible-count">3</span> / 3 項</div></div>
     <div class="cat-items">
-      <div class="cat-item">
-        <div class="item-name">主視覺、社群素材、活動頁設計</div>
-        <div class="item-desc">開發活動主視覺 KV 並延伸為各渠道素材（社群圖、Banner、活動頁面）。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">活動簡報</div>
-        <div class="item-desc">製作活動介紹用簡報，供對外洽談合作、招募贊助或內部提案使用。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">識別證、背板、易拉展、現場指引看板</div>
-        <div class="item-desc">設計並送印現場所有實體視覺物件，確保品牌一致性與空間指引清晰。</div>
-      </div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,overseas,annual"><div class="item-name">主視覺、社群素材、活動頁設計</div><div class="item-desc">開發活動主視覺 KV 並延伸為各渠道素材（社群圖、Banner、活動頁面）。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">活動簡報</div><div class="item-desc">製作活動介紹用簡報，供對外洽談合作、招募贊助或內部提案使用。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">識別證、背板、易拉展、現場指引看板</div><div class="item-desc">設計並送印現場所有實體視覺物件，確保品牌一致性與空間指引清晰。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <!-- 8 執行 -->
-  <div class="cat-section">
-    <div class="cat-header">
-      <div class="cat-num cn-ops">08</div>
-      <div class="cat-name">執行</div>
-      <div class="cat-count">6 項</div>
-    </div>
+  <div class="cat-section" data-cat="8">
+    <div class="cat-header"><div class="cat-num cn-ops">08</div><div class="cat-name">執行</div><div class="cat-count"><span class="visible-count">6</span> / 6 項</div></div>
     <div class="cat-items">
-      <div class="cat-item">
-        <div class="item-name">[場佈] 輸出、攝影、設備、投影 / 錄影</div>
-        <div class="item-desc">活動前完成所有印刷品輸出、攝影設備到位、投影與錄影系統測試。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">活動前彩排</div>
-        <div class="item-desc">安排講者與工作團隊現場走位，確認設備、燈光、音響與轉場流程。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">現場貴賓接待</div>
-        <div class="item-desc">依 VIP 分級安排專人迎接、引導入座與休息室服務，展現高規格待客。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">細流 / 工作人員分工</div>
-        <div class="item-desc">產出分鐘級細部流程表，明確每位工作人員的崗位、職責與通訊機制。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">報到流程 / 簽到表 / QR</div>
-        <div class="item-desc">建置報到系統（QR Code 掃描或人工簽到），確保入場順暢並即時統計出席。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">攝影、大合照安排</div>
-        <div class="item-desc">規劃活動攝影動線與大合照時機，確保關鍵畫面不遺漏、照片可即時交付。</div>
-      </div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">[場佈] 輸出、攝影、設備、投影 / 錄影</div><div class="item-desc">活動前完成所有印刷品輸出、攝影設備到位、投影與錄影系統測試。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">活動前彩排</div><div class="item-desc">安排講者與工作團隊現場走位，確認設備、燈光、音響與轉場流程。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,overseas,annual"><div class="item-name">現場貴賓接待</div><div class="item-desc">依 VIP 分級安排專人迎接、引導入座與休息室服務，展現高規格待客。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,annual"><div class="item-name">細流 / 工作人員分工</div><div class="item-desc">產出分鐘級細部流程表，明確每位工作人員的崗位、職責與通訊機制。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,gathering,annual"><div class="item-name">報到流程 / 簽到表 / QR</div><div class="item-desc">建置報到系統（QR Code 掃描或人工簽到），確保入場順暢並即時統計出席。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-gathering">小聚</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,overseas,annual"><div class="item-name">攝影、大合照安排</div><div class="item-desc">規劃活動攝影動線與大合照時機，確保關鍵畫面不遺漏、照片可即時交付。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <!-- 9 財務 -->
-  <div class="cat-section">
-    <div class="cat-header">
-      <div class="cat-num cn-plan">09</div>
-      <div class="cat-name">財務</div>
-      <div class="cat-count">5 項</div>
-    </div>
+  <div class="cat-section" data-cat="9">
+    <div class="cat-header"><div class="cat-num cn-plan">09</div><div class="cat-name">財務</div><div class="cat-count"><span class="visible-count">5</span> / 5 項</div></div>
     <div class="cat-items">
-      <div class="cat-item">
-        <div class="item-name">成本控管</div>
-        <div class="item-desc">持續追蹤實際支出 vs 預算，即時示警超支項目並調整配置。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">活動費用結清、預扣費用追回</div>
-        <div class="item-desc">活動結束後完成所有款項結清，追回預付保證金或未使用之預扣款。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">活動預算表</div>
-        <div class="item-desc">編列完整預算明細（場地、設備、餐飲、印刷、講者費等），經核准後作為控管基準。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">報帳、發票</div>
-        <div class="item-desc">彙整所有費用憑證與發票，依公司財務流程完成報帳作業。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">講者 / 合作方付款時程追蹤</div>
-        <div class="item-desc">追蹤講者酬勞與廠商尾款的付款進度，避免延遲影響合作關係。</div>
-      </div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,overseas,gathering,annual"><div class="item-name">成本控管</div><div class="item-desc">持續追蹤實際支出 vs 預算，即時示警超支項目並調整配置。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-gathering">小聚</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,overseas,annual"><div class="item-name">活動費用結清、預扣費用追回</div><div class="item-desc">活動結束後完成所有款項結清，追回預付保證金或未使用之預扣款。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,overseas,gathering,annual"><div class="item-name">活動預算表</div><div class="item-desc">編列完整預算明細（場地、設備、餐飲、印刷、講者費等），經核准後作為控管基準。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-gathering">小聚</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,course,overseas,gathering,annual"><div class="item-name">報帳、發票</div><div class="item-desc">彙整所有費用憑證與發票，依公司財務流程完成報帳作業。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-course">課程</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-gathering">小聚</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,annual"><div class="item-name">講者 / 合作方付款時程追蹤</div><div class="item-desc">追蹤講者酬勞與廠商尾款的付款進度，避免延遲影響合作關係。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <!-- 10 飲食 -->
-  <div class="cat-section">
-    <div class="cat-header">
-      <div class="cat-num cn-guest">10</div>
-      <div class="cat-name">飲食</div>
-      <div class="cat-count">3 項</div>
-    </div>
+  <div class="cat-section" data-cat="10">
+    <div class="cat-header"><div class="cat-num cn-guest">10</div><div class="cat-name">飲食</div><div class="cat-count"><span class="visible-count">3</span> / 3 項</div></div>
     <div class="cat-items">
-      <div class="cat-item">
-        <div class="item-name">[比價] 餐廳搜尋與比較</div>
-        <div class="item-desc">依預算、菜系與場地距離篩選餐廳，製作比較表（含菜單、人均價位、包廂條件）。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">餐廳 / 餐點預訂</div>
-        <div class="item-desc">確認最終人數與特殊飲食需求後完成訂位，並確認出菜時間與服務流程。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">禮品採購</div>
-        <div class="item-desc">規劃講者伴手禮或與會者紀念品，統一採購並安排包裝與發放。</div>
-      </div>
+      <div class="cat-item" data-tags="forum,gathering,overseas,annual"><div class="item-name">[比價] 餐廳搜尋與比較</div><div class="item-desc">依預算、菜系與場地距離篩選餐廳，製作比較表（含菜單、人均價位、包廂條件）。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-gathering">小聚</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,gathering,overseas,annual"><div class="item-name">餐廳 / 餐點預訂</div><div class="item-desc">確認最終人數與特殊飲食需求後完成訂位，並確認出菜時間與服務流程。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-gathering">小聚</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,overseas,annual"><div class="item-name">禮品採購</div><div class="item-desc">規劃講者伴手禮或與會者紀念品，統一採購並安排包裝與發放。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <!-- 11 會後 -->
-  <div class="cat-section">
-    <div class="cat-header">
-      <div class="cat-num cn-partner">11</div>
-      <div class="cat-name">會後</div>
-      <div class="cat-count">3 項</div>
-    </div>
+  <div class="cat-section" data-cat="11">
+    <div class="cat-header"><div class="cat-num cn-partner">11</div><div class="cat-name">會後</div><div class="cat-count"><span class="visible-count">3</span> / 3 項</div></div>
     <div class="cat-items">
-      <div class="cat-item">
-        <div class="item-name">活動復盤、結案會議</div>
-        <div class="item-desc">召開內部復盤會議，檢視 KPI 達成度、記錄優化項目，產出結案報告。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">活動滿意度調查問卷</div>
-        <div class="item-desc">於活動後 48 小時內發送問卷，收集與會者回饋作為下次迭代依據。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">潛在會員名單更新、名片生態圈更新</div>
-        <div class="item-desc">將活動中接觸的潛在會員匯入 CRM，更新名片資料庫並移交 BD 團隊跟進。</div>
-      </div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,overseas,annual"><div class="item-name">活動復盤、結案會議</div><div class="item-desc">召開內部復盤會議，檢視 KPI 達成度、記錄優化項目，產出結案報告。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,course,overseas,annual"><div class="item-name">活動滿意度調查問卷</div><div class="item-desc">於活動後 48 小時內發送問卷，收集與會者回饋作為下次迭代依據。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-course">課程</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="forum,workshop,pitch,overseas,gathering,annual"><div class="item-name">潛在會員名單更新、名片生態圈更新</div><div class="item-desc">將活動中接觸的潛在會員匯入 CRM，更新名片資料庫並移交 BD 團隊跟進。</div><div class="item-tags"><span class="item-tag it-forum">論壇</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-pitch">Pitch</span><span class="item-tag it-overseas">海外</span><span class="item-tag it-gathering">小聚</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <!-- 12 海外 -->
-  <div class="cat-section">
-    <div class="cat-header">
-      <div class="cat-num cn-content">12</div>
-      <div class="cat-name">海外</div>
-      <div class="cat-count">6 項</div>
-    </div>
+  <div class="cat-section" data-cat="12">
+    <div class="cat-header"><div class="cat-num cn-content">12</div><div class="cat-name">海外</div><div class="cat-count"><span class="visible-count">6</span> / 6 項</div></div>
     <div class="cat-items">
-      <div class="cat-item">
-        <div class="item-name">交通（機票 / 巴士）</div>
-        <div class="item-desc">統籌團體機票訂購與當地交通（巴士包車 / 專車），管理航班與轉機銜接。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">行程路線規劃、每日 Rundown、機構接待時程</div>
-        <div class="item-desc">編排每日參訪路線與時程，與各接待機構確認行程細節並預留緩衝時間。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">就醫、緊急聯絡機制</div>
-        <div class="item-desc">建立當地緊急聯絡清單（醫院、大使館、保險公司），確保突發狀況可即時應對。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">當地接待、翻譯</div>
-        <div class="item-desc">安排當地接待人員與專業翻譯，確保語言與文化溝通無障礙。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">機構單位安排</div>
-        <div class="item-desc">與海外目標機構進行邀約、行程確認與接待細節對接，確保參訪品質。</div>
-      </div>
-      <div class="cat-item">
-        <div class="item-name">簽證 / 保險</div>
-        <div class="item-desc">協助團員確認簽證需求、統一辦理旅平險，並建立團員護照資料清冊。</div>
-      </div>
+      <div class="cat-item" data-tags="overseas"><div class="item-name">交通（機票 / 巴士）</div><div class="item-desc">統籌團體機票訂購與當地交通（巴士包車 / 專車），管理航班與轉機銜接。</div><div class="item-tags"><span class="item-tag it-overseas">海外</span></div></div>
+      <div class="cat-item" data-tags="overseas"><div class="item-name">行程路線規劃、每日 Rundown、機構接待時程</div><div class="item-desc">編排每日參訪路線與時程，與各接待機構確認行程細節並預留緩衝時間。</div><div class="item-tags"><span class="item-tag it-overseas">海外</span></div></div>
+      <div class="cat-item" data-tags="overseas"><div class="item-name">就醫、緊急聯絡機制</div><div class="item-desc">建立當地緊急聯絡清單（醫院、大使館、保險公司），確保突發狀況可即時應對。</div><div class="item-tags"><span class="item-tag it-overseas">海外</span></div></div>
+      <div class="cat-item" data-tags="overseas"><div class="item-name">當地接待、翻譯</div><div class="item-desc">安排當地接待人員與專業翻譯，確保語言與文化溝通無障礙。</div><div class="item-tags"><span class="item-tag it-overseas">海外</span></div></div>
+      <div class="cat-item" data-tags="overseas"><div class="item-name">機構單位安排</div><div class="item-desc">與海外目標機構進行邀約、行程確認與接待細節對接，確保參訪品質。</div><div class="item-tags"><span class="item-tag it-overseas">海外</span></div></div>
+      <div class="cat-item" data-tags="overseas"><div class="item-name">簽證 / 保險</div><div class="item-desc">協助團員確認簽證需求、統一辦理旅平險，並建立團員護照資料清冊。</div><div class="item-tags"><span class="item-tag it-overseas">海外</span></div></div>
     </div>
   </div>
 
 </div>
 
-<div class="footer">
-  識富天使會 ∙ Event Management SOP v1.0 ∙ 2026
-</div>
+<div class="footer">識富天使會 ∙ Event Management SOP v1.0 ∙ 2026</div>
 
+<script>
+const activeTags = new Set(['forum','workshop','pitch','course','overseas','gathering','annual']);
+const allTags = ['forum','workshop','pitch','course','overseas','gathering','annual'];
+
+function toggleFilter(el) {
+  const tag = el.dataset.tag;
+  if (activeTags.size === allTags.length) {
+    allTags.forEach(t => activeTags.delete(t));
+    activeTags.add(tag);
+  } else if (activeTags.has(tag)) {
+    activeTags.delete(tag);
+    if (activeTags.size === 0) allTags.forEach(t => activeTags.add(t));
+  } else {
+    activeTags.add(tag);
+  }
+  applyFilters();
+}
+
+function resetFilters() {
+  allTags.forEach(t => activeTags.add(t));
+  applyFilters();
+}
+
+function applyFilters() {
+  document.querySelectorAll('.filter-tag').forEach(btn => {
+    const tag = btn.dataset.tag;
+    btn.classList.toggle('active', activeTags.has(tag));
+    btn.classList.toggle('inactive', !activeTags.has(tag));
+  });
+
+  let totalVisible = 0;
+
+  document.querySelectorAll('.cat-section').forEach(section => {
+    const items = section.querySelectorAll('.cat-item');
+    let visibleInSection = 0;
+    items.forEach(item => {
+      const itemTags = item.dataset.tags.split(',');
+      const match = itemTags.some(t => activeTags.has(t));
+      item.classList.toggle('filtered-out', !match);
+      if (match) visibleInSection++;
+    });
+    totalVisible += visibleInSection;
+    const countEl = section.querySelector('.visible-count');
+    if (countEl) countEl.textContent = visibleInSection;
+    section.classList.toggle('dimmed', visibleInSection === 0);
+  });
+
+  const isAll = activeTags.size === allTags.length;
+  document.getElementById('filterCount').textContent = isAll
+    ? '顯示全部 60 項'
+    : '篩選顯示 ' + totalVisible + ' 項';
+}
+</script>
 </body>
 </html>
