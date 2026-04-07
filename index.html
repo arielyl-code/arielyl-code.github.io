@@ -1,163 +1,1527 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>香港行｜分享給朋友</title>
-  <script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #2c5f7a 0%, #427594 50%, #5a9ab5 100%);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      padding: 24px;
-    }
-    .card {
-      background: white;
-      border-radius: 20px;
-      padding: 36px 28px;
-      max-width: 360px;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-    }
-    .icon { font-size: 52px; margin-bottom: 16px; }
-    h1 { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; line-height: 1.4; }
-    p { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 20px; }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      background: #427594;
-      color: white;
-      border: none;
-      border-radius: 50px;
-      padding: 14px 24px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      width: 100%;
-      transition: background 0.2s, transform 0.1s;
-      margin-top: 10px;
-    }
-    .btn.secondary {
-      background: white;
-      color: #427594;
-      border: 2px solid #427594;
-    }
-    .btn:active { transform: scale(0.97); }
-    .btn:disabled { background: #ccc; border-color: #ccc; color: #999; cursor: not-allowed; }
-    .divider { border: none; border-top: 1px solid #eee; margin: 14px 0; }
-    .section-label { font-size: 11px; color: #aaa; letter-spacing: 1px; margin-bottom: 10px; }
-    .status { margin-top: 16px; font-size: 13px; color: #888; min-height: 20px; }
-    .status.success { color: #2e7d32; font-weight: 600; }
-    .status.error { color: #c62828; font-weight: 600; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>識富校對助手</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0E1113;
+  --bg-main: #1F2A31;
+  --bg-card: #2B3E4F;
+  --bg-input: #354F70;
+  --border: #425977;
+  --text-primary: #F3F1ED;
+  --text-secondary: #D4C0BF;
+  --text-muted: #6B758C;
+  --accent-warm: #D4B38C;
+  --accent-warm-light: #E8E0CF;
+  --accent-warm-dark: #9D7962;
+  --accent-gold: #E6CFA8;
+  --error: #CC9F9F;
+  --error-bg: rgba(204, 159, 159, 0.1);
+  --success: #859188;
+  --success-bg: rgba(133, 145, 136, 0.1);
+  --warning: #BC9676;
+  --warning-bg: rgba(188, 150, 118, 0.1);
+  --purple-muted: #685B80;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.7;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, var(--bg-main) 0%, var(--bg-card) 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--accent-gold);
+  letter-spacing: 1px;
+}
+
+.brand-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 300;
+}
+
+.header-right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-icon {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-icon:hover {
+  border-color: var(--accent-warm);
+  color: var(--accent-warm);
+  background: rgba(212, 179, 140, 0.08);
+}
+
+.btn-icon.active {
+  border-color: var(--accent-warm);
+  color: var(--accent-warm);
+  background: rgba(212, 179, 140, 0.12);
+}
+
+/* Main Layout */
+.main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  height: calc(100vh - 73px);
+}
+
+/* Input Panel */
+.panel {
+  padding: 24px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.panel-left {
+  border-right: 1px solid var(--border);
+  background: var(--bg-deep);
+}
+
+.panel-right {
+  background: var(--bg-main);
+}
+
+.panel-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+
+/* Tab Switcher */
+.tab-bar {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-main);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 20px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.tab:hover {
+  color: var(--text-secondary);
+}
+
+.tab.active {
+  background: var(--bg-card);
+  color: var(--accent-gold);
+}
+
+/* Text Input */
+.input-area {
+  width: 100%;
+  min-height: 280px;
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.8;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.input-area:focus {
+  outline: none;
+  border-color: var(--accent-warm);
+}
+
+.input-area::placeholder {
+  color: var(--text-muted);
+}
+
+/* Image Upload */
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--bg-main);
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: var(--accent-warm);
+  background: rgba(212, 179, 140, 0.05);
+}
+
+.upload-icon {
+  font-size: 36px;
+  opacity: 0.5;
+}
+
+.upload-text {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.upload-hint {
+  color: var(--text-muted);
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.image-previews {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.image-preview {
+  position: relative;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  background: var(--bg-card);
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-preview .remove-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.7);
+  border: none;
+  color: var(--error);
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* URL Input */
+.url-input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.url-input {
+  flex: 1;
+  padding: 12px 16px;
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.url-input:focus {
+  outline: none;
+  border-color: var(--accent-warm);
+}
+
+.url-input::placeholder {
+  color: var(--text-muted);
+}
+
+.btn-fetch {
+  padding: 12px 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--accent-warm);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-fetch:hover {
+  background: var(--bg-input);
+  border-color: var(--accent-warm);
+}
+
+.fetched-preview {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  max-height: 300px;
+  overflow-y: auto;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+/* Event Selector */
+.section-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 24px;
+  margin-bottom: 10px;
+}
+
+.select-wrap {
+  position: relative;
+}
+
+.select-wrap select {
+  width: 100%;
+  padding: 10px 16px;
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14px;
+  appearance: none;
+  cursor: pointer;
+}
+
+.select-wrap select:focus {
+  outline: none;
+  border-color: var(--accent-warm);
+}
+
+.select-wrap::after {
+  content: '▾';
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* Channel Tag */
+.channel-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.channel-tag {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.channel-tag:hover {
+  border-color: var(--accent-warm-dark);
+  color: var(--text-secondary);
+}
+
+.channel-tag.active {
+  border-color: var(--accent-warm);
+  color: var(--accent-warm);
+  background: rgba(212, 179, 140, 0.1);
+}
+
+/* Run Button */
+.btn-run {
+  width: 100%;
+  padding: 14px;
+  margin-top: 24px;
+  background: linear-gradient(135deg, var(--accent-warm-dark) 0%, var(--accent-warm) 100%);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--bg-deep);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 1px;
+}
+
+.btn-run:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(212, 179, 140, 0.3);
+}
+
+.btn-run:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Results Panel */
+.result-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60%;
+  text-align: center;
+  gap: 16px;
+}
+
+.result-empty-icon {
+  font-size: 48px;
+  opacity: 0.15;
+}
+
+.result-empty-text {
+  color: var(--text-muted);
+  font-size: 14px;
+  max-width: 260px;
+  line-height: 1.8;
+}
+
+/* Result Cards */
+.result-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  border-left: 3px solid transparent;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.result-card.error-card { border-left-color: var(--error); background: var(--error-bg); }
+.result-card.warning-card { border-left-color: var(--warning); background: var(--warning-bg); }
+.result-card.success-card { border-left-color: var(--success); background: var(--success-bg); }
+
+.result-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.result-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.badge-error { background: var(--error); color: var(--bg-deep); }
+.badge-warning { background: var(--warning); color: var(--bg-deep); }
+.badge-success { background: var(--success); color: var(--bg-deep); }
+
+.result-card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.result-card-body {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.result-card-body .highlight {
+  background: rgba(230, 207, 168, 0.15);
+  color: var(--accent-gold);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.result-summary {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  text-align: center;
+}
+
+.summary-item .summary-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.summary-item .summary-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+.num-error { color: var(--error); }
+.num-warning { color: var(--warning); }
+.num-success { color: var(--success); }
+
+/* Loading */
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent-warm);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Settings Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal {
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  width: 480px;
+  max-width: 90vw;
+  box-shadow: var(--shadow);
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--accent-gold);
+  margin-bottom: 24px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent-warm);
+}
+
+.form-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.6;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  border-color: var(--text-muted);
+  color: var(--text-secondary);
+}
+
+.btn-primary {
+  padding: 10px 24px;
+  background: var(--accent-warm);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--bg-deep);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+/* Status indicator */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot.connected { background: var(--success); }
+.status-dot.disconnected { background: var(--error); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* Hidden */
+.hidden { display: none !important; }
+
+/* Tab content */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Model Selector */
+.model-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.model-btn {
+  padding: 12px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.model-btn:hover {
+  border-color: var(--accent-warm-dark);
+}
+
+.model-btn.active {
+  border-color: var(--accent-warm);
+  background: rgba(212, 179, 140, 0.12);
+}
+
+.model-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.model-btn.active .model-name {
+  color: var(--accent-gold);
+}
+
+.model-desc {
+  font-size: 10px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.form-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 24px 0;
+}
+</style>
 </head>
 <body>
-  <div class="card">
-    <div class="icon">📨</div>
-    <h1>香港行倒數<br>分享給朋友</h1>
-    <p>點下方按鈕，選擇要分享的好友或群組。</p>
 
-    <div class="section-label">倒數系列</div>
-    <button class="btn" id="btn-day2" onclick="shareMessage('day2')">📤 【倒數 2 天】南豐／港科大</button>
+<!-- Header -->
+<header class="header">
+  <div class="header-left">
+    <span class="brand">識富校對助手</span>
+    <span class="brand-sub">Content Proofreader</span>
+  </div>
+  <div class="header-right">
+    <button class="btn-icon" id="btn-bookmarklet" title="拖曳到書籤列即可使用">
+      ⚡ Bookmarklet
+    </button>
+    <button class="btn-icon" id="btn-settings" onclick="toggleSettings()">
+      <span class="status-dot disconnected" id="status-dot"></span>
+      設定
+    </button>
+  </div>
+</header>
 
-    <hr class="divider">
-    <div class="section-label">行前資訊</div>
-    <button class="btn secondary" id="btn-notice" onclick="shareMessage('notice')">📋 行前通知</button>
+<!-- Main -->
+<main class="main">
+  <!-- Left: Input -->
+  <div class="panel panel-left">
+    <div class="panel-title">輸入內容</div>
 
-    <hr class="divider">
-    <div class="section-label">當日行程</div>
-    <button class="btn" id="btn-itinerary" onclick="shareMessage('itinerary')">🗓 第二天行程</button>
+    <!-- Tabs -->
+    <div class="tab-bar">
+      <button class="tab active" data-tab="text" onclick="switchTab('text')">📝 貼文字</button>
+      <button class="tab" data-tab="image" onclick="switchTab('image')">📷 截圖上傳</button>
+      <button class="tab" data-tab="url" onclick="switchTab('url')">🔗 網址擷取</button>
+    </div>
 
-    <button class="btn" id="btn-day3" onclick="shareMessage('day3')">🗓 第三天行程</button>
+    <!-- Text Tab -->
+    <div class="tab-content active" id="tab-text">
+      <textarea class="input-area" id="text-input" placeholder="直接貼上要校對的文字內容...&#10;&#10;支援從任何地方複製貼上，包含格式混亂的內容也沒關係。"></textarea>
+    </div>
 
-    <div class="status" id="status">載入中…</div>
+    <!-- Image Tab -->
+    <div class="tab-content" id="tab-image">
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+        <div class="upload-icon">📷</div>
+        <div class="upload-text">點擊上傳或拖曳截圖到這裡</div>
+        <div class="upload-hint">支援多張圖片，PNG / JPG / WebP</div>
+      </div>
+      <input type="file" id="file-input" multiple accept="image/*" class="hidden" onchange="handleFiles(this.files)">
+      <div class="image-previews" id="image-previews"></div>
+    </div>
+
+    <!-- URL Tab -->
+    <div class="tab-content" id="tab-url">
+      <div class="url-input-group">
+        <input type="url" class="url-input" id="url-input" placeholder="貼上網頁網址，例如活動頁面 URL">
+        <button class="btn-fetch" onclick="fetchUrl()">擷取</button>
+      </div>
+      <div class="fetched-preview hidden" id="fetched-preview"></div>
+    </div>
+
+    <!-- Event & Channel -->
+    <div class="section-label">比對活動</div>
+    <div class="select-wrap">
+      <select id="event-select">
+        <option value="">— 選擇活動知識庫 —</option>
+      </select>
+    </div>
+
+    <div class="section-label">素材類型</div>
+    <div class="channel-tags" id="channel-tags">
+      <button class="channel-tag" data-channel="website" onclick="selectChannel(this)">網站文案</button>
+      <button class="channel-tag" data-channel="fb" onclick="selectChannel(this)">FB 貼文</button>
+      <button class="channel-tag" data-channel="linkedin" onclick="selectChannel(this)">LinkedIn</button>
+      <button class="channel-tag" data-channel="line" onclick="selectChannel(this)">LINE 推播</button>
+      <button class="channel-tag" data-channel="form" onclick="selectChannel(this)">報名表單</button>
+      <button class="channel-tag" data-channel="print" onclick="selectChannel(this)">印刷製作物</button>
+      <button class="channel-tag" data-channel="other" onclick="selectChannel(this)">其他</button>
+    </div>
+
+    <button class="btn-run" id="btn-run" onclick="runProofread()">
+      開始校對
+    </button>
   </div>
 
-  <script>
-    const LIFF_ID = "2009433190-yHg23ZGB";
+  <!-- Right: Results -->
+  <div class="panel panel-right">
+    <div class="panel-title">校對結果</div>
 
-    const messages = {
+    <div id="result-area">
+      <div class="result-empty">
+        <div class="result-empty-icon">🔍</div>
+        <div class="result-empty-text">
+          貼上文字、上傳截圖或輸入網址，<br>
+          點擊「開始校對」後結果將顯示在這裡。
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
 
-      day2: {
-        type: "flex",
-        altText: "香港行，倒數 2 天｜南豐／港科大",
-        contents: {"type":"carousel","contents":[{"type":"bubble","size":"mega","hero":{"type":"image","url":"https://image2url.com/r2/default/images/1773825585530-b5e9ba94-8447-472b-8b67-e7a77778b127.png","size":"full","aspectMode":"cover","aspectRatio":"320:213"},"body":{"type":"box","layout":"vertical","spacing":"sm","paddingAll":"13px","contents":[{"type":"box","layout":"vertical","height":"30px","contents":[{"type":"text","weight":"bold","size":"lg","wrap":true,"align":"center","contents":[{"type":"span","text":"⧁ 香港行，倒數"},{"type":"span","text":" 2 ","color":"#427594"},{"type":"span","text":"天 ⧀"}]}]},{"type":"box","layout":"vertical","margin":"sm","height":"210px","contents":[{"type":"text","text":"3/25 ｜南豐集團家族辦公室","wrap":true,"color":"#427594","size":"md","weight":"regular","align":"center"},{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","text":"從紡織巨頭到跨世代資本帝國｜實業家族的長線邏輯。3/25 下午設港科大及當地二代菁英交流。倒數 2 天，六個面向，逐一攤開來看。","wrap":true,"color":"#000000","size":"md","margin":"lg"}]}]},"footer":{"type":"box","layout":"vertical","contents":[{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","text":"往右滑，看更多 ➟","wrap":true,"color":"#427594","size":"md","align":"center","margin":"lg"}]}},{"type":"bubble","size":"mega","hero":{"type":"image","url":"https://image2url.com/r2/default/images/1773825540350-1d29cda9-d146-4fa3-9a3b-57eb7e1052a7.jpg","size":"full","aspectMode":"cover","aspectRatio":"320:213"},"body":{"type":"box","layout":"vertical","spacing":"sm","paddingAll":"13px","contents":[{"type":"box","layout":"vertical","height":"30px","contents":[{"type":"text","weight":"bold","size":"lg","wrap":true,"align":"center","text":"①南豐集團家族辦公室","contents":[]}]},{"type":"box","layout":"vertical","margin":"sm","contents":[{"type":"text","text":"從紡織巨頭到跨世代資本帝國","wrap":true,"color":"#427594","size":"md","weight":"regular","align":"center"},{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","text":"1954 年，一座香港棉紗廠。七十年後，南豐集團橫跨地產、航運、金融投資與生命科學，以私有集團的結構在全球多個市場深度布局。作為從實業轉型為全球資產管理龍頭的傳奇，南豐將數十載在地產開發、航運與製造業累積的營運智慧，灌注於全球多元化配置中，形成「實業資本化、資本產業化」的獨特運作模式。","wrap":true,"color":"#000000","size":"md","margin":"lg"}]}]},"footer":{"type":"box","layout":"vertical","contents":[{"type":"box","layout":"vertical","backgroundColor":"#427594","cornerRadius":"md","height":"40px","alignItems":"center","justifyContent":"center","action":{"type":"uri","label":"action","uri":"https://www.nftrinity.com/"},"contents":[{"type":"text","text":"延伸閱讀 >","color":"#ffffff"}]}]}},{"type":"bubble","size":"mega","hero":{"type":"image","url":"https://image2url.com/r2/default/images/1773825632849-43b0e17b-05c2-45ca-9eef-8c91f956271c.jpg","size":"full","aspectMode":"cover","aspectRatio":"320:213"},"body":{"type":"box","layout":"vertical","spacing":"sm","paddingAll":"13px","contents":[{"type":"box","layout":"vertical","height":"30px","contents":[{"type":"text","weight":"bold","size":"lg","wrap":true,"align":"center","text":"①南豐集團家族辦公室","contents":[]}]},{"type":"box","layout":"vertical","margin":"sm","height":"230px","contents":[{"type":"text","text":"超越純金融機構的韌性與防禦深度","wrap":true,"color":"#427594","size":"md","weight":"regular","align":"center"},{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","text":"憑藉強大的資產負債表與非上市公司的戰略靈活性，南豐在應對全球經濟週期時，展現出超越傳統金融機構的韌性與防禦深度。不向季報交代，不追短期表現——這種結構性的時間自由度，使南豐得以執行許多上市公司在制度上無法承載的長線決策，是亞洲實業家族轉型與資產保值的卓越標竿。","wrap":true,"color":"#000000","size":"md","margin":"lg"}]}]}},{"type":"bubble","size":"mega","hero":{"type":"image","url":"https://image2url.com/r2/default/images/1773825675046-961d690c-bd2b-46c7-9ea5-a346599055bc.jpg","size":"full","aspectMode":"cover","aspectRatio":"320:213"},"body":{"type":"box","layout":"vertical","spacing":"sm","paddingAll":"13px","contents":[{"type":"box","layout":"vertical","height":"30px","contents":[{"type":"text","weight":"bold","size":"lg","wrap":true,"align":"center","text":"①南豐集團家族辦公室","contents":[]}]},{"type":"box","layout":"vertical","margin":"sm","contents":[{"type":"text","text":"以家族資本定義另類投資的進入門檻","wrap":true,"color":"#427594","size":"md","weight":"regular","align":"center"},{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","text":"南豐透過旗下「南豐生科」與「仰和投資」，在生物技術、精準醫療與健康產業建立起全球領先的生態體系。這種將財富投入人類未來命運的戰略定力，使其在另類投資領域具備極高的進入門檻與專業壁壘——透過倫敦、紐約及亞洲核心城市的物業組合與科技布局，南豐以實業家的思維重新定義資本的社會價值，實現家族影響力在產業創新與跨國資產中的永續傳承。","wrap":true,"color":"#000000","size":"md","margin":"lg"}]}]}},{"type":"bubble","size":"mega","hero":{"type":"image","url":"https://image2url.com/r2/default/images/1773996667373-221ed7b1-09af-420e-8a58-d686668c7da0.jpeg","size":"full","aspectMode":"cover","aspectRatio":"320:213"},"body":{"type":"box","layout":"vertical","spacing":"sm","paddingAll":"13px","contents":[{"type":"box","layout":"vertical","height":"30px","contents":[{"type":"text","weight":"bold","size":"lg","wrap":true,"align":"center","text":"②Charles Monat Associates Ltd","contents":[]}]},{"type":"box","layout":"vertical","margin":"sm","contents":[{"type":"text","text":"中立平台，跨境佈局","wrap":true,"color":"#427594","size":"md","weight":"regular","align":"center"},{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","text":"Charles Monat Associates Ltd 創立於 1971 年，是全球首屈一指的財富轉移與遺產規劃顧問公司，總部設於香港，服務遍及 60 個市場逾 9,500 名高淨值客戶，管理保單總保額超過 450 億美元。旗下逾 200 名專業顧問來自稅務、法律、財富規劃等不同背景，並與全球頂尖私人銀行、法律顧問及會計師事務所緊密協作。","wrap":true,"color":"#000000","size":"md","margin":"lg"}]}]},"footer":{"type":"box","layout":"vertical","contents":[{"type":"box","layout":"vertical","backgroundColor":"#427594","cornerRadius":"md","height":"40px","alignItems":"center","justifyContent":"center","action":{"type":"uri","label":"action","uri":"https://www.monat.com/tc/"},"contents":[{"type":"text","text":"延伸閱讀 >","color":"#ffffff"}]}]}},{"type":"bubble","size":"mega","hero":{"type":"image","url":"https://image2url.com/r2/default/images/1773996812019-464ee78d-d09f-4adb-bf22-4ea6f0942ba9.jpg","size":"full","aspectMode":"cover","aspectRatio":"320:213"},"body":{"type":"box","layout":"vertical","spacing":"sm","paddingAll":"13px","contents":[{"type":"box","layout":"vertical","height":"30px","contents":[{"type":"text","weight":"bold","size":"lg","wrap":true,"align":"center","text":"②Charles Monat Associates Ltd","contents":[]}]},{"type":"box","layout":"vertical","margin":"sm","contents":[{"type":"text","text":"不僅是保險經紀人","wrap":true,"color":"#427594","size":"md","weight":"regular","align":"center"},{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","text":"有別於傳統保險經紀，Charles Monat 定位為「遺產傳承的匠人」——以人壽保險為核心工具，整合信託、稅務與法律多元專業，為客戶打造穩健靈活的跨代財富架構。作為中立保險平台，不偏頗任何承保機構，尤其擅長協助亞洲國際化家族應對跨境資產配置、地緣政治風險與資本流動管理的複合挑戰。","wrap":true,"color":"#000000","size":"md","margin":"lg"}]}]},"footer":{"type":"box","layout":"vertical","contents":[{"type":"box","layout":"vertical","backgroundColor":"#427594","cornerRadius":"md","height":"40px","alignItems":"center","justifyContent":"center","action":{"type":"uri","label":"action","uri":"https://paper.hket.com/article/4014304/Charles%20Monat%20%E5%8D%8A%E4%B8%96%E7%B4%80%E5%B0%88%E6%A5%AD%E7%B6%93%E9%A9%97%20%E5%8A%A9%E9%AB%98%E6%B7%A8%E5%80%BC%E4%BA%BA%E5%A3%AB%E7%A9%A9%E5%81%A5%E5%82%B3%E6%89%BF%E8%B2%A1%E5%AF%8C"},"contents":[{"type":"text","text":"延伸閱讀 >","color":"#ffffff"}]}]}}]}
-      },
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal">
+    <div class="modal-title">⚙️ 設定</div>
 
-      notice: {
-        type: "flex",
-        altText: "香港行 行前通知",
-        contents: {"type":"carousel","contents":[{"type":"bubble","size":"mega","hero":{"type":"image","url":"https://image2url.com/r2/default/images/1773713514273-c20b6046-7fee-4f92-bb96-9f2bec47dd51.png","size":"full","aspectMode":"cover","aspectRatio":"320:213"},"body":{"type":"box","layout":"vertical","spacing":"sm","paddingAll":"13px","contents":[{"type":"box","layout":"vertical","height":"30px","contents":[{"type":"text","weight":"bold","size":"lg","wrap":true,"align":"center","text":"必備文件","contents":[]}]},{"type":"box","layout":"vertical","margin":"sm","contents":[{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","text":"⟢ 機票","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"⟢ 護照","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"⟢ 香港簽證或台胞證","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","weight":"bold","size":"lg","wrap":true,"align":"center","text":"工作團隊聯繫方式","margin":"md","contents":[]},{"type":"text","text":"⟢ Chester(Line ID: chestertsai0712 )","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"⟢ Kate (Line ID: katechen1983 )","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"⟢ 識富台灣團隊電話：0905323082","wrap":true,"color":"#000000","size":"md","margin":"lg"}]},{"type":"box","layout":"vertical","margin":"md","contents":[{"type":"box","layout":"vertical","backgroundColor":"#427594","cornerRadius":"md","height":"40px","alignItems":"center","justifyContent":"center","action":{"type":"uri","label":"action","uri":"https://lihi2.me/84BDz"},"contents":[{"type":"text","text":"行程懶人包 >","color":"#ffffff"}]}]}]}},{"type":"bubble","size":"mega","hero":{"type":"image","url":"https://image2url.com/r2/default/images/1773714591870-186dd5d6-7284-45be-a71f-a35c35493217.png","size":"full","aspectMode":"cover","aspectRatio":"320:213"},"body":{"type":"box","layout":"vertical","spacing":"sm","paddingAll":"13px","contents":[{"type":"box","layout":"vertical","height":"30px","contents":[{"type":"text","weight":"bold","size":"lg","wrap":true,"align":"center","text":"航班資訊","contents":[]}]},{"type":"box","layout":"vertical","margin":"sm","contents":[{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","text":"⟢ 集合說明：台灣出發的夥伴 請於長榮 BR 867 登機門集合","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"⟢  當天抵達香港的夥伴、已於香港的夥伴 請於 13:00 前於午宴餐廳集合 ","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"⟢ 3/23 去程參考航班：","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"｜長榮 BR 867｜09:50 TPE → 11:50 HKG ","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"⟢  3/25 回程參考航班：","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"｜長榮 BR 858｜21:10 HKG → 22:55 TPE","wrap":true,"color":"#000000","size":"md","margin":"lg"}]}]}},{"type":"bubble","size":"mega","hero":{"type":"image","url":"https://image2url.com/r2/default/images/1773714072887-ff377b1a-8769-4bd9-8f9d-1a01336659c0.png","size":"full","aspectMode":"cover","aspectRatio":"320:213"},"body":{"type":"box","layout":"vertical","spacing":"sm","paddingAll":"13px","contents":[{"type":"box","layout":"vertical","height":"30px","contents":[{"type":"text","weight":"bold","size":"lg","wrap":true,"align":"center","text":"注意事項","contents":[]}]},{"type":"box","layout":"vertical","margin":"sm","contents":[{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","text":"⟢ 香港目前氣溫約 18–24°C，早晚偏涼，建議備一件薄外套 ","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"⟢  服裝建議: 建議以 Business / Smart Casual的服裝搭配為原則","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"⟢ 電源轉接頭（香港為三腳方形插頭）","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"⟢  旅遊保險: 本次行程皆有幫參與者投保「旅行綜合保險」，若有額外需求者請自行額外投保","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"⟢  小費:  本次越南參訪行程之司機小費識富已統一支付","wrap":true,"color":"#000000","size":"md","margin":"lg"}]}]}},{"type":"bubble","size":"mega","hero":{"type":"image","url":"https://image2url.com/r2/default/images/1773715849468-cbfd913f-e4dd-4f7e-a8d8-ad80ae76ec61.png","size":"full","aspectMode":"cover","aspectRatio":"320:213"},"body":{"type":"box","layout":"vertical","spacing":"sm","paddingAll":"13px","contents":[{"type":"box","layout":"vertical","height":"30px","contents":[{"type":"text","weight":"bold","size":"lg","wrap":true,"align":"center","text":"住宿資訊","contents":[]}]},{"type":"box","layout":"vertical","margin":"sm","contents":[{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","text":"⟢ 飯店：KIMPTON TSIM SHA TSUI HONG KONG","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"⟢  T： +852 3916 8316       ","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"⟢ M：+852 6435 5081","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"11 Middle Road, Tsim Sha Tsui, Kowloon, Hong Kong","wrap":true,"color":"#000000","size":"md","margin":"lg"}]},{"type":"box","layout":"vertical","margin":"xl","contents":[{"type":"box","layout":"vertical","cornerRadius":"md","height":"40px","alignItems":"center","justifyContent":"center","borderColor":"#427594","borderWidth":"light","margin":"md","action":{"type":"uri","label":"action","uri":"https://www.kimptonhongkong.com/"},"contents":[{"type":"text","text":"飯店資訊","color":"#427594"}]},{"type":"box","layout":"vertical","cornerRadius":"md","height":"40px","alignItems":"center","justifyContent":"center","borderColor":"#427594","borderWidth":"light","margin":"md","action":{"type":"uri","label":"action","uri":"https://maps.app.goo.gl/FJHVrbwc3s7h85ms9"},"contents":[{"type":"text","text":"飯店 > 導航","color":"#427594"}]}]}]}},{"type":"bubble","size":"mega","hero":{"type":"image","url":"https://image2url.com/r2/default/images/1773714304143-12a7c444-025f-4930-9088-8b4503356335.png","size":"full","aspectMode":"cover","aspectRatio":"320:213"},"body":{"type":"box","layout":"vertical","spacing":"sm","paddingAll":"13px","contents":[{"type":"box","layout":"vertical","height":"30px","contents":[{"type":"text","weight":"bold","size":"lg","wrap":true,"align":"center","text":"3/23（一）行程","contents":[]}]},{"type":"box","layout":"vertical","margin":"sm","contents":[{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","text":" ．09:50 前往香港 ","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"．13:00 抵港午宴 ","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"．15:00 列支敦士登王室家辦 LGT ","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"．18:30 與 LGT 晚宴","wrap":true,"color":"#000000","size":"md","margin":"lg"}]}]},"footer":{"type":"box","layout":"vertical","margin":"xl","contents":[{"type":"box","layout":"vertical","cornerRadius":"md","height":"40px","alignItems":"center","justifyContent":"center","borderColor":"#427594","borderWidth":"light","action":{"type":"uri","label":"action","uri":"https://maps.app.goo.gl/a8Lfnr5kGesZ58Lo7"},"contents":[{"type":"text","text":"午宴紫玉蘭餐廳 > 導航","color":"#427594"}]},{"type":"box","layout":"vertical","cornerRadius":"md","height":"40px","alignItems":"center","justifyContent":"center","borderColor":"#427594","borderWidth":"light","margin":"md","action":{"type":"uri","label":"action","uri":"https://maps.app.goo.gl/ee73yDgvytVZ4iRa6"},"contents":[{"type":"text","text":"LGT > 導航","color":"#427594"}]}]}},{"type":"bubble","size":"mega","hero":{"type":"image","url":"https://image2url.com/r2/default/images/1773715017426-de225479-a5e8-482e-8687-9c55869a2d7e.png","size":"full","aspectMode":"cover","aspectRatio":"320:213"},"body":{"type":"box","layout":"vertical","spacing":"sm","paddingAll":"13px","contents":[{"type":"box","layout":"vertical","height":"30px","contents":[{"type":"text","weight":"bold","size":"lg","wrap":true,"align":"center","text":"3/24（二）上午行程","contents":[]}]},{"type":"box","layout":"vertical","margin":"sm","contents":[{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","text":" ． 08:50 摩根士丹利（Morgan Stanley）","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"．11:30 萬方家族辦公室 & 午宴","wrap":true,"color":"#000000","size":"md","margin":"lg"}]}]},"footer":{"type":"box","layout":"vertical","margin":"xl","contents":[{"type":"box","layout":"vertical","cornerRadius":"md","height":"40px","alignItems":"center","justifyContent":"center","borderColor":"#427594","borderWidth":"light","action":{"type":"uri","label":"action","uri":"https://maps.app.goo.gl/NMjKiTqdfm8irHzW9"},"contents":[{"type":"text","text":"摩根士丹利 > 導航","color":"#427594"}]},{"type":"box","layout":"vertical","cornerRadius":"md","height":"40px","alignItems":"center","justifyContent":"center","borderColor":"#427594","borderWidth":"light","margin":"md","action":{"type":"uri","label":"action","uri":"https://maps.app.goo.gl/nQpK44AGzXp1Uc7SA"},"contents":[{"type":"text","text":"萬方家族辦公室 > 導航","color":"#427594"}]}]}},{"type":"bubble","size":"mega","hero":{"type":"image","url":"https://image2url.com/r2/default/images/1773715017426-de225479-a5e8-482e-8687-9c55869a2d7e.png","size":"full","aspectMode":"cover","aspectRatio":"320:213"},"body":{"type":"box","layout":"vertical","spacing":"sm","paddingAll":"13px","contents":[{"type":"box","layout":"vertical","height":"30px","contents":[{"type":"text","weight":"bold","size":"lg","wrap":true,"align":"center","text":"3/24（二）下午行程","contents":[]}]},{"type":"box","layout":"vertical","margin":"sm","contents":[{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","text":"路線一/","wrap":true,"color":"#03314C","size":"md","margin":"lg"},{"type":"text","text":"．15:00 WGHK 峰會 & 晚宴 ／保利旗艦藝廊導覽 & 晚宴","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"路線二/","wrap":true,"color":"#03314C","size":"md","margin":"xxl"},{"type":"text","text":"．18:30 與 LGT 晚宴","wrap":true,"color":"#000000","size":"md","margin":"lg"}]}]},"footer":{"type":"box","layout":"vertical","margin":"xl","contents":[{"type":"box","layout":"vertical","cornerRadius":"md","height":"40px","alignItems":"center","justifyContent":"center","borderColor":"#427594","borderWidth":"light","action":{"type":"uri","label":"action","uri":"https://maps.app.goo.gl/7E2MgA2atD5gyyqFA"},"contents":[{"type":"text","text":"WGHK/香港瑰麗酒店 > 導航","color":"#427594"}]},{"type":"box","layout":"vertical","cornerRadius":"md","height":"40px","alignItems":"center","justifyContent":"center","borderColor":"#427594","borderWidth":"light","margin":"md","action":{"type":"uri","label":"action","uri":"https://maps.app.goo.gl/WwSwD3tQMTTeVYVGA"},"contents":[{"type":"text","text":"保利香港拍賣 > 導航","color":"#427594"}]}]}},{"type":"bubble","size":"mega","hero":{"type":"image","url":"https://image2url.com/r2/default/images/1773715044716-e2975230-37c3-491d-9214-b046859b3ffe.png","size":"full","aspectMode":"cover","aspectRatio":"320:213"},"body":{"type":"box","layout":"vertical","spacing":"sm","paddingAll":"13px","contents":[{"type":"box","layout":"vertical","height":"30px","contents":[{"type":"text","weight":"bold","size":"lg","wrap":true,"align":"center","text":"3/25（三）行程","contents":[]}]},{"type":"box","layout":"vertical","margin":"sm","contents":[{"type":"separator","color":"#427594","margin":"lg"},{"type":"text","text":"．08:50 南豐集團家族辦公室 ","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"．12:30 午宴 ","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"．14:00  Chales Monat ","wrap":true,"color":"#000000","size":"md","margin":"lg"},{"type":"text","text":"．21:10 返台","wrap":true,"color":"#000000","size":"md","margin":"lg"}]}]},"footer":{"type":"box","layout":"vertical","margin":"xl","contents":[{"type":"box","layout":"vertical","cornerRadius":"md","height":"40px","alignItems":"center","justifyContent":"center","borderColor":"#427594","borderWidth":"light","action":{"type":"uri","label":"action","uri":"https://maps.app.goo.gl/UKPDqVQAM1J64LkKA"},"contents":[{"type":"text","text":"南豐大廈 > 導航","color":"#427594"}]},{"type":"box","layout":"vertical","cornerRadius":"md","height":"40px","alignItems":"center","justifyContent":"center","borderColor":"#427594","borderWidth":"light","margin":"md","action":{"type":"uri","label":"action","uri":"https://maps.app.goo.gl/i8zoRik46jnf138f6"},"contents":[{"type":"text","text":"Chales Monat  > 導航","color":"#427594"}]}]}}]}
-      },
+    <div class="form-group">
+      <label class="form-label">AI 模型</label>
+      <div class="model-selector">
+        <button class="model-btn active" data-model="claude" onclick="selectModel('claude')">
+          <span class="model-name">Claude</span>
+          <span class="model-desc">Sonnet 4.6 · 中文最佳</span>
+        </button>
+        <button class="model-btn" data-model="gpt" onclick="selectModel('gpt')">
+          <span class="model-name">GPT</span>
+          <span class="model-desc">GPT-4o · 均衡</span>
+        </button>
+        <button class="model-btn" data-model="gemini" onclick="selectModel('gemini')">
+          <span class="model-name">Gemini</span>
+          <span class="model-desc">2.5 Flash · 免費額度大</span>
+        </button>
+      </div>
+    </div>
 
-      day3: {
-        type: "flex",
-        altText: "識富 × 香港商務行｜第三天行程",
-        contents: {"type":"carousel","contents":[{"type":"bubble","size":"giga","body":{"type":"box","layout":"vertical","contents":[{"type":"text","text":"識富 × 香港商務行","weight":"bold","color":"#0057B8","size":"sm"},{"type":"text","text":"2025年3月25日（三）","weight":"bold","size":"lg","margin":"md"},{"type":"text","text":"Day 3","size":"xs","color":"#aaaaaa"},{"type":"separator","margin":"xxl"},{"type":"text","text":"當日行程","weight":"bold","size":"sm","color":"#0057B8","margin":"xxl"},{"type":"box","layout":"vertical","margin":"md","spacing":"sm","contents":[{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"08:10","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"完成 Check-out、行李上巴士出發","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"08:30–11:45","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"企業交流：香港南豐家族辦公室","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"12:15–14:00","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"午宴","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"14:30–17:00","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"Charles Monat","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"17:00–18:30","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"返回機場","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"21:10-22:55","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"長榮 BR 858｜HKG (1航)→ TPE（2航）","size":"xs","color":"#111111","flex":5,"wrap":true}]}]},{"type":"separator","margin":"xxl"}]}},{"type":"bubble","size":"giga","body":{"type":"box","layout":"vertical","contents":[{"type":"text","text":"識富 × 香港商務行","weight":"bold","color":"#0057B8","size":"sm"},{"type":"text","text":"香港南豐家族辦公室（NF）","weight":"bold","size":"lg","margin":"md"},{"type":"text","text":"2025年3月25日（三）｜08:30–11:45","size":"xs","color":"#aaaaaa","wrap":true},{"type":"separator","margin":"xxl"},{"type":"text","text":"機構行程","weight":"bold","size":"sm","color":"#0057B8","margin":"xxl"},{"type":"box","layout":"vertical","margin":"md","spacing":"sm","contents":[{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"08:30–09:45","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"簡介","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"09:45–10:10","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"一級市場投資邏輯與布局思路","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"10:10–11:00","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"二級市場配置邏輯 & 生命科學","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"11:00–11:15","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"南豐共投計劃與資產配置","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"11:15–11:30","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"Q&A","size":"xs","color":"#111111","flex":5,"wrap":true}]}]},{"type":"separator","margin":"xxl"},{"type":"box","layout":"horizontal","margin":"md","contents":[{"type":"text","text":"LOCATION","size":"xs","color":"#aaaaaa","flex":0},{"type":"text","text":"南豐大廈","size":"xs","color":"#aaaaaa","align":"end"}]}]}},{"type":"bubble","size":"giga","body":{"type":"box","layout":"vertical","contents":[{"type":"text","text":"識富 × 香港商務行","weight":"bold","color":"#0057B8","size":"sm"},{"type":"text","text":"Charles Monat Associates","weight":"bold","size":"lg","margin":"md"},{"type":"text","text":"2025年3月25日（三）｜14:30–17:00","size":"xs","color":"#aaaaaa","wrap":true},{"type":"separator","margin":"xxl"},{"type":"text","text":"討論議題","weight":"bold","size":"sm","color":"#0057B8","margin":"xxl"},{"type":"box","layout":"vertical","margin":"md","spacing":"sm","contents":[{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"1.","size":"xs","color":"#0057B8","flex":1,"weight":"bold"},{"type":"text","text":"國內外保險差異與案例分析","size":"xs","color":"#111111","flex":7,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"2.","size":"xs","color":"#0057B8","flex":1,"weight":"bold"},{"type":"text","text":"信託架構與案例分析","size":"xs","color":"#111111","flex":7,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"3.","size":"xs","color":"#0057B8","flex":1,"weight":"bold"},{"type":"text","text":"香港和新加坡在使用保險或信託上差異","size":"xs","color":"#111111","flex":7,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"4.","size":"xs","color":"#0057B8","flex":1,"weight":"bold"},{"type":"text","text":"香港和新加坡家辦差異及案例分析","size":"xs","color":"#111111","flex":7,"wrap":true}]}]},{"type":"separator","margin":"xxl"},{"type":"box","layout":"horizontal","margin":"md","contents":[{"type":"text","text":"LOCATION","size":"xs","color":"#aaaaaa","flex":0},{"type":"text","text":"Charles Monat HK Office","size":"xs","color":"#aaaaaa","align":"end"}]}]}}]}
-      },
+    <div class="form-group" id="group-claude">
+      <label class="form-label">Claude API Key</label>
+      <input type="password" class="form-input" id="api-key-claude" placeholder="sk-ant-api03-...">
+      <div class="form-hint">至 <a href="https://console.anthropic.com/" target="_blank" style="color: var(--accent-warm)">console.anthropic.com</a> 取得。Key 只存在你的瀏覽器中。</div>
+    </div>
 
-            itinerary: {
-        type: "flex",
-        altText: "識富 × 香港商務行｜第二天行程",
-        contents: {"type":"carousel","contents":[{"type":"bubble","size":"giga","body":{"type":"box","layout":"vertical","contents":[{"type":"text","text":"識富 × 香港商務行","weight":"bold","color":"#0057B8","size":"sm"},{"type":"text","text":"2025年3月24日（一）","weight":"bold","size":"lg","margin":"md"},{"type":"text","text":"Day 2","size":"xs","color":"#aaaaaa"},{"type":"separator","margin":"xxl"},{"type":"text","text":"當日行程","weight":"bold","size":"sm","color":"#0057B8","margin":"xxl"},{"type":"box","layout":"vertical","margin":"md","spacing":"sm","contents":[{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"08:10","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"集合從飯店出發","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"08:30–11:00","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"企業交流：Morgan Stanley","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"11:30–13:00","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"午宴：私廚（日式 Omakase）","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"13:00–15:00","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"企業參訪：Raffles' 萬芳家辦","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"separator","margin":"xxl"},{"type":"box","layout":"horizontal","margin":"md","contents":[{"type":"text","text":"[路線一]峰會","size":"xs","color":"#0057B8","flex":3},{"type":"text","text":" ","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"15:00–20:30","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"WGHK 峰會 & 晚宴","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"[路線二]藝廊","size":"xs","color":"#0057B8","flex":3},{"type":"text","text":" ","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"15:00 - 17:30","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"保利旗艦藝廊專人導覽","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"18:00 - 20:30","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"晚宴(K11) & 維多利亞港灣","size":"xs","color":"#111111","flex":5,"wrap":true}]}]},{"type":"separator","margin":"xxl"},{"type":"box","layout":"horizontal","margin":"md","contents":[{"type":"text","text":"住宿","size":"xs","color":"#111111","weight":"bold","flex":0},{"type":"text","text":"Kimpton Tsim Sha Tsui HK","size":"xs","color":"#111111","weight":"bold","align":"end"}]}]}},{"type":"bubble","size":"giga","body":{"type":"box","layout":"vertical","contents":[{"type":"text","text":"識富 × 香港商務行","weight":"bold","color":"#0057B8","size":"sm"},{"type":"text","text":"Morgan Stanley","weight":"bold","size":"lg","margin":"md"},{"type":"text","text":"2025年3月24日（一）｜08:30–11:00","size":"xs","color":"#aaaaaa","wrap":true},{"type":"separator","margin":"xxl"},{"type":"text","text":"機構行程","weight":"bold","size":"sm","color":"#0057B8","margin":"xxl"},{"type":"box","layout":"vertical","margin":"md","spacing":"sm","contents":[{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"08:45–09:00","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"開場致詞與活動說明","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"09:00–09:30","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"大中華半導體展望：功率半導體","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"09:30–10:00","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"中國 AI：核心投資主題","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"10:00–10:30","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"科技板塊：交易策略與配置邏輯","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"10:30–10:45","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"創投視角下的科技創新","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"10:45–11:00","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"Olivia Du 問答環節","size":"xs","color":"#111111","flex":5,"wrap":true}]}]},{"type":"separator","margin":"xxl"},{"type":"box","layout":"horizontal","margin":"md","contents":[{"type":"text","text":"LOCATION","size":"xs","color":"#aaaaaa","flex":0},{"type":"text","text":"Morgan Stanley HK Office","size":"xs","color":"#aaaaaa","align":"end"}]}]}},{"type":"bubble","size":"giga","body":{"type":"box","layout":"vertical","contents":[{"type":"text","text":"識富 × 香港商務行","weight":"bold","color":"#0057B8","size":"sm"},{"type":"text","text":"Raffles'新加坡萬芳家族辦公室","weight":"bold","size":"lg","margin":"md"},{"type":"text","text":"2025年3月24日（一）｜11:30-15:00","size":"xs","color":"#aaaaaa","wrap":true},{"type":"separator","margin":"xxl"},{"type":"text","text":"機構行程","weight":"bold","size":"sm","color":"#0057B8","margin":"xxl"},{"type":"box","layout":"vertical","margin":"md","spacing":"sm","contents":[{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"11:30–12:00","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"Raffles' 介紹","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"12:00–13:30","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"午餐餐敘","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"13:30–13:50","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"私募股權","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"13:50–14:10","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"數位資產","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"14:10–14:55","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"Network & 產品客製化討論","size":"xs","color":"#111111","flex":5,"wrap":true}]},{"type":"box","layout":"horizontal","contents":[{"type":"text","text":"15:00","size":"xs","color":"#aaaaaa","flex":3},{"type":"text","text":"Closing","size":"xs","color":"#111111","flex":5,"wrap":true}]}]},{"type":"separator","margin":"xxl"},{"type":"box","layout":"horizontal","margin":"md","contents":[{"type":"text","text":"LOCATION","size":"xs","color":"#aaaaaa","flex":0},{"type":"text","text":"Raffles' Family Office HK","size":"xs","color":"#aaaaaa","align":"end"}]}]}}]}
+    <div class="form-group hidden" id="group-gpt">
+      <label class="form-label">OpenAI API Key</label>
+      <input type="password" class="form-input" id="api-key-gpt" placeholder="sk-proj-...">
+      <div class="form-hint">至 <a href="https://platform.openai.com/api-keys" target="_blank" style="color: var(--accent-warm)">platform.openai.com</a> 取得。</div>
+    </div>
+
+    <div class="form-group hidden" id="group-gemini">
+      <label class="form-label">Gemini API Key</label>
+      <input type="password" class="form-input" id="api-key-gemini" placeholder="AIzaSy...">
+      <div class="form-hint">至 <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent-warm)">Google AI Studio</a> 取得。免費層資料可能用於改善 Google 產品。</div>
+    </div>
+
+    <div class="form-divider"></div>
+
+    <div class="form-group">
+      <label class="form-label">Google Sheet ID</label>
+      <input type="text" class="form-input" id="sheet-id-input" placeholder="Google Sheet 的 ID（網址中 /d/ 後面那串）">
+      <div class="form-hint">Google Sheet 需設為「知道連結的人都可以檢視」。</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Google Sheets API Key</label>
+      <input type="text" class="form-input" id="gsheet-api-key-input" placeholder="Google Cloud Console 取得的 API Key">
+      <div class="form-hint">用來讀取知識庫 Sheet。至 <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color: var(--accent-warm)">GCP Console</a> 建立。</div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="toggleSettings()">取消</button>
+      <button class="btn-primary" onclick="saveSettings()">儲存設定</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== State =====
+let state = {
+  activeTab: 'text',
+  selectedChannel: null,
+  uploadedImages: [],
+  fetchedText: '',
+  isLoading: false,
+  settings: {
+    model: 'claude',
+    apiKeys: { claude: '', gpt: '', gemini: '' },
+    sheetId: '',
+    gsheetApiKey: ''
+  },
+  events: [],
+  knowledgeBase: {}
+};
+
+// ===== Init =====
+function init() {
+  loadSettings();
+  updateStatusDot();
+  setupDragDrop();
+  setupPaste();
+  if (state.settings.sheetId && state.settings.gsheetApiKey) {
+    loadEventsFromSheet();
+  }
+}
+
+// ===== Model Selection =====
+function selectModel(model) {
+  document.querySelectorAll('.model-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-model="${model}"]`).classList.add('active');
+  // Show/hide corresponding API key fields
+  ['claude', 'gpt', 'gemini'].forEach(m => {
+    document.getElementById(`group-${m}`).classList.toggle('hidden', m !== model);
+  });
+  state.settings.model = model;
+}
+
+// ===== Settings =====
+function loadSettings() {
+  try {
+    const saved = localStorage.getItem('shihfu-proofreader-settings');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Migrate from old format
+      if (parsed.apiKey && !parsed.apiKeys) {
+        parsed.apiKeys = { claude: parsed.apiKey, gpt: '', gemini: '' };
+        parsed.model = 'claude';
+        delete parsed.apiKey;
       }
+      state.settings = { ...state.settings, ...parsed };
+      document.getElementById('api-key-claude').value = state.settings.apiKeys?.claude || '';
+      document.getElementById('api-key-gpt').value = state.settings.apiKeys?.gpt || '';
+      document.getElementById('api-key-gemini').value = state.settings.apiKeys?.gemini || '';
+      document.getElementById('sheet-id-input').value = state.settings.sheetId || '';
+      document.getElementById('gsheet-api-key-input').value = state.settings.gsheetApiKey || '';
+      // Restore model selection
+      if (state.settings.model) {
+        selectModel(state.settings.model);
+      }
+    }
+  } catch(e) {}
+}
 
+function saveSettings() {
+  state.settings.apiKeys = {
+    claude: document.getElementById('api-key-claude').value.trim(),
+    gpt: document.getElementById('api-key-gpt').value.trim(),
+    gemini: document.getElementById('api-key-gemini').value.trim()
+  };
+  state.settings.sheetId = document.getElementById('sheet-id-input').value.trim();
+  state.settings.gsheetApiKey = document.getElementById('gsheet-api-key-input').value.trim();
+  localStorage.setItem('shihfu-proofreader-settings', JSON.stringify(state.settings));
+  updateStatusDot();
+  toggleSettings();
+  if (state.settings.sheetId && state.settings.gsheetApiKey) {
+    loadEventsFromSheet();
+  }
+}
+
+function toggleSettings() {
+  const modal = document.getElementById('settings-modal');
+  modal.classList.toggle('show');
+}
+
+function getActiveApiKey() {
+  return state.settings.apiKeys?.[state.settings.model] || '';
+}
+
+function updateStatusDot() {
+  const dot = document.getElementById('status-dot');
+  dot.className = 'status-dot ' + (getActiveApiKey() ? 'connected' : 'disconnected');
+}
+
+// ===== Tabs =====
+function switchTab(tab) {
+  state.activeTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById(`tab-${tab}`).classList.add('active');
+}
+
+// ===== Channel =====
+function selectChannel(el) {
+  document.querySelectorAll('.channel-tag').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  state.selectedChannel = el.dataset.channel;
+}
+
+// ===== Image Upload =====
+function setupDragDrop() {
+  const zone = document.getElementById('upload-zone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    handleFiles(e.dataTransfer.files);
+  });
+}
+
+function setupPaste() {
+  document.addEventListener('paste', e => {
+    if (state.activeTab !== 'image') return;
+    const files = [];
+    for (const item of e.clipboardData.items) {
+      if (item.type.startsWith('image/')) {
+        files.push(item.getAsFile());
+      }
+    }
+    if (files.length) handleFiles(files);
+  });
+}
+
+function handleFiles(files) {
+  for (const file of files) {
+    if (!file.type.startsWith('image/')) continue;
+    const reader = new FileReader();
+    reader.onload = e => {
+      state.uploadedImages.push({
+        name: file.name,
+        data: e.target.result
+      });
+      renderPreviews();
     };
+    reader.readAsDataURL(file);
+  }
+}
 
-    async function init() {
-      const status = document.getElementById("status");
-      try {
-        await liff.init({ liffId: LIFF_ID });
-        if (!liff.isLoggedIn()) { liff.login(); return; }
-        status.textContent = "準備好了，可以分享！";
-        document.querySelectorAll(".btn").forEach(b => b.disabled = false);
-      } catch (e) {
-        status.textContent = "❌ " + (e.message || JSON.stringify(e));
-        status.className = "status error";
-      }
+function renderPreviews() {
+  const container = document.getElementById('image-previews');
+  container.innerHTML = state.uploadedImages.map((img, i) => `
+    <div class="image-preview">
+      <img src="${img.data}" alt="${img.name}">
+      <button class="remove-btn" onclick="removeImage(${i})">✕</button>
+    </div>
+  `).join('');
+}
+
+function removeImage(index) {
+  state.uploadedImages.splice(index, 1);
+  renderPreviews();
+}
+
+// ===== URL Fetch =====
+async function fetchUrl() {
+  const url = document.getElementById('url-input').value.trim();
+  if (!url) return;
+  const preview = document.getElementById('fetched-preview');
+  preview.classList.remove('hidden');
+  preview.textContent = '擷取中...';
+
+  try {
+    // Use a CORS proxy or direct fetch for same-origin
+    const resp = await fetch(url);
+    const html = await resp.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    // Remove scripts, styles, nav
+    doc.querySelectorAll('script, style, nav, header, footer, noscript').forEach(el => el.remove());
+    const text = doc.body.innerText.replace(/\n{3,}/g, '\n\n').trim();
+    state.fetchedText = text;
+    preview.textContent = text.slice(0, 3000) + (text.length > 3000 ? '\n\n⋯（已擷取前 3000 字）' : '');
+  } catch(e) {
+    preview.textContent = '⚠️ 無法擷取此網址。可能的原因：跨域限制（CORS）。\n建議改用截圖方式，或直接複製網頁文字貼上。';
+    state.fetchedText = '';
+  }
+}
+
+// ===== Google Sheets =====
+async function loadEventsFromSheet() {
+  try {
+    const { sheetId, gsheetApiKey } = state.settings;
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?key=${gsheetApiKey}&fields=sheets.properties.title`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+
+    if (data.sheets) {
+      state.events = data.sheets.map(s => s.properties.title).filter(t => t !== '使用說明');
+      const select = document.getElementById('event-select');
+      select.innerHTML = '<option value="">— 選擇活動知識庫 —</option>' +
+        state.events.map(e => `<option value="${e}">${e}</option>`).join('');
     }
+  } catch(e) {
+    console.error('Failed to load sheet:', e);
+  }
+}
 
-    async function shareMessage(type) {
-      const status = document.getElementById("status");
-      document.querySelectorAll(".btn").forEach(b => b.disabled = true);
-      status.textContent = "開啟好友選擇器…";
-      status.className = "status";
+async function loadKnowledgeBase(sheetName) {
+  try {
+    const { sheetId, gsheetApiKey } = state.settings;
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(sheetName)}?key=${gsheetApiKey}`;
+    const resp = await fetch(url);
+    const data = await resp.json();
 
-      if (!liff.isApiAvailable("shareTargetPicker")) {
-        status.textContent = "⚠️ 請在 LINE 內開啟此頁面";
-        status.className = "status error";
-        document.querySelectorAll(".btn").forEach(b => b.disabled = false);
-        return;
-      }
+    if (data.values && data.values.length > 0) {
+      // Parse: first rows until empty row = ground truth, then history
+      const rows = data.values;
+      let groundTruth = [];
+      let history = [];
+      let pastGroundTruth = true;
 
-      try {
-        const res = await liff.shareTargetPicker([messages[type]], { isMultiple: true });
-        if (res) {
-          status.textContent = "✅ 分享成功！";
-          status.className = "status success";
-        } else {
-          status.textContent = "已取消分享";
-          status.className = "status";
+      for (let i = 1; i < rows.length; i++) { // skip header
+        const row = rows[i];
+        if (!row || row.every(c => !c || !c.trim())) {
+          pastGroundTruth = false;
+          continue;
         }
-      } catch (e) {
-        status.textContent = "❌ " + e.message;
-        status.className = "status error";
-      } finally {
-        document.querySelectorAll(".btn").forEach(b => b.disabled = false);
+        if (pastGroundTruth) {
+          groundTruth.push({ field: row[0], value: row[1] });
+        } else {
+          history.push({ date: row[0], channel: row[1], content: row[2] });
+        }
+      }
+
+      return { groundTruth, history, raw: data.values };
+    }
+  } catch(e) {
+    console.error('Failed to load knowledge base:', e);
+  }
+  return { groundTruth: [], history: [], raw: [] };
+}
+
+// ===== Proofread =====
+async function runProofread() {
+  if (state.isLoading) return;
+  if (!getActiveApiKey()) {
+    toggleSettings();
+    return;
+  }
+
+  // Gather input
+  let inputContent = '';
+  let images = [];
+
+  if (state.activeTab === 'text') {
+    inputContent = document.getElementById('text-input').value.trim();
+    if (!inputContent) return;
+  } else if (state.activeTab === 'image') {
+    if (state.uploadedImages.length === 0) return;
+    images = state.uploadedImages.map(img => img.data);
+  } else if (state.activeTab === 'url') {
+    inputContent = state.fetchedText;
+    if (!inputContent) return;
+  }
+
+  // Load knowledge base
+  const eventName = document.getElementById('event-select').value;
+  let kb = { groundTruth: [], history: [] };
+  if (eventName) {
+    kb = await loadKnowledgeBase(eventName);
+  }
+
+  // Build prompt
+  const systemPrompt = buildSystemPrompt(kb);
+  const userMessage = buildUserMessage(inputContent, images);
+
+  // Show loading
+  state.isLoading = true;
+  document.getElementById('btn-run').disabled = true;
+  document.getElementById('btn-run').textContent = '校對中...';
+  document.getElementById('result-area').innerHTML = `
+    <div class="loading-indicator">
+      <div class="spinner"></div>
+      正在分析內容，請稍候...
+    </div>`;
+
+  try {
+    const response = await callAI(systemPrompt, userMessage);
+    displayResults(response);
+  } catch(e) {
+    document.getElementById('result-area').innerHTML = `
+      <div class="result-card error-card">
+        <div class="result-card-header">
+          <span class="result-badge badge-error">錯誤</span>
+          <span class="result-card-title">API 呼叫失敗</span>
+        </div>
+        <div class="result-card-body">${e.message}</div>
+      </div>`;
+  } finally {
+    state.isLoading = false;
+    document.getElementById('btn-run').disabled = false;
+    document.getElementById('btn-run').textContent = '開始校對';
+  }
+}
+
+function buildSystemPrompt(kb) {
+  let prompt = `你是「識富天使會」的內部校對助手。你的任務是仔細檢查提供的文字內容，找出以下問題：
+
+## 校對項目
+
+### 1. 錯字與別字（最高優先）
+- 中文錯字、別字（如「家族」寫成「加除」、「論壇」寫成「論談」）
+- 漏字、多字
+- 英文拼字錯誤
+- 標點符號誤用
+
+### 2. 資訊一致性（高優先）
+- 與知識庫中的事實資料比對：日期、時間、地點、講者姓名與頭銜、機構名稱
+- 若有歷史產出紀錄，比對前後內容是否矛盾
+
+### 3. 語氣與風格（中優先）
+- 識富的語氣標準：商業雜誌級（商業周刊/Bloomberg/FT 水準）
+- 禁用語：「不是⋯而是⋯」句型、破折號（——）、過度解釋性語言
+- 應使用同儕級口吻，非教導式或推銷式
+- 避免 AI 感用語
+
+## 輸出格式
+
+請用以下 JSON 格式回覆，不要包含其他文字：
+
+{
+  "summary": {
+    "errors": 數字,
+    "warnings": 數字,
+    "passes": 數字
+  },
+  "findings": [
+    {
+      "severity": "error" | "warning" | "pass",
+      "category": "typo" | "consistency" | "style",
+      "title": "簡短標題",
+      "detail": "詳細說明，包含原文引用和建議修正",
+      "original": "有問題的原文片段（可選）",
+      "suggestion": "建議修改為（可選）"
+    }
+  ]
+}`;
+
+  if (kb.groundTruth.length > 0) {
+    prompt += '\n\n## 活動知識庫（Ground Truth）\n以下是此活動的確認事實，請以此為標準比對：\n';
+    kb.groundTruth.forEach(item => {
+      prompt += `- ${item.field}：${item.value}\n`;
+    });
+  }
+
+  if (kb.history.length > 0) {
+    prompt += '\n\n## 歷史產出紀錄\n以下是此活動過去已發佈的內容，請比對是否有矛盾：\n';
+    kb.history.slice(-10).forEach(item => {
+      prompt += `- [${item.date}] [${item.channel}] ${item.content?.slice(0, 200)}\n`;
+    });
+  }
+
+  return prompt;
+}
+
+function buildUserMessage(text, images) {
+  const content = [];
+
+  if (images.length > 0) {
+    images.forEach(imgData => {
+      const base64 = imgData.split(',')[1];
+      const mimeType = imgData.split(';')[0].split(':')[1];
+      content.push({
+        type: 'image',
+        source: { type: 'base64', media_type: mimeType, data: base64 }
+      });
+    });
+    content.push({
+      type: 'text',
+      text: '請校對以上截圖中的所有文字內容。先辨識出圖片中的文字，再進行校對。'
+    });
+  } else {
+    const channelLabel = state.selectedChannel ?
+      { website:'網站文案', fb:'FB貼文', linkedin:'LinkedIn貼文', line:'LINE推播', form:'報名表單', print:'印刷製作物', other:'其他' }[state.selectedChannel] : '未指定';
+
+    content.push({
+      type: 'text',
+      text: `素材類型：${channelLabel}\n\n--- 以下為待校對內容 ---\n\n${text}`
+    });
+  }
+
+  return content;
+}
+
+// ===== AI API Router =====
+async function callAI(systemPrompt, userContent) {
+  const model = state.settings.model;
+  const adapters = { claude: callClaude, gpt: callGPT, gemini: callGemini };
+  const adapter = adapters[model];
+  if (!adapter) throw new Error(`不支援的模型：${model}`);
+  return adapter(systemPrompt, userContent);
+}
+
+// ===== Claude Adapter =====
+async function callClaude(systemPrompt, userContent) {
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': getActiveApiKey(),
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 4096,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userContent }]
+    })
+  });
+
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(`Claude API 錯誤 (${resp.status}): ${err.error?.message || '未知錯誤'}`);
+  }
+
+  const data = await resp.json();
+  const text = data.content.map(c => c.text || '').join('');
+  return parseAIResponse(text);
+}
+
+// ===== GPT Adapter =====
+async function callGPT(systemPrompt, userContent) {
+  // Convert userContent from Claude format to OpenAI format
+  const messages = [
+    { role: 'system', content: systemPrompt }
+  ];
+
+  // OpenAI uses a different image format
+  if (Array.isArray(userContent)) {
+    const parts = userContent.map(item => {
+      if (item.type === 'text') {
+        return { type: 'text', text: item.text };
+      } else if (item.type === 'image') {
+        return {
+          type: 'image_url',
+          image_url: { url: `data:${item.source.media_type};base64,${item.source.data}` }
+        };
+      }
+      return null;
+    }).filter(Boolean);
+    messages.push({ role: 'user', content: parts });
+  } else {
+    messages.push({ role: 'user', content: userContent });
+  }
+
+  const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getActiveApiKey()}`
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o',
+      max_tokens: 4096,
+      response_format: { type: 'json_object' },
+      messages
+    })
+  });
+
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(`GPT API 錯誤 (${resp.status}): ${err.error?.message || '未知錯誤'}`);
+  }
+
+  const data = await resp.json();
+  const text = data.choices?.[0]?.message?.content || '';
+  return parseAIResponse(text);
+}
+
+// ===== Gemini Adapter =====
+async function callGemini(systemPrompt, userContent) {
+  const apiKey = getActiveApiKey();
+
+  // Convert userContent to Gemini format
+  const parts = [];
+  if (Array.isArray(userContent)) {
+    for (const item of userContent) {
+      if (item.type === 'text') {
+        parts.push({ text: item.text });
+      } else if (item.type === 'image') {
+        parts.push({
+          inlineData: {
+            mimeType: item.source.media_type,
+            data: item.source.data
+          }
+        });
       }
     }
+  } else {
+    parts.push({ text: userContent });
+  }
 
-    document.querySelectorAll(".btn").forEach(b => b.disabled = true);
-    init();
-  </script>
+  const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: systemPrompt }] },
+      contents: [{ role: 'user', parts }],
+      generationConfig: {
+        maxOutputTokens: 4096,
+        responseMimeType: 'application/json'
+      }
+    })
+  });
+
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    const msg = err.error?.message || '未知錯誤';
+    throw new Error(`Gemini API 錯誤 (${resp.status}): ${msg}`);
+  }
+
+  const data = await resp.json();
+  const text = data.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('') || '';
+  return parseAIResponse(text);
+}
+
+// ===== Response Parser =====
+function parseAIResponse(text) {
+  try {
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) return JSON.parse(jsonMatch[0]);
+  } catch(e) {}
+  return {
+    summary: { errors: 0, warnings: 0, passes: 1 },
+    findings: [{ severity: 'pass', category: 'style', title: '校對完成', detail: text }]
+  };
+}
+
+function displayResults(result) {
+  const area = document.getElementById('result-area');
+  const { summary, findings } = result;
+
+  let html = `
+    <div class="result-summary">
+      <div class="summary-item">
+        <div class="summary-num num-error">${summary.errors || 0}</div>
+        <div class="summary-label">錯誤</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-num num-warning">${summary.warnings || 0}</div>
+        <div class="summary-label">警告</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-num num-success">${summary.passes || 0}</div>
+        <div class="summary-label">通過</div>
+      </div>
+    </div>`;
+
+  if (findings && findings.length > 0) {
+    findings.forEach((f, i) => {
+      const cardClass = f.severity === 'error' ? 'error-card' : f.severity === 'warning' ? 'warning-card' : 'success-card';
+      const badgeClass = f.severity === 'error' ? 'badge-error' : f.severity === 'warning' ? 'badge-warning' : 'badge-success';
+      const badgeText = f.severity === 'error' ? '錯誤' : f.severity === 'warning' ? '警告' : '通過';
+
+      html += `
+        <div class="result-card ${cardClass}" style="animation-delay: ${i * 0.05}s">
+          <div class="result-card-header">
+            <span class="result-badge ${badgeClass}">${badgeText}</span>
+            <span class="result-card-title">${escapeHtml(f.title)}</span>
+          </div>
+          <div class="result-card-body">
+            ${escapeHtml(f.detail)}
+            ${f.original ? `<br><br>原文：<span class="highlight">${escapeHtml(f.original)}</span>` : ''}
+            ${f.suggestion ? `<br>建議：<span class="highlight">${escapeHtml(f.suggestion)}</span>` : ''}
+          </div>
+        </div>`;
+    });
+  }
+
+  area.innerHTML = html;
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ===== Bookmarklet =====
+document.getElementById('btn-bookmarklet').setAttribute('href',
+  `javascript:void(function(){var t=document.body.innerText;var w=window.open('${location.href}?text='+encodeURIComponent(t.slice(0,5000)),'_blank');}())`
+);
+document.getElementById('btn-bookmarklet').addEventListener('click', e => {
+  e.preventDefault();
+  alert('請將這個按鈕「拖曳」到瀏覽器書籤列！\\n\\n使用方式：在任意網頁上點擊書籤，會自動擷取頁面文字並跳轉到校對工具。');
+});
+
+// Check URL params for bookmarklet
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('text')) {
+  document.getElementById('text-input').value = decodeURIComponent(urlParams.get('text'));
+}
+
+// Init
+init();
+</script>
 </body>
 </html>
