@@ -14,21 +14,80 @@
     --tag-luntan: #3D5A73; --tag-fourm: #2E7D5A; --tag-pitch: #C47D2E;
     --tag-sharing: #8B6BAE; --tag-workshop: #6B8E5B; --tag-visit: #C9A94E;
     --tag-annual: #B8475E; --tag-dinner: #7A5B3E; --tag-banquet: #5B8E8E;
+    --o-yc: #3D5A73; --o-ch: #7A3B4E; --o-ar: #6B8E5B;
+    --o-kt: #8B6BAE; --o-wm: #5B8E8E; --o-q: #C47D2E;
+    --s-ip: #3D5A73; --s-ps: #C47D2E; --s-dn: #4A6B5A;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: var(--cream); color: var(--dark); font-family: 'Noto Sans TC', sans-serif; font-weight: 400; line-height: 1.7; -webkit-font-smoothing: antialiased; }
 
-  /* HEADER */
-  .header { background: var(--dark); color: var(--cream); padding: 60px 40px 50px; text-align: center; position: relative; overflow: hidden; }
+  .header { background: var(--dark); color: var(--cream); padding: 50px 40px 40px; text-align: center; position: relative; overflow: hidden; }
   .header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(201,169,78,0.08) 0%, transparent 50%, rgba(201,169,78,0.05) 100%); }
-  .header-label { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; position: relative; }
-  .header h1 { font-family: 'Noto Serif TC', serif; font-weight: 700; font-size: 32px; letter-spacing: 2px; position: relative; margin-bottom: 8px; }
-  .header-sub { font-size: 13px; color: var(--grey-light); font-weight: 300; position: relative; }
-  .header-line { width: 48px; height: 1px; background: var(--gold); margin: 20px auto 0; position: relative; }
+  .header-label { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; position: relative; }
+  .header h1 { font-family: 'Noto Serif TC', serif; font-weight: 700; font-size: 30px; letter-spacing: 2px; position: relative; margin-bottom: 6px; }
+  .header-sub { font-size: 12px; color: var(--grey-light); font-weight: 300; position: relative; }
+  .header-line { width: 48px; height: 1px; background: var(--gold); margin: 18px auto 0; position: relative; }
 
-  /* FILTER */
-  .filter-bar { position: sticky; top: 0; z-index: 100; background: var(--white); border-bottom: 1px solid var(--cream-deep); padding: 16px 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
-  .filter-inner { max-width: 960px; margin: 0 auto; }
+  .mode-bar { background: #232323; padding: 0; display: flex; justify-content: center; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .mode-btn { background: none; border: none; color: var(--grey-light); padding: 14px 28px; font-size: 12.5px; font-weight: 500; letter-spacing: 1px; cursor: pointer; font-family: inherit; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .mode-btn:hover { color: var(--cream); }
+  .mode-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  .event-bar { background: var(--white); border-bottom: 1px solid var(--cream-deep); padding: 18px 24px 16px; display: none; }
+  body.mode-event .event-bar { display: block; }
+  .event-tabs { max-width: 1300px; margin: 0 auto; display: flex; gap: 10px; flex-wrap: wrap; align-items: stretch; }
+  .event-tab { flex: 1; min-width: 180px; padding: 12px 14px; background: var(--cream); border: 1.5px solid var(--cream-deep); border-radius: 6px; cursor: pointer; transition: all 0.2s; text-align: left; font-family: inherit; }
+  .event-tab:hover { border-color: var(--gold-light); background: var(--white); }
+  .event-tab.active { background: var(--dark); border-color: var(--dark); }
+  .event-tab .ev-date { font-size: 10px; letter-spacing: 1px; color: var(--grey-mid); font-weight: 600; margin-bottom: 4px; }
+  .event-tab.active .ev-date { color: var(--gold); }
+  .event-tab .ev-name { font-size: 12px; font-weight: 600; color: var(--dark); line-height: 1.4; margin-bottom: 6px; }
+  .event-tab.active .ev-name { color: var(--cream); }
+  .event-tab .ev-meta { font-size: 10px; color: var(--grey-mid); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .event-tab.active .ev-meta { color: var(--grey-light); }
+  .ev-countdown { background: var(--gold); color: var(--dark); padding: 1px 6px; border-radius: 8px; font-weight: 600; }
+
+  /* STATUS BAR */
+  .event-status { background: var(--cream); border-bottom: 1px solid var(--cream-deep); padding: 14px 24px; display: none; position: sticky; top: 0; z-index: 90; }
+  body.mode-event .event-status { display: block; }
+  .es-inner { max-width: 1300px; margin: 0 auto; display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+
+  .es-totals { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--grey-warm); padding: 4px 12px; background: var(--white); border-radius: 6px; border: 1px solid var(--cream-deep); }
+  .es-totals strong { font-size: 14px; color: var(--dark); font-weight: 700; }
+
+  .es-people { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; min-width: 0; }
+  .es-person { display: flex; align-items: center; gap: 8px; padding: 5px 10px; background: var(--white); border-radius: 6px; border: 1px solid var(--cream-deep); font-size: 11px; }
+  .es-person-name { display: flex; align-items: center; gap: 5px; font-weight: 600; color: var(--dark); white-space: nowrap; }
+  .es-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .es-person-stats { display: flex; gap: 4px; color: var(--grey-mid); font-weight: 500; }
+  .es-stat-num { padding: 1px 5px; border-radius: 3px; font-weight: 600; }
+  .es-stat-num.ns { color: var(--grey-warm); }
+  .es-stat-num.ip { color: var(--s-ip); background: rgba(61,90,115,0.08); }
+  .es-stat-num.dn { color: var(--s-dn); background: rgba(74,107,90,0.08); }
+
+  .es-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+  /* MULTI-SELECT DROPDOWN */
+  .multi-dd { position: relative; }
+  .md-trigger { font-size: 11px; padding: 6px 12px; border-radius: 14px; border: 1.5px solid var(--grey-light); background: var(--white); cursor: pointer; color: var(--grey-warm); font-family: inherit; display: flex; align-items: center; gap: 6px; white-space: nowrap; transition: all 0.2s; }
+  .md-trigger:hover { border-color: var(--grey-warm); }
+  .md-trigger.has-filter { border-color: var(--o-q); color: var(--o-q); font-weight: 600; }
+  .md-trigger .md-arrow { font-size: 9px; opacity: 0.6; }
+  .md-panel { position: absolute; top: calc(100% + 6px); right: 0; background: var(--white); border: 1px solid var(--cream-deep); border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); padding: 8px; min-width: 160px; z-index: 200; display: none; }
+  .multi-dd.open .md-panel { display: block; }
+  .md-option { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; color: var(--grey-warm); transition: background 0.15s; }
+  .md-option:hover { background: var(--cream); }
+  .md-option input { cursor: pointer; }
+  .md-option.checked { color: var(--dark); font-weight: 500; }
+
+  .es-pill { font-size: 11px; padding: 6px 12px; border-radius: 14px; border: 1.5px solid var(--grey-light); background: var(--white); cursor: pointer; transition: all 0.2s; color: var(--grey-warm); font-family: inherit; white-space: nowrap; }
+  .es-pill:hover { border-color: var(--o-q); }
+  .es-pill.active { background: var(--o-q); border-color: var(--o-q); color: var(--white); font-weight: 600; }
+
+  /* OVERVIEW MODE FILTER BAR */
+  .filter-bar { position: sticky; top: 0; z-index: 90; background: var(--white); border-bottom: 1px solid var(--cream-deep); padding: 16px 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+  body.mode-event .filter-bar { display: none; }
+  .filter-inner { max-width: 1300px; margin: 0 auto; }
   .filter-label { font-size: 11px; font-weight: 600; color: var(--grey-mid); letter-spacing: 2px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
   .filter-label svg { width: 14px; height: 14px; }
   .filter-count { margin-left: auto; font-weight: 400; letter-spacing: 0; font-size: 12px; color: var(--grey-light); }
@@ -45,11 +104,11 @@
   .ft-annual { border-color: var(--tag-annual); } .ft-annual.active { background: var(--tag-annual); } .ft-annual.inactive { color: var(--tag-annual); }
   .ft-dinner { border-color: var(--tag-dinner); } .ft-dinner.active { background: var(--tag-dinner); } .ft-dinner.inactive { color: var(--tag-dinner); }
   .ft-banquet { border-color: var(--tag-banquet); } .ft-banquet.active { background: var(--tag-banquet); } .ft-banquet.inactive { color: var(--tag-banquet); }
-  .filter-reset { font-size: 11px; color: var(--grey-mid); cursor: pointer; padding: 6px 12px; border: 1px dashed var(--grey-light); border-radius: 20px; transition: all 0.2s; white-space: nowrap; }
+  .filter-reset { font-size: 11px; color: var(--grey-mid); cursor: pointer; padding: 6px 12px; border: 1px dashed var(--grey-light); border-radius: 20px; transition: all 0.2s; white-space: nowrap; background: none; font-family: inherit; }
   .filter-reset:hover { border-color: var(--grey-warm); color: var(--dark); }
 
-  /* PIPELINE */
-  .arch-section { padding: 48px 24px 32px; max-width: 1100px; margin: 0 auto; }
+  .arch-section { padding: 48px 24px 32px; max-width: 1200px; margin: 0 auto; }
+  body.mode-event .arch-section { display: none; }
   .arch-title { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 600; text-align: center; color: var(--dark); margin-bottom: 32px; letter-spacing: 1px; }
   .pipeline { display: flex; align-items: stretch; gap: 0; overflow-x: auto; padding: 0; }
   .pipe-step { flex: 1; min-width: 130px; position: relative; display: flex; flex-direction: column; align-items: center; }
@@ -61,9 +120,8 @@
   .pipe-detail { padding: 10px 6px 0; display: flex; flex-direction: column; gap: 2px; text-align: center; }
   .pipe-detail-text { font-size: 10px; color: var(--grey-mid); line-height: 1.5; }
 
-  /* DETAIL SECTIONS */
-  .details { max-width: 960px; margin: 0 auto; padding: 0 24px 60px; }
-  .cat-section { margin-bottom: 36px; background: var(--white); border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.05); transition: opacity 0.3s ease; }
+  .details { max-width: 1300px; margin: 0 auto; padding: 32px 24px 60px; }
+  .cat-section { margin-bottom: 32px; background: var(--white); border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.05); transition: opacity 0.3s ease; }
   .cat-section.dimmed { opacity: 0.25; }
   .cat-header { display: flex; align-items: center; gap: 14px; padding: 18px 24px; }
   .cat-num { font-family: 'Noto Serif TC', serif; font-size: 24px; font-weight: 900; line-height: 1; min-width: 36px; }
@@ -73,56 +131,122 @@
   .cat-count { margin-left: auto; font-size: 11px; color: var(--grey-mid); font-weight: 400; background: var(--cream); padding: 3px 10px; border-radius: 10px; white-space: nowrap; }
   .cat-items { border-top: 1px solid var(--cream-deep); }
 
-  /* ITEM ROW - 4 columns: stage | name | desc | tags */
-  .cat-item {
+  /* OVERVIEW MODE GRID: stage | name | desc | tags */
+  body.mode-overview .cat-col-header,
+  body.mode-overview .cat-item {
     display: grid;
-    grid-template-columns: 72px 1fr 1.2fr auto;
+    grid-template-columns: 80px 1.1fr 1.5fr auto;
     gap: 10px;
     padding: 11px 24px;
-    border-bottom: 1px solid var(--cream-deep);
-    align-items: baseline;
+    align-items: center;
   }
-  .cat-item:last-child { border-bottom: none; }
-  .cat-item.filtered-out { display: none; }
+  body.mode-overview .col-date,
+  body.mode-overview .col-owner,
+  body.mode-overview .col-status,
+  body.mode-overview .item-date-cell,
+  body.mode-overview .item-owner-cell,
+  body.mode-overview .item-status-cell { display: none !important; }
 
-  /* STAGE COLUMN */
-  .item-stage {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--grey-mid);
-    white-space: nowrap;
-    line-height: 1.5;
-    letter-spacing: 0.3px;
+  /* EVENT MODE GRID: stage | date | name | desc | owner | status */
+  body.mode-event .cat-col-header,
+  body.mode-event .cat-item {
+    display: grid;
+    grid-template-columns: 80px 115px 1fr 1.2fr 95px 95px;
+    gap: 10px;
+    padding: 11px 18px;
+    align-items: center;
   }
-  .stage-fire { color: var(--dark); font-weight: 600; }
-  .stage-icon { font-style: normal; }
-  .stage-during { color: var(--grey-mid); }
-  .stage-after { color: var(--grey-light); }
-  .stage-before { color: var(--grey-mid); }
+  body.mode-event .col-tags,
+  body.mode-event .item-tags { display: none !important; }
+
+  .cat-col-header { padding-top: 8px !important; padding-bottom: 8px !important; background: var(--cream); border-bottom: 1px solid var(--cream-deep); }
+  .cat-item { border-bottom: 1px solid var(--cream-deep); }
+  .cat-item:last-child { border-bottom: none; }
+  .cat-item.filtered-out { display: none !important; }
+  .col-label { font-size: 10px; font-weight: 600; color: var(--grey-light); letter-spacing: 1.5px; }
 
   .item-name { font-size: 13.5px; font-weight: 600; color: var(--dark); line-height: 1.5; }
-  .item-desc { font-size: 12.5px; color: var(--grey-mid); line-height: 1.6; font-weight: 300; }
-  .item-tags { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; align-items: flex-start; padding-top: 2px; }
+  .item-desc { font-size: 12px; color: var(--grey-mid); line-height: 1.6; font-weight: 300; }
+
+  /* TAG COLUMN (overview only) */
+  .item-tags { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; align-items: flex-start; }
   .item-tag { font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 3px; color: var(--white); white-space: nowrap; letter-spacing: 0.5px; line-height: 1.6; }
   .it-luntan { background: var(--tag-luntan); } .it-fourm { background: var(--tag-fourm); } .it-pitch { background: var(--tag-pitch); }
   .it-sharing { background: var(--tag-sharing); } .it-workshop { background: var(--tag-workshop); } .it-visit { background: var(--tag-visit); }
   .it-annual { background: var(--tag-annual); } .it-dinner { background: var(--tag-dinner); } .it-banquet { background: var(--tag-banquet); }
 
-  .footer { text-align: center; padding: 32px 24px 48px; font-size: 11px; color: var(--grey-light); letter-spacing: 1px; }
+  /* SELECT INPUTS */
+  .item-stage-cell, .item-owner-cell, .item-status-cell, .item-date-cell { display: flex; align-items: center; }
+  .stage-select, .owner-select, .status-select, .date-input {
+    font-family: inherit; font-size: 11px; font-weight: 500;
+    padding: 4px 6px; border-radius: 4px;
+    border: 1.5px solid var(--cream-deep); background: var(--white);
+    color: var(--grey-warm); cursor: pointer; width: 100%;
+    transition: all 0.15s;
+  }
+  .date-input { font-weight: 600; }
+  .stage-select:hover, .owner-select:hover, .status-select:hover, .date-input:hover { border-color: var(--grey-light); }
 
-  @media (max-width: 768px) {
-    .header { padding: 40px 20px 36px; } .header h1 { font-size: 24px; }
+  .stage-select { font-weight: 600; }
+  .stage-select.st-fire { background: #FFF4E0; color: var(--dark); border-color: #E8B870; }
+
+  .owner-select { font-weight: 600; }
+  .owner-select.o-set-yc { background: var(--o-yc); color: var(--white); border-color: var(--o-yc); }
+  .owner-select.o-set-ch { background: var(--o-ch); color: var(--white); border-color: var(--o-ch); }
+  .owner-select.o-set-ar { background: var(--o-ar); color: var(--white); border-color: var(--o-ar); }
+  .owner-select.o-set-kt { background: var(--o-kt); color: var(--white); border-color: var(--o-kt); }
+  .owner-select.o-set-wm { background: var(--o-wm); color: var(--white); border-color: var(--o-wm); }
+  .owner-select.o-set-q { background: #FFF4E0; color: var(--o-q); border-color: var(--o-q); }
+
+  .status-select { font-weight: 600; }
+  .status-select.s-set-ns { background: var(--white); color: var(--grey-mid); border-color: var(--cream-deep); }
+  .status-select.s-set-ip { background: var(--s-ip); color: var(--white); border-color: var(--s-ip); }
+  .status-select.s-set-ps { background: #FFF4E0; color: var(--s-ps); border-color: var(--s-ps); }
+  .status-select.s-set-dn { background: var(--s-dn); color: var(--white); border-color: var(--s-dn); }
+  .status-select.s-set-nn { background: #EAE6DC; color: var(--grey-mid); border-color: #DAD4C5; font-style: italic; }
+
+  .cat-item.is-notneeded { opacity: 0.4; background: #FBFAF6; }
+  .cat-item.is-notneeded .item-name { text-decoration: line-through; text-decoration-color: var(--grey-light); }
+  .cat-item.is-notneeded:hover { opacity: 0.85; transition: opacity 0.2s; }
+
+  /* FOOTER WITH EXPORT */
+  .footer-actions { max-width: 1300px; margin: 0 auto; padding: 0 24px 24px; display: none; justify-content: center; gap: 12px; }
+  body.mode-event .footer-actions { display: flex; }
+  .footer-btn { font-size: 12px; color: var(--grey-warm); cursor: pointer; padding: 10px 24px; border: 1.5px dashed var(--grey-light); border-radius: 20px; background: var(--white); font-family: inherit; transition: all 0.2s; }
+  .footer-btn:hover { border-color: var(--gold); color: var(--dark); border-style: solid; }
+
+  .footer { text-align: center; padding: 20px 24px 48px; font-size: 11px; color: var(--grey-light); letter-spacing: 1px; }
+
+  @media (max-width: 1100px) {
+    body.mode-event .item-desc, body.mode-event .col-desc { display: none !important; }
+    body.mode-event .cat-col-header, body.mode-event .cat-item {
+      grid-template-columns: 76px 110px 1fr 90px 90px;
+    }
+  }
+  @media (max-width: 900px) {
+    .header { padding: 36px 20px 30px; } .header h1 { font-size: 22px; }
     .pipeline { flex-wrap: wrap; gap: 4px; } .pipe-step { min-width: 45%; flex: 0 0 45%; }
     .pipe-step:first-child .pipe-arrow, .pipe-step:last-child .pipe-arrow, .pipe-arrow { clip-path: none; border-radius: 4px; }
-    .cat-item { grid-template-columns: 64px 1fr; padding-left: 16px; padding-right: 16px; }
-    .item-desc { display: none; }
-    .item-tags { grid-column: 1 / -1; justify-content: flex-start; margin-top: 2px; }
+    body.mode-overview .cat-col-header, body.mode-overview .cat-item {
+      grid-template-columns: 70px 1fr !important; padding: 10px 14px;
+    }
+    body.mode-overview .item-desc, body.mode-overview .item-tags,
+    body.mode-overview .col-desc, body.mode-overview .col-tags { display: none !important; }
+    body.mode-event .cat-col-header, body.mode-event .cat-item {
+      grid-template-columns: 1fr 1fr !important; padding: 10px 14px;
+    }
+    body.mode-event .item-desc, body.mode-event .col-desc { display: none !important; }
+    body.mode-event .item-name { grid-column: 1 / -1; margin-bottom: 4px; }
     .filter-tags { gap: 6px; } .filter-tag { font-size: 11px; padding: 5px 12px; }
+    .event-tab { min-width: 100%; }
+    .mode-btn { padding: 12px 18px; font-size: 11px; }
+    .es-people { flex-direction: column; }
+    .es-person { width: 100%; }
   }
-  @media print { .filter-bar { position: static; box-shadow: none; } .cat-section { break-inside: avoid; } body { background: white; } }
+  @media print { .filter-bar, .event-status, .mode-bar { position: static; box-shadow: none; } .cat-section { break-inside: avoid; } body { background: white; } }
 </style>
 </head>
-<body>
+<body class="mode-overview">
 
 <div class="header">
   <div class="header-label">識富天使會 Angel Club</div>
@@ -131,12 +255,42 @@
   <div class="header-line"></div>
 </div>
 
+<div class="mode-bar">
+  <button class="mode-btn active" data-mode="overview" onclick="switchMode('overview')">📋 SOP 總覽</button>
+  <button class="mode-btn" data-mode="event" onclick="switchMode('event')">🎯 活動分工</button>
+</div>
+
+<div class="event-bar"><div class="event-tabs" id="eventTabs"></div></div>
+
+<div class="event-status">
+  <div class="es-inner">
+    <div class="es-totals" id="esTotals"></div>
+    <div class="es-people" id="esPeople"></div>
+    <div class="es-controls">
+      <button class="es-pill" id="onlyPendingBtn" onclick="toggleOnlyPending()">只看待確認</button>
+      <div class="multi-dd" id="statusDd">
+        <button class="md-trigger" id="statusDdTrigger" onclick="toggleStatusDd(event)">
+          <span id="statusDdLabel">事件狀態</span>
+          <span class="md-arrow">▼</span>
+        </button>
+        <div class="md-panel" id="statusDdPanel" onclick="event.stopPropagation()">
+          <div class="md-option" onclick="toggleStatusFilter('ns')"><input type="checkbox" id="sf-ns" checked> 未開始</div>
+          <div class="md-option" onclick="toggleStatusFilter('ip')"><input type="checkbox" id="sf-ip" checked> 進行中</div>
+          <div class="md-option" onclick="toggleStatusFilter('ps')"><input type="checkbox" id="sf-ps" checked> 暫停</div>
+          <div class="md-option" onclick="toggleStatusFilter('dn')"><input type="checkbox" id="sf-dn" checked> 已完成</div>
+          <div class="md-option" onclick="toggleStatusFilter('nn')"><input type="checkbox" id="sf-nn"> 不需要</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="filter-bar">
   <div class="filter-inner">
     <div class="filter-label">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
       依活動類型篩選
-      <span class="filter-count" id="filterCount">顯示全部 60 項</span>
+      <span class="filter-count" id="filterCount">顯示全部 58 項</span>
     </div>
     <div class="filter-tags">
       <div class="filter-tag ft-luntan active" data-tag="luntan" onclick="toggleFilter(this)">論壇</div>
@@ -148,7 +302,7 @@
       <div class="filter-tag ft-annual active" data-tag="annual" onclick="toggleFilter(this)">年會</div>
       <div class="filter-tag ft-dinner active" data-tag="dinner" onclick="toggleFilter(this)">晚宴</div>
       <div class="filter-tag ft-banquet active" data-tag="banquet" onclick="toggleFilter(this)">餐敘</div>
-      <div class="filter-reset" onclick="resetFilters()">全部顯示</div>
+      <button class="filter-reset" onclick="resetFilters()">全部顯示</button>
     </div>
   </div>
 </div>
@@ -167,146 +321,371 @@
 
 <div class="details" id="sopDetails">
 
-  <div class="cat-section" data-cat="1企劃">
-    <div class="cat-header"><div class="cat-num cn-plan">01</div><div class="cat-name">企劃</div><div class="cat-count"><span class="visible-count">3</span> / 3 項</div></div>
-    <div class="cat-items">
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">活動大表/行事曆建立</div><div class="item-desc">統整年度所有活動時程，建立可追蹤的主行事曆，確保跨活動不衝突、資源可調配。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
-      <div class="cat-item" data-tags="fourm,visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">活動策略/企劃表</div><div class="item-desc">定義單場活動目標、受眾、KPI、預算框架與核心訊息，作為所有執行工作的依據文件。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
-      <div class="cat-item" data-tags="visit,annual,luntan"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">風險預案 / 應變計畫</div><div class="item-desc">預擬講者取消、場地異常、天候影響等情境的 Plan B，確保活動韌性。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+  <div class="cat-section" data-cat="1開案">
+    <div class="cat-header"><div class="cat-num cn-plan">01</div><div class="cat-name">開案</div><div class="cat-count"><span class="visible-count">2</span> / 2 項</div></div>
+    <div class="cat-items"><div class="cat-col-header"><div class="col-label">階段</div><div class="col-label col-date">日期</div><div class="col-label">項目名稱</div><div class="col-label col-desc">說明</div><div class="col-label col-owner">負責人</div><div class="col-label col-status">狀態</div><div class="col-label col-tags">活動</div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet" data-task-id="t0" data-default-owner="q" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t0"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t0"></div><div class="item-name">活動大表/行事曆建立/活動策略/企劃表</div><div class="item-desc">統整年度活動時程與單場活動企劃，定義目標、受眾、KPI、預算框架與核心訊息，建立可追蹤的主行事曆與企劃文件，作為所有執行工作的依據。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t0"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t0"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+      <div class="cat-item" data-tags="visit,annual,luntan" data-task-id="t1" data-default-owner="q" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t1"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t1"></div><div class="item-name">風險預案 / 應變計畫</div><div class="item-desc">預擬講者取消、場地異常、天候影響等情境的 Plan B，確保活動韌性。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t1"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t1"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <div class="cat-section" data-cat="2議程">
     <div class="cat-header"><div class="cat-num cn-content">02</div><div class="cat-name">議程</div><div class="cat-count"><span class="visible-count">7</span> / 7 項</div></div>
-    <div class="cat-items">
-      <div class="cat-item" data-tags="fourm,pitch,visit,workshop,annual,luntan"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">機構/講者邀請與確認</div><div class="item-desc">向目標機構與講者發出正式邀約，追蹤回覆狀態直到確認出席。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,luntan"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">活動流程表</div><div class="item-desc">完整時間軸 rundown，含每一環節起訖時間、負責人、轉場提示與技術 cue 點。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,luntan"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">講者資料收集（bio / 照片）</div><div class="item-desc">收集講者中英文簡歷、高解析度照片與職稱，供網站、手冊及現場識別使用。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="fourm,sharing,workshop,annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">[比價]主持人安排</div><div class="item-desc">依據活動調性搜尋、比價並確認專業主持人，含中英雙語能力評估。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,sharing,workshop,annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">主持人講稿、內容授權/審核流程</div><div class="item-desc">撰寫主持人串場稿，並建立講者簡報的合規審核流程（尤其金融機構有 compliance 要求）。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="pitch,annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">問答題目準備/Panel 設計</div><div class="item-desc">為圓桌論壇或 Q&A 環節預擬引導問題，設計互動節奏與議題深度層次。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,visit,workshop,annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">講者 rundown,投影片準備/索取</div><div class="item-desc">向已確認講者索取簡報檔案，統一格式與版型，並提供個人化 rundown。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+    <div class="cat-items"><div class="cat-col-header"><div class="col-label">階段</div><div class="col-label col-date">日期</div><div class="col-label">項目名稱</div><div class="col-label col-desc">說明</div><div class="col-label col-owner">負責人</div><div class="col-label col-status">狀態</div><div class="col-label col-tags">活動</div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,workshop,annual,luntan" data-task-id="t5" data-default-owner="ch" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t5"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t5"></div><div class="item-name">機構/講者邀請與確認</div><div class="item-desc">向目標機構與講者發出正式邀約，追蹤回覆狀態直到確認出席。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t5"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t5"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,luntan" data-task-id="t6" data-default-owner="ar" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t6"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t6"></div><div class="item-name">活動流程表</div><div class="item-desc">完整時間軸 rundown，含每一環節起訖時間、負責人、轉場提示與技術 cue 點。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t6"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t6"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,luntan" data-task-id="t8" data-default-owner="ar" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t8"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t8"></div><div class="item-name">講者資料收集（bio / 照片）</div><div class="item-desc">收集講者中英文簡歷、高解析度照片與職稱，供網站、手冊及現場識別使用。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t8"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t8"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="fourm,sharing,workshop,annual,luntan" data-task-id="t2" data-default-owner="ar" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t2"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t2"></div><div class="item-name">[比價]主持人安排</div><div class="item-desc">依據活動調性搜尋、比價並確認專業主持人，含中英雙語能力評估。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t2"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t2"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,sharing,workshop,annual,luntan" data-task-id="t3" data-default-owner="ar" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t3"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t3"></div><div class="item-name">主持人講稿、內容授權/審核流程</div><div class="item-desc">撰寫主持人串場稿，並建立講者簡報的合規審核流程（尤其金融機構有 compliance 要求）。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t3"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t3"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="pitch,annual,luntan" data-task-id="t4" data-default-owner="ch" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t4"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t4"></div><div class="item-name">問答題目準備/Panel 設計</div><div class="item-desc">為圓桌論壇或 Q&A 環節預擬引導問題，設計互動節奏與議題深度層次。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t4"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t4"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,workshop,annual,luntan" data-task-id="t7" data-default-owner="ar" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t7"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t7"></div><div class="item-name">講者 rundown,投影片準備/索取</div><div class="item-desc">向已確認講者索取簡報檔案，統一格式與版型，並提供個人化 rundown。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t7"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t7"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <div class="cat-section" data-cat="3來賓">
     <div class="cat-header"><div class="cat-num cn-guest">03</div><div class="cat-name">來賓</div><div class="cat-count"><span class="visible-count">5</span> / 5 項</div></div>
-    <div class="cat-items">
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">活動報名表</div><div class="item-desc">設計並上線報名表單，收集與會者基本資料、特殊需求（飲食禁忌、翻譯等）。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
-      <div class="cat-item" data-tags="annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">會前出席確認/接待安排/VIP 分級策略</div><div class="item-desc">會前逐一確認出席，依理事、會員、外部貴賓分級規劃接待規格與動線。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="fourm,visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-before">活動前</div><div class="item-name">每週定期名單回顧</div><div class="item-desc">每週固定追蹤報名狀態、出席率預估與邀請缺口，及時調整推進策略。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">邀請名單push/追蹤</div><div class="item-desc">持續推進未回覆名單，透過多管道（電話、LINE、Email）觸及並記錄回覆狀態。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">邀請名單策略討論</div><div class="item-desc">與主管及 BD 團隊共同定義目標受眾輪廓與名單來源，確保邀請品質。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span></div></div>
+    <div class="cat-items"><div class="cat-col-header"><div class="col-label">階段</div><div class="col-label col-date">日期</div><div class="col-label">項目名稱</div><div class="col-label col-desc">說明</div><div class="col-label col-owner">負責人</div><div class="col-label col-status">狀態</div><div class="col-label col-tags">活動</div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet" data-task-id="t11" data-default-owner="ar" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t11"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t11"></div><div class="item-name">活動報名表</div><div class="item-desc">設計並上線報名表單，收集與會者基本資料、特殊需求（飲食禁忌、翻譯等）。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t11"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t11"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+      <div class="cat-item" data-tags="annual,luntan" data-task-id="t9" data-default-owner="q" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t9"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t9"></div><div class="item-name">會前出席確認/接待安排/VIP 分級策略</div><div class="item-desc">會前逐一確認出席，依理事、會員、外部貴賓分級規劃接待規格與動線。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t9"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t9"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="fourm,visit,sharing,workshop,annual,dinner,luntan,banquet" data-task-id="t10" data-default-owner="q" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t10"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t10"></div><div class="item-name">每週定期名單回顧</div><div class="item-desc">每週固定追蹤報名狀態、出席率預估與邀請缺口，及時調整推進策略。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t10"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t10"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan" data-task-id="t12" data-default-owner="ar" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t12"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t12"></div><div class="item-name">邀請名單push/追蹤</div><div class="item-desc">持續推進未回覆名單，透過多管道（電話、LINE、Email）觸及並記錄回覆狀態。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t12"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t12"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan" data-task-id="t13" data-default-owner="ch" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t13"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t13"></div><div class="item-name">邀請名單策略討論</div><div class="item-desc">與主管及 BD 團隊共同定義目標受眾輪廓與名單來源，確保邀請品質。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t13"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t13"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span></div></div>
     </div>
   </div>
 
   <div class="cat-section" data-cat="4行銷">
-    <div class="cat-header"><div class="cat-num cn-mkt">04</div><div class="cat-name">行銷</div><div class="cat-count"><span class="visible-count">8</span> / 8 項</div></div>
-    <div class="cat-items">
-      <div class="cat-item" data-tags="fourm,pitch,sharing,workshop,annual,luntan"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">文案撰寫（網站 / 社群）</div><div class="item-desc">產出活動主文案與各渠道適配版本，維持品牌調性與高淨值受眾語感。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">活動報名表</div><div class="item-desc">報名頁上線與轉換數據追蹤，監測各渠道帶入的報名數量與轉換率。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,sharing,workshop,annual,luntan"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">活動資訊上架網頁</div><div class="item-desc">將活動完整資訊（議程、講者、報名連結）上架官方網站，確保資訊一致。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="pitch,visit,sharing,workshop,annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">倒數提醒（D-7 / D-3 / D-1）</div><div class="item-desc">於活動前固定節點推送提醒訊息，降低 no-show 率並營造期待感。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">新聞稿/媒體合作 / PR</div><div class="item-desc">撰寫新聞稿、洽談媒體露出機會，建立並維護媒體聯絡名單。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,sharing,workshop,annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">社群曝光活動（官網,EDM,LINE,Wechat,LinkIn,FB)</div><div class="item-desc">依通路特性（官網 / EDM / LINE / WeChat / LinkedIn / FB）發布活動資訊與宣傳素材。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動後</div><div class="item-name">活動小結公告社群（官網,EDM,LINE,Wechat,LinkIn,FB)</div><div class="item-desc">活動結束後產出精華摘要，於全渠道同步發布，強化品牌影響力與社群記憶。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動後</div><div class="item-name">活動花絮上架網頁、社群露出</div><div class="item-desc">整理活動照片、短影片與金句圖卡，上架官網並於社群持續露出，延長內容生命週期。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+    <div class="cat-header"><div class="cat-num cn-mkt">04</div><div class="cat-name">行銷</div><div class="cat-count"><span class="visible-count">7</span> / 7 項</div></div>
+    <div class="cat-items"><div class="cat-col-header"><div class="col-label">階段</div><div class="col-label col-date">日期</div><div class="col-label">項目名稱</div><div class="col-label col-desc">說明</div><div class="col-label col-owner">負責人</div><div class="col-label col-status">狀態</div><div class="col-label col-tags">活動</div></div>
+      <div class="cat-item" data-tags="fourm,pitch,sharing,workshop,annual,luntan" data-task-id="t15" data-default-owner="ar" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t15"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t15"></div><div class="item-name">文案撰寫（網站 / 社群）</div><div class="item-desc">產出活動主文案與各渠道適配版本，維持品牌調性與高淨值受眾語感。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t15"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t15"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,sharing,workshop,annual,luntan" data-task-id="t19" data-default-owner="ar" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t19"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t19"></div><div class="item-name">活動資訊上架網頁</div><div class="item-desc">將活動完整資訊（議程、講者、報名連結）上架官方網站，確保資訊一致。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t19"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t19"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="pitch,visit,sharing,workshop,annual,luntan" data-task-id="t14" data-default-owner="ar" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t14"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t14"></div><div class="item-name">倒數提醒（D-7 / D-3 / D-1）</div><div class="item-desc">於活動前固定節點推送提醒訊息，降低 no-show 率並營造期待感。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t14"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t14"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="luntan" data-task-id="t16" data-default-owner="q" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t16"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t16"></div><div class="item-name">新聞稿/媒體合作 / PR</div><div class="item-desc">撰寫新聞稿、洽談媒體露出機會，建立並維護媒體聯絡名單。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t16"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t16"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,sharing,workshop,annual,luntan" data-task-id="t20" data-default-owner="ar" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t20"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t20"></div><div class="item-name">社群曝光活動（官網,EDM,LINE,Wechat,LinkIn,FB)</div><div class="item-desc">依通路特性（官網 / EDM / LINE / WeChat / LinkedIn / FB）發布活動資訊與宣傳素材。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t20"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t20"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet" data-task-id="t17" data-default-owner="ar" data-default-stage="f2"><div class="item-stage-cell"><select class="stage-select" data-task-id="t17"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t17"></div><div class="item-name">活動小結公告社群（官網,EDM,LINE,Wechat,LinkIn,FB)</div><div class="item-desc">活動結束後產出精華摘要，於全渠道同步發布，強化品牌影響力與社群記憶。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t17"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t17"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet" data-task-id="t18" data-default-owner="ar" data-default-stage="f2"><div class="item-stage-cell"><select class="stage-select" data-task-id="t18"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t18"></div><div class="item-name">活動花絮上架網頁、社群露出</div><div class="item-desc">整理活動照片、短影片與金句圖卡，上架官網並於社群持續露出，延長內容生命週期。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t18"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t18"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
     </div>
   </div>
 
   <div class="cat-section" data-cat="5合作/贊助">
     <div class="cat-header"><div class="cat-num cn-partner">05</div><div class="cat-name">合作 / 贊助</div><div class="cat-count"><span class="visible-count">6</span> / 6 項</div></div>
-    <div class="cat-items">
-      <div class="cat-item" data-tags="visit,annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">KOL / 夥伴曝光</div><div class="item-desc">協調合作夥伴或意見領袖進行活動前後的社群轉發與背書。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="visit,annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">合作方案洽談/設計</div><div class="item-desc">規劃合作權益結構，與潛在夥伴進行需求對接並擬定合作框架。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="visit,annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">合約簽署</div><div class="item-desc">確認合作條款後推動合約用印流程，確保雙方權責清晰。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="visit,annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">贊助交付（票券 / 名單）</div><div class="item-desc">依合約提供贊助商應得權益，包含免費票券、與會者名單或展位等。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="visit,annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">贊助方案設計</div><div class="item-desc">設計多層級贊助方案（冠名 / 協辦 / 支持），明確各級露出權益與交付物。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="visit,annual,luntan"><div class="item-stage stage-after">活動後</div><div class="item-name">贊助成果報告</div><div class="item-desc">活動後彙整贊助商露出數據、觸及效果與照片，交付正式成果報告。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+    <div class="cat-items"><div class="cat-col-header"><div class="col-label">階段</div><div class="col-label col-date">日期</div><div class="col-label">項目名稱</div><div class="col-label col-desc">說明</div><div class="col-label col-owner">負責人</div><div class="col-label col-status">狀態</div><div class="col-label col-tags">活動</div></div>
+      <div class="cat-item" data-tags="visit,annual,luntan" data-task-id="t21" data-default-owner="ch" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t21"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t21"></div><div class="item-name">KOL / 夥伴曝光</div><div class="item-desc">協調合作夥伴或意見領袖進行活動前後的社群轉發與背書。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t21"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t21"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="visit,annual,luntan" data-task-id="t22" data-default-owner="ch" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t22"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t22"></div><div class="item-name">合作方案洽談/設計</div><div class="item-desc">規劃合作權益結構，與潛在夥伴進行需求對接並擬定合作框架。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t22"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t22"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="visit,annual,luntan" data-task-id="t23" data-default-owner="ch" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t23"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t23"></div><div class="item-name">合約簽署</div><div class="item-desc">確認合作條款後推動合約用印流程，確保雙方權責清晰。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t23"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t23"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="visit,annual,luntan" data-task-id="t24" data-default-owner="q" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t24"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t24"></div><div class="item-name">贊助交付（票券 / 名單）</div><div class="item-desc">依合約提供贊助商應得權益，包含免費票券、與會者名單或展位等。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t24"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t24"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="visit,annual,luntan" data-task-id="t26" data-default-owner="ch" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t26"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t26"></div><div class="item-name">贊助方案設計</div><div class="item-desc">設計多層級贊助方案（冠名 / 協辦 / 支持），明確各級露出權益與交付物。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t26"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t26"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="visit,annual,luntan" data-task-id="t25" data-default-owner="ar" data-default-stage="a1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t25"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t25"></div><div class="item-name">贊助成果報告</div><div class="item-desc">活動後彙整贊助商露出數據、觸及效果與照片，交付正式成果報告。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t25"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t25"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <div class="cat-section" data-cat="6場地">
     <div class="cat-header"><div class="cat-num cn-ops">06</div><div class="cat-name">場地</div><div class="cat-count"><span class="visible-count">5</span> / 5 項</div></div>
-    <div class="cat-items">
-      <div class="cat-item" data-tags="annual,luntan"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">[比價]場地/貴賓室搜尋與比較</div><div class="item-desc">依活動規模、品牌調性與預算搜尋場地，製作比較表供決策。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="annual,luntan"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">[比價]燈光、攝影 / 錄影、AV 設播（投影 / 音響 / 麥克風）/直播/網路設備</div><div class="item-desc">評估並比價視聽設備供應商（投影、音響、麥克風、直播串流、WiFi 增強等）。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="annual,dinner,luntan,banquet"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">場地及相關設備預訂</div><div class="item-desc">完成場地合約簽訂、設備租借訂單，並鎖定確認日期與撤場時間。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
-      <div class="cat-item" data-tags="visit,annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">交通動線/停車/接駁資訊準備</div><div class="item-desc">整理場地周邊交通、停車場與接駁安排資訊，製作與會者指引。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="pitch,annual,dinner,luntan,banquet"><div class="item-stage stage-before">活動前</div><div class="item-name">場地佈置、配置圖/座位安排</div><div class="item-desc">繪製平面配置圖，規劃座位區、報到區、VIP 區與動線，確認佈置時程。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+    <div class="cat-items"><div class="cat-col-header"><div class="col-label">階段</div><div class="col-label col-date">日期</div><div class="col-label">項目名稱</div><div class="col-label col-desc">說明</div><div class="col-label col-owner">負責人</div><div class="col-label col-status">狀態</div><div class="col-label col-tags">活動</div></div>
+      <div class="cat-item" data-tags="annual,luntan" data-task-id="t27" data-default-owner="ar" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t27"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t27"></div><div class="item-name">[比價]場地/貴賓室搜尋與比較</div><div class="item-desc">依活動規模、品牌調性與預算搜尋場地，製作比較表供決策。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t27"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t27"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="annual,luntan" data-task-id="t28" data-default-owner="ar" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t28"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t28"></div><div class="item-name">[比價]燈光、攝影 / 錄影、AV 設播（投影 / 音響 / 麥克風）/直播/網路設備</div><div class="item-desc">評估並比價視聽設備供應商（投影、音響、麥克風、直播串流、WiFi 增強等）。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t28"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t28"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="annual,dinner,luntan,banquet" data-task-id="t31" data-default-owner="ar" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t31"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t31"></div><div class="item-name">場地及相關設備預訂</div><div class="item-desc">完成場地合約簽訂、設備租借訂單，並鎖定確認日期與撤場時間。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t31"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t31"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+      <div class="cat-item" data-tags="visit,annual,luntan" data-task-id="t29" data-default-owner="ar" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t29"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t29"></div><div class="item-name">交通動線/停車/接駁資訊準備</div><div class="item-desc">整理場地周邊交通、停車場與接駁安排資訊，製作與會者指引。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t29"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t29"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="pitch,annual,dinner,luntan,banquet" data-task-id="t30" data-default-owner="ar" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t30"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t30"></div><div class="item-name">場地佈置、配置圖/座位安排</div><div class="item-desc">繪製平面配置圖，規劃座位區、報到區、VIP 區與動線，確認佈置時程。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t30"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t30"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
     </div>
   </div>
 
   <div class="cat-section" data-cat="7設計">
     <div class="cat-header"><div class="cat-num cn-mkt">07</div><div class="cat-name">設計</div><div class="cat-count"><span class="visible-count">3</span> / 3 項</div></div>
-    <div class="cat-items">
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,luntan"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">主視覺、社群素材、活動頁設計</div><div class="item-desc">開發活動主視覺 KV 並延伸為各渠道素材（社群圖、Banner、活動頁面）。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">活動簡報</div><div class="item-desc">製作活動介紹用簡報，供對外洽談合作、招募贊助或內部提案使用。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="visit,annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">識別證、背板、易拉展、現場指引看板</div><div class="item-desc">設計並送印現場所有實體視覺物件，確保品牌一致性與空間指引清晰。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+    <div class="cat-items"><div class="cat-col-header"><div class="col-label">階段</div><div class="col-label col-date">日期</div><div class="col-label">項目名稱</div><div class="col-label col-desc">說明</div><div class="col-label col-owner">負責人</div><div class="col-label col-status">狀態</div><div class="col-label col-tags">活動</div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,luntan" data-task-id="t32" data-default-owner="ar" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t32"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t32"></div><div class="item-name">主視覺、社群素材、活動頁設計</div><div class="item-desc">開發活動主視覺 KV 並延伸為各渠道素材（社群圖、Banner、活動頁面）。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t32"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t32"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,luntan" data-task-id="t33" data-default-owner="ar" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t33"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t33"></div><div class="item-name">活動簡報</div><div class="item-desc">製作活動介紹用簡報，供對外洽談合作、招募贊助或內部提案使用。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t33"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t33"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="visit,annual,luntan" data-task-id="t34" data-default-owner="ar" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t34"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t34"></div><div class="item-name">識別證、背板、易拉展、現場指引看板</div><div class="item-desc">設計並送印現場所有實體視覺物件，確保品牌一致性與空間指引清晰。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t34"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t34"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <div class="cat-section" data-cat="8執行">
     <div class="cat-header"><div class="cat-num cn-ops">08</div><div class="cat-name">執行</div><div class="cat-count"><span class="visible-count">6</span> / 6 項</div></div>
-    <div class="cat-items">
-      <div class="cat-item" data-tags="annual,luntan"><div class="item-stage stage-during">活動中</div><div class="item-name">[場佈]輸出、攝影、設備、投影/錄影</div><div class="item-desc">活動前完成所有印刷品輸出、攝影設備到位、投影與錄影系統測試。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,sharing,workshop,annual,luntan"><div class="item-stage stage-during">活動中</div><div class="item-name">報到流程/簽到表/QR</div><div class="item-desc">建置報到系統（QR Code 掃描或人工簽到），確保入場順暢並即時統計出席。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-during">活動中</div><div class="item-name">攝影、大合照安排</div><div class="item-desc">規劃活動攝影動線與大合照時機，確保關鍵畫面不遺漏、照片可即時交付。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
-      <div class="cat-item" data-tags="annual,luntan"><div class="item-stage stage-during">活動中</div><div class="item-name">活動彩排</div><div class="item-desc">安排講者與工作團隊現場走位，確認設備、燈光、音響與轉場流程。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="visit,annual,luntan"><div class="item-stage stage-during">活動中</div><div class="item-name">現場貴賓接待</div><div class="item-desc">依 VIP 分級安排專人迎接、引導入座與休息室服務，展現高規格待客。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="visit,annual,luntan"><div class="item-stage stage-during">活動中</div><div class="item-name">細流/工作人員分工</div><div class="item-desc">產出分鐘級細部流程表，明確每位工作人員的崗位、職責與通訊機制。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+    <div class="cat-items"><div class="cat-col-header"><div class="col-label">階段</div><div class="col-label col-date">日期</div><div class="col-label">項目名稱</div><div class="col-label col-desc">說明</div><div class="col-label col-owner">負責人</div><div class="col-label col-status">狀態</div><div class="col-label col-tags">活動</div></div>
+      <div class="cat-item" data-tags="annual,luntan" data-task-id="t35" data-default-owner="ar" data-default-stage="d1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t35"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t35"></div><div class="item-name">[場佈]輸出、攝影、設備、投影/錄影</div><div class="item-desc">活動前完成所有印刷品輸出、攝影設備到位、投影與錄影系統測試。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t35"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t35"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,sharing,workshop,annual,luntan" data-task-id="t36" data-default-owner="ar" data-default-stage="d1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t36"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t36"></div><div class="item-name">報到流程/簽到表/QR</div><div class="item-desc">建置報到系統（QR Code 掃描或人工簽到），確保入場順暢並即時統計出席。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t36"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t36"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet" data-task-id="t37" data-default-owner="ar" data-default-stage="d1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t37"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t37"></div><div class="item-name">攝影、大合照安排</div><div class="item-desc">規劃活動攝影動線與大合照時機，確保關鍵畫面不遺漏、照片可即時交付。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t37"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t37"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+      <div class="cat-item" data-tags="annual,luntan" data-task-id="t38" data-default-owner="ar" data-default-stage="d1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t38"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t38"></div><div class="item-name">活動彩排</div><div class="item-desc">安排講者與工作團隊現場走位，確認設備、燈光、音響與轉場流程。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t38"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t38"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="visit,annual,luntan" data-task-id="t39" data-default-owner="q" data-default-stage="d1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t39"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t39"></div><div class="item-name">現場貴賓接待</div><div class="item-desc">依 VIP 分級安排專人迎接、引導入座與休息室服務，展現高規格待客。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t39"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t39"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="visit,annual,luntan" data-task-id="t40" data-default-owner="ar" data-default-stage="d1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t40"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t40"></div><div class="item-name">細流/工作人員分工</div><div class="item-desc">產出分鐘級細部流程表，明確每位工作人員的崗位、職責與通訊機制。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t40"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t40"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <div class="cat-section" data-cat="9財務">
     <div class="cat-header"><div class="cat-num cn-plan">09</div><div class="cat-name">財務</div><div class="cat-count"><span class="visible-count">5</span> / 5 項</div></div>
-    <div class="cat-items">
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">成本控管</div><div class="item-desc">持續追蹤實際支出 vs 預算，即時示警超支項目並調整配置。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">活動預算表</div><div class="item-desc">編列完整預算明細（場地、設備、餐飲、印刷、講者費等），經核准後作為控管基準。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">講者/合作方付款時程追蹤</div><div class="item-desc">追蹤講者酬勞與廠商尾款的付款進度，避免延遲影響合作關係。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
-      <div class="cat-item" data-tags="visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-during">活動中</div><div class="item-name">報帳、發票</div><div class="item-desc">彙整所有費用憑證與發票，依公司財務流程完成報帳作業。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-after">活動後</div><div class="item-name">活動費用結清、預扣費用追回</div><div class="item-desc">活動結束後完成所有款項結清，追回預付保證金或未使用之預扣款。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+    <div class="cat-items"><div class="cat-col-header"><div class="col-label">階段</div><div class="col-label col-date">日期</div><div class="col-label">項目名稱</div><div class="col-label col-desc">說明</div><div class="col-label col-owner">負責人</div><div class="col-label col-status">狀態</div><div class="col-label col-tags">活動</div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet" data-task-id="t42" data-default-owner="ar" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t42"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t42"></div><div class="item-name">成本控管</div><div class="item-desc">持續追蹤實際支出 vs 預算，即時示警超支項目並調整配置。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t42"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t42"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet" data-task-id="t44" data-default-owner="q" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t44"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t44"></div><div class="item-name">活動預算表</div><div class="item-desc">編列完整預算明細（場地、設備、餐飲、印刷、講者費等），經核准後作為控管基準。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t44"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t44"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet" data-task-id="t45" data-default-owner="ar" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t45"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t45"></div><div class="item-name">講者/合作方付款時程追蹤</div><div class="item-desc">追蹤講者酬勞與廠商尾款的付款進度，避免延遲影響合作關係。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t45"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t45"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+      <div class="cat-item" data-tags="visit,sharing,workshop,annual,dinner,luntan,banquet" data-task-id="t41" data-default-owner="ar" data-default-stage="d1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t41"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t41"></div><div class="item-name">報帳、發票</div><div class="item-desc">彙整所有費用憑證與發票，依公司財務流程完成報帳作業。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t41"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t41"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet" data-task-id="t43" data-default-owner="ar" data-default-stage="a1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t43"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t43"></div><div class="item-name">活動費用結清、預扣費用追回</div><div class="item-desc">活動結束後完成所有款項結清，追回預付保證金或未使用之預扣款。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t43"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t43"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
     </div>
   </div>
 
   <div class="cat-section" data-cat="10飲食">
     <div class="cat-header"><div class="cat-num cn-guest">10</div><div class="cat-name">飲食</div><div class="cat-count"><span class="visible-count">3</span> / 3 項</div></div>
-    <div class="cat-items">
-      <div class="cat-item" data-tags="visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">[比價]餐廳搜尋與比較</div><div class="item-desc">依預算、菜系與場地距離篩選餐廳，製作比較表（含菜單、人均價位、包廂條件）。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
-      <div class="cat-item" data-tags="visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">餐廳/餐點預訂</div><div class="item-desc">確認最終人數與特殊飲食需求後完成訂位，並確認出菜時間與服務流程。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
-      <div class="cat-item" data-tags="visit,annual,luntan"><div class="item-stage stage-before">活動前</div><div class="item-name">禮品採購</div><div class="item-desc">規劃講者伴手禮或與會者紀念品，統一採購並安排包裝與發放。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+    <div class="cat-items"><div class="cat-col-header"><div class="col-label">階段</div><div class="col-label col-date">日期</div><div class="col-label">項目名稱</div><div class="col-label col-desc">說明</div><div class="col-label col-owner">負責人</div><div class="col-label col-status">狀態</div><div class="col-label col-tags">活動</div></div>
+      <div class="cat-item" data-tags="visit,sharing,workshop,annual,dinner,luntan,banquet" data-task-id="t46" data-default-owner="ar" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t46"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t46"></div><div class="item-name">[比價]餐廳搜尋與比較</div><div class="item-desc">依預算、菜系與場地距離篩選餐廳，製作比較表（含菜單、人均價位、包廂條件）。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t46"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t46"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+      <div class="cat-item" data-tags="visit,sharing,workshop,annual,dinner,luntan,banquet" data-task-id="t48" data-default-owner="ar" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t48"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t48"></div><div class="item-name">餐廳/餐點預訂</div><div class="item-desc">確認最終人數與特殊飲食需求後完成訂位，並確認出菜時間與服務流程。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t48"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t48"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+      <div class="cat-item" data-tags="visit,annual,luntan" data-task-id="t47" data-default-owner="ar" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t47"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t47"></div><div class="item-name">禮品採購</div><div class="item-desc">規劃講者伴手禮或與會者紀念品，統一採購並安排包裝與發放。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t47"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t47"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
     </div>
   </div>
 
   <div class="cat-section" data-cat="11會後">
     <div class="cat-header"><div class="cat-num cn-partner">11</div><div class="cat-name">會後</div><div class="cat-count"><span class="visible-count">3</span> / 3 項</div></div>
-    <div class="cat-items">
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-after">活動後</div><div class="item-name">活動復盤、結案會議</div><div class="item-desc">召開內部復盤會議，檢視 KPI 達成度、記錄優化項目，產出結案報告。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
-      <div class="cat-item" data-tags="fourm,visit,sharing,workshop,annual,luntan"><div class="item-stage stage-after">活動後</div><div class="item-name">活動滿意度調查問卷</div><div class="item-desc">於活動後 48 小時內發送問卷，收集與會者回饋作為下次迭代依據。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
-      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet"><div class="item-stage stage-after">活動後</div><div class="item-name">潛在會員名單更新、名片生態圈更新</div><div class="item-desc">將活動中接觸的潛在會員匯入 CRM，更新名片資料庫並移交 BD 團隊跟進。</div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+    <div class="cat-items"><div class="cat-col-header"><div class="col-label">階段</div><div class="col-label col-date">日期</div><div class="col-label">項目名稱</div><div class="col-label col-desc">說明</div><div class="col-label col-owner">負責人</div><div class="col-label col-status">狀態</div><div class="col-label col-tags">活動</div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet" data-task-id="t49" data-default-owner="q" data-default-stage="a1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t49"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t49"></div><div class="item-name">活動復盤、結案會議</div><div class="item-desc">召開內部復盤會議，檢視 KPI 達成度、記錄優化項目，產出結案報告。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t49"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t49"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
+      <div class="cat-item" data-tags="fourm,visit,sharing,workshop,annual,luntan" data-task-id="t50" data-default-owner="ar" data-default-stage="a1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t50"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t50"></div><div class="item-name">活動滿意度調查問卷</div><div class="item-desc">於活動後 48 小時內發送問卷，收集與會者回饋作為下次迭代依據。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t50"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t50"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span></div></div>
+      <div class="cat-item" data-tags="fourm,pitch,visit,sharing,workshop,annual,dinner,luntan,banquet" data-task-id="t51" data-default-owner="q" data-default-stage="a1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t51"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t51"></div><div class="item-name">潛在會員名單更新、名片生態圈更新</div><div class="item-desc">將活動中接觸的潛在會員匯入 CRM，更新名片資料庫並移交 BD 團隊跟進。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t51"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t51"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-luntan">論壇</span><span class="item-tag it-fourm">Forum</span><span class="item-tag it-pitch">Pitch Day</span><span class="item-tag it-sharing">分享會</span><span class="item-tag it-workshop">工作坊</span><span class="item-tag it-visit">企業參訪</span><span class="item-tag it-annual">年會</span><span class="item-tag it-dinner">晚宴</span><span class="item-tag it-banquet">餐敘</span></div></div>
     </div>
   </div>
 
   <div class="cat-section" data-cat="12海外">
     <div class="cat-header"><div class="cat-num cn-content">12</div><div class="cat-name">海外</div><div class="cat-count"><span class="visible-count">6</span> / 6 項</div></div>
-    <div class="cat-items">
-      <div class="cat-item" data-tags="visit"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">交通（機票 / 巴士）</div><div class="item-desc">統籌團體機票訂購與當地交通（巴士包車 / 專車），管理航班與轉機銜接。</div><div class="item-tags"><span class="item-tag it-visit">企業參訪</span></div></div>
-      <div class="cat-item" data-tags="visit"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">就醫、緊急聯絡機制</div><div class="item-desc">建立當地緊急聯絡清單（醫院、大使館、保險公司），確保突發狀況可即時應對。</div><div class="item-tags"><span class="item-tag it-visit">企業參訪</span></div></div>
-      <div class="cat-item" data-tags="visit"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">機構單位安排</div><div class="item-desc">與海外目標機構進行邀約、行程確認與接待細節對接，確保參訪品質。</div><div class="item-tags"><span class="item-tag it-visit">企業參訪</span></div></div>
-      <div class="cat-item" data-tags="visit"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">當地接待、翻譯</div><div class="item-desc">安排當地接待人員與專業翻譯，確保語言與文化溝通無障礙。</div><div class="item-tags"><span class="item-tag it-visit">企業參訪</span></div></div>
-      <div class="cat-item" data-tags="visit"><div class="item-stage stage-fire"><span class="stage-icon">🔥</span> 活動前</div><div class="item-name">行程路線規劃、每日 Rundown、機構接待時程</div><div class="item-desc">編排每日參訪路線與時程，與各接待機構確認行程細節並預留緩衝時間。</div><div class="item-tags"><span class="item-tag it-visit">企業參訪</span></div></div>
-      <div class="cat-item" data-tags="visit"><div class="item-stage stage-before">活動前</div><div class="item-name">簽證 / 保險</div><div class="item-desc">協助團員確認簽證需求、統一辦理旅平險，並建立團員護照資料清冊。</div><div class="item-tags"><span class="item-tag it-visit">企業參訪</span></div></div>
+    <div class="cat-items"><div class="cat-col-header"><div class="col-label">階段</div><div class="col-label col-date">日期</div><div class="col-label">項目名稱</div><div class="col-label col-desc">說明</div><div class="col-label col-owner">負責人</div><div class="col-label col-status">狀態</div><div class="col-label col-tags">活動</div></div>
+      <div class="cat-item" data-tags="visit" data-task-id="t52" data-default-owner="ar" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t52"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t52"></div><div class="item-name">交通（機票 / 巴士）</div><div class="item-desc">統籌團體機票訂購與當地交通（巴士包車 / 專車），管理航班與轉機銜接。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t52"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t52"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-visit">企業參訪</span></div></div>
+      <div class="cat-item" data-tags="visit" data-task-id="t53" data-default-owner="ar" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t53"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t53"></div><div class="item-name">就醫、緊急聯絡機制</div><div class="item-desc">建立當地緊急聯絡清單（醫院、大使館、保險公司），確保突發狀況可即時應對。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t53"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t53"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-visit">企業參訪</span></div></div>
+      <div class="cat-item" data-tags="visit" data-task-id="t54" data-default-owner="ch" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t54"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t54"></div><div class="item-name">機構單位安排</div><div class="item-desc">與海外目標機構進行邀約、行程確認與接待細節對接，確保參訪品質。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t54"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t54"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-visit">企業參訪</span></div></div>
+      <div class="cat-item" data-tags="visit" data-task-id="t55" data-default-owner="q" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t55"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t55"></div><div class="item-name">當地接待、翻譯</div><div class="item-desc">安排當地接待人員與專業翻譯，確保語言與文化溝通無障礙。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t55"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t55"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-visit">企業參訪</span></div></div>
+      <div class="cat-item" data-tags="visit" data-task-id="t57" data-default-owner="q" data-default-stage="f1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t57"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t57"></div><div class="item-name">行程路線規劃、每日 Rundown、機構接待時程</div><div class="item-desc">編排每日參訪路線與時程，與各接待機構確認行程細節並預留緩衝時間。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t57"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t57"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-visit">企業參訪</span></div></div>
+      <div class="cat-item" data-tags="visit" data-task-id="t56" data-default-owner="ar" data-default-stage="b1"><div class="item-stage-cell"><select class="stage-select" data-task-id="t56"><option value="f1">🔥 活動前</option><option value="b1">活動前</option><option value="d1">活動中</option><option value="f2">🔥 活動後</option><option value="a1">活動後</option></select></div><div class="item-date-cell"><input type="date" class="date-input" data-task-id="t56"></div><div class="item-name">簽證 / 保險</div><div class="item-desc">協助團員確認簽證需求、統一辦理旅平險，並建立團員護照資料清冊。</div><div class="item-owner-cell"><select class="owner-select" data-task-id="t56"><option value="q">— 待確認 —</option><option value="yc">永璨</option><option value="ch">Chester</option><option value="ar">Ariel</option><option value="kt">Kate</option><option value="wm">William</option></select></div><div class="item-status-cell"><select class="status-select" data-task-id="t56"><option value="ns">未開始</option><option value="ip">進行中</option><option value="ps">暫停</option><option value="dn">已完成</option><option value="nn">不需要</option></select></div><div class="item-tags"><span class="item-tag it-visit">企業參訪</span></div></div>
     </div>
   </div>
 
 </div>
 
-<div class="footer">識富天使會 ∙ Event Management SOP v1.0 ∙ 2026</div>
+<div class="footer-actions">
+  <button class="footer-btn" onclick="exportData()">📥 匯出 / 備份所有活動資料</button>
+  <button class="footer-btn" onclick="importData()">📤 匯入備份</button>
+</div>
+<input type="file" id="importFile" accept="application/json" style="display:none" onchange="handleImport(event)">
+
+<div class="footer">識富天使會 ∙ Event Management SOP v3.0 ∙ 2026</div>
 
 <script>
+const TOTAL_TASKS = 58;
+
+const EVENTS = [
+  { id: 'lei0506', date: '2026-05-06', name: '雷大合作｜家族傳承分享活動', loc: '台北', type: 'sharing', typeName: '分享會' },
+  { id: 'forum0624', date: '2026-06-24', name: '家族傳承主題論壇', loc: '台北', type: 'luntan', typeName: '論壇' },
+  { id: 'lei0630', date: '2026-06-30', name: '雷大合作｜智能轉型分享活動', loc: '高雄', type: 'sharing', typeName: '分享會' },
+  { id: 'lei0722', date: '2026-07-22', name: '雷大合作｜Pitch Day', loc: '台北', type: 'pitch', typeName: 'Pitch Day' },
+  { id: 'lei0825', date: '2026-08-25', name: '雷大合作｜企業參訪', loc: '越南', type: 'visit', typeName: '企業參訪', dateLabel: '08.25-28' },
+];
+
+const PERSON_LABELS = { yc:'永璨', ch:'Chester', ar:'Ariel', kt:'Kate', wm:'William', q:'待確認' };
+const PERSON_KEYS = ['yc','ch','ar','kt','wm','q'];
+
 const allTags = ['luntan','fourm','pitch','sharing','workshop','visit','annual','dinner','banquet'];
 const activeTags = new Set(allTags);
+let currentMode = 'overview';
+let currentEventId = null;
+let onlyPending = false;
+const activeStatuses = new Set(['ns','ip','ps','dn']); // default: all except 不需要
 
+// ===== UNIFIED STORAGE PER EVENT =====
+function eventDataKey(eid) { return 'sop_event_' + eid; }
+function getEventData(eid) {
+  try { return JSON.parse(localStorage.getItem(eventDataKey(eid)) || '{}'); }
+  catch(e) { return {}; }
+}
+function setEventField(eid, tid, field, value) {
+  const data = getEventData(eid);
+  if (!data[tid]) data[tid] = {};
+  data[tid][field] = value;
+  localStorage.setItem(eventDataKey(eid), JSON.stringify(data));
+}
+
+// ===== MODE SWITCH =====
+function switchMode(mode) {
+  currentMode = mode;
+  document.body.classList.toggle('mode-event', mode === 'event');
+  document.body.classList.toggle('mode-overview', mode === 'overview');
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  if (mode === 'event') {
+    if (!currentEventId) currentEventId = EVENTS[0].id;
+    selectEvent(currentEventId);
+  } else {
+    activeTags.clear();
+    allTags.forEach(t => activeTags.add(t));
+    onlyPending = false;
+    document.getElementById('onlyPendingBtn').classList.remove('active');
+    document.querySelectorAll('.cat-item.is-notneeded').forEach(i => i.classList.remove('is-notneeded'));
+    // In overview: render with default stage values, no owner/status visible
+    document.querySelectorAll('.cat-item').forEach(item => {
+      const stageSel = item.querySelector('.stage-select');
+      if (stageSel) {
+        stageSel.value = item.dataset.defaultStage;
+        updateStageStyle(stageSel);
+      }
+    });
+    applyFilters();
+  }
+}
+
+function renderEventTabs() {
+  const today = new Date();
+  const tabs = EVENTS.map(ev => {
+    const evDate = new Date(ev.date);
+    const days = Math.ceil((evDate - today) / 86400000);
+    const dateStr = ev.dateLabel || evDate.toISOString().slice(5,10).replace('-','.');
+    const countdown = days > 0 ? `D-${days}` : (days === 0 ? '今天' : '已結束');
+    const isActive = ev.id === currentEventId;
+    return `<button class="event-tab ${isActive?'active':''}" onclick="selectEvent('${ev.id}')">
+      <div class="ev-date">2026.${dateStr}</div>
+      <div class="ev-name">${ev.name}</div>
+      <div class="ev-meta"><span>${ev.loc}</span><span>·</span><span>${ev.typeName}</span><span class="ev-countdown">${countdown}</span></div>
+    </button>`;
+  }).join('');
+  document.getElementById('eventTabs').innerHTML = tabs;
+}
+
+function selectEvent(eid) {
+  currentEventId = eid;
+  const ev = EVENTS.find(e => e.id === eid);
+  if (!ev) return;
+  
+  const data = getEventData(eid);
+  
+  document.querySelectorAll('.cat-item').forEach(item => {
+    const tid = item.dataset.taskId;
+    const itemTags = item.dataset.tags.split(',');
+    const isRelevant = itemTags.includes(ev.type);
+    const saved = data[tid] || {};
+    
+    const stageSel = item.querySelector('.stage-select');
+    const ownerSel = item.querySelector('.owner-select');
+    const statusSel = item.querySelector('.status-select');
+    const dateInp = item.querySelector('.date-input');
+    
+    stageSel.value = saved.stage !== undefined ? saved.stage : item.dataset.defaultStage;
+    ownerSel.value = saved.owner !== undefined ? saved.owner : item.dataset.defaultOwner;
+    statusSel.value = saved.status !== undefined ? saved.status : (isRelevant ? 'ns' : 'nn');
+    dateInp.value = saved.date || '';
+    
+    updateStageStyle(stageSel);
+    updateOwnerStyle(ownerSel);
+    updateStatusStyle(statusSel, item);
+  });
+  
+  renderEventTabs();
+  applyFilters();
+}
+
+function updateStageStyle(sel) {
+  sel.classList.toggle('st-fire', sel.value === 'f1' || sel.value === 'f2');
+}
+
+function updateOwnerStyle(sel) {
+  sel.classList.remove('o-set-yc','o-set-ch','o-set-ar','o-set-kt','o-set-wm','o-set-q');
+  sel.classList.add('o-set-' + sel.value);
+}
+
+function updateStatusStyle(sel, item) {
+  sel.classList.remove('s-set-ns','s-set-ip','s-set-ps','s-set-dn','s-set-nn');
+  sel.classList.add('s-set-' + sel.value);
+  if (item) item.classList.toggle('is-notneeded', sel.value === 'nn');
+}
+
+document.addEventListener('change', e => {
+  if (!currentEventId && currentMode === 'event') return;
+  const item = e.target.closest('.cat-item');
+  if (!item) return;
+  const tid = item.dataset.taskId;
+  
+  if (e.target.classList.contains('stage-select')) {
+    if (currentEventId) setEventField(currentEventId, tid, 'stage', e.target.value);
+    updateStageStyle(e.target);
+  }
+  if (e.target.classList.contains('owner-select')) {
+    if (currentEventId) setEventField(currentEventId, tid, 'owner', e.target.value);
+    updateOwnerStyle(e.target);
+    updateEventStats();
+  }
+  if (e.target.classList.contains('status-select')) {
+    if (currentEventId) setEventField(currentEventId, tid, 'status', e.target.value);
+    updateStatusStyle(e.target, item);
+    updateEventStats();
+    applyFilters();
+  }
+  if (e.target.classList.contains('date-input')) {
+    if (currentEventId) setEventField(currentEventId, tid, 'date', e.target.value);
+  }
+});
+
+function toggleOnlyPending() {
+  onlyPending = !onlyPending;
+  document.getElementById('onlyPendingBtn').classList.toggle('active', onlyPending);
+  applyFilters();
+}
+
+// MULTI-SELECT STATUS DROPDOWN
+function toggleStatusDd(e) {
+  e.stopPropagation();
+  document.getElementById('statusDd').classList.toggle('open');
+}
+document.addEventListener('click', () => {
+  document.getElementById('statusDd').classList.remove('open');
+});
+
+function toggleStatusFilter(s) {
+  const cb = document.getElementById('sf-' + s);
+  cb.checked = !cb.checked;
+  if (cb.checked) activeStatuses.add(s);
+  else activeStatuses.delete(s);
+  cb.parentElement.classList.toggle('checked', cb.checked);
+  updateStatusDdLabel();
+  applyFilters();
+}
+
+function updateStatusDdLabel() {
+  const total = 5;
+  const count = activeStatuses.size;
+  const trigger = document.getElementById('statusDdTrigger');
+  const label = document.getElementById('statusDdLabel');
+  if (count === total) {
+    label.textContent = '事件狀態';
+    trigger.classList.remove('has-filter');
+  } else if (count === 0) {
+    label.textContent = '事件狀態 (全關)';
+    trigger.classList.add('has-filter');
+  } else {
+    label.textContent = `事件狀態 (${count})`;
+    trigger.classList.add('has-filter');
+  }
+}
+
+// EXPORT / IMPORT
+function exportData() {
+  const all = {};
+  EVENTS.forEach(ev => { all[ev.id] = { meta: ev, data: getEventData(ev.id) }; });
+  const blob = new Blob([JSON.stringify(all, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `sop-data-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importData() { document.getElementById('importFile').click(); }
+function handleImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      Object.keys(data).forEach(eid => {
+        if (data[eid].data) localStorage.setItem(eventDataKey(eid), JSON.stringify(data[eid].data));
+      });
+      alert('匯入成功！');
+      if (currentEventId) selectEvent(currentEventId);
+    } catch(err) { alert('匯入失敗：' + err.message); }
+  };
+  reader.readAsText(file);
+}
+
+// OVERVIEW FILTER
 function toggleFilter(el) {
   const tag = el.dataset.tag;
   if (activeTags.size === allTags.length) {
@@ -327,28 +706,97 @@ function resetFilters() {
 }
 
 function applyFilters() {
-  document.querySelectorAll('.filter-tag').forEach(btn => {
-    const tag = btn.dataset.tag;
-    btn.classList.toggle('active', activeTags.has(tag));
-    btn.classList.toggle('inactive', !activeTags.has(tag));
-  });
+  if (currentMode === 'overview') {
+    document.querySelectorAll('.filter-tag').forEach(btn => {
+      const tag = btn.dataset.tag;
+      btn.classList.toggle('active', activeTags.has(tag));
+      btn.classList.toggle('inactive', !activeTags.has(tag));
+    });
+  }
+  
   let totalVisible = 0;
   document.querySelectorAll('.cat-section').forEach(section => {
     const items = section.querySelectorAll('.cat-item');
     let vis = 0;
     items.forEach(item => {
-      const match = item.dataset.tags.split(',').some(t => activeTags.has(t));
-      item.classList.toggle('filtered-out', !match);
-      if (match) vis++;
+      let show = true;
+      if (currentMode === 'overview') {
+        show = item.dataset.tags.split(',').some(t => activeTags.has(t));
+      } else {
+        // Event mode
+        const statusSel = item.querySelector('.status-select');
+        const sv = statusSel ? statusSel.value : 'ns';
+        if (!activeStatuses.has(sv)) show = false;
+        if (onlyPending) {
+          const oSel = item.querySelector('.owner-select');
+          if (!oSel || oSel.value !== 'q') show = false;
+        }
+      }
+      item.classList.toggle('filtered-out', !show);
+      if (show) vis++;
     });
     totalVisible += vis;
     const c = section.querySelector('.visible-count');
     if (c) c.textContent = vis;
     section.classList.toggle('dimmed', vis === 0);
   });
-  const isAll = activeTags.size === allTags.length;
-  document.getElementById('filterCount').textContent = isAll ? '顯示全部 60 項' : '篩選顯示 ' + totalVisible + ' 項';
+  
+  if (currentMode === 'overview') {
+    const isAll = activeTags.size === allTags.length;
+    document.getElementById('filterCount').textContent = isAll ? `顯示全部 ${TOTAL_TASKS} 項` : '篩選顯示 ' + totalVisible + ' 項';
+  }
+  updateEventStats();
 }
+
+function updateEventStats() {
+  if (currentMode !== 'event') return;
+  
+  // Per-person stats: ns, ip, ps, dn (skip nn)
+  const people = {};
+  PERSON_KEYS.forEach(p => people[p] = { ns:0, ip:0, ps:0, dn:0, total:0 });
+  let nnCount = 0;
+  
+  document.querySelectorAll('.cat-item').forEach(item => {
+    const oSel = item.querySelector('.owner-select');
+    const sSel = item.querySelector('.status-select');
+    if (!oSel || !sSel) return;
+    if (sSel.value === 'nn') { nnCount++; return; }
+    const o = oSel.value;
+    if (people[o]) {
+      people[o].total++;
+      people[o][sSel.value] = (people[o][sSel.value] || 0) + 1;
+    }
+  });
+  
+  const active = TOTAL_TASKS - nnCount;
+  document.getElementById('esTotals').innerHTML = `本活動 <strong>${active}</strong> / ${TOTAL_TASKS} 項`;
+  
+  const peopleHtml = PERSON_KEYS.filter(p => people[p].total > 0).map(p => {
+    const d = people[p];
+    const ipText = d.ip > 0 ? `<span class="es-stat-num ip">進${d.ip}</span>` : '';
+    const dnText = d.dn > 0 ? `<span class="es-stat-num dn">完${d.dn}</span>` : '';
+    const psText = d.ps > 0 ? `<span class="es-stat-num" style="color:var(--s-ps)">暫${d.ps}</span>` : '';
+    return `<div class="es-person">
+      <div class="es-person-name"><div class="es-dot" style="background:var(--o-${p})"></div>${PERSON_LABELS[p]}</div>
+      <div class="es-person-stats">
+        <span class="es-stat-num ns">未${d.ns}</span>
+        ${ipText}
+        ${psText}
+        ${dnText}
+      </div>
+    </div>`;
+  }).join('');
+  
+  document.getElementById('esPeople').innerHTML = peopleHtml || '<div style="font-size:11px;color:var(--grey-light);padding:6px 0;">尚無分配</div>';
+}
+
+// Initialize status dropdown labels
+document.querySelectorAll('.md-option input').forEach(cb => {
+  cb.parentElement.classList.toggle('checked', cb.checked);
+});
+updateStatusDdLabel();
+renderEventTabs();
+applyFilters();
 </script>
 </body>
 </html>
