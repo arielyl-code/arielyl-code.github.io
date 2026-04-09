@@ -131,11 +131,11 @@
   .cat-count { margin-left: auto; font-size: 11px; color: var(--grey-mid); font-weight: 400; background: var(--cream); padding: 3px 10px; border-radius: 10px; white-space: nowrap; }
   .cat-items { border-top: 1px solid var(--cream-deep); }
 
-  /* OVERVIEW MODE GRID: stage | name | desc | tags */
+  /* OVERVIEW MODE GRID: stage | name | desc | required */
   body.mode-overview .cat-col-header,
   body.mode-overview .cat-item {
     display: grid;
-    grid-template-columns: 80px 1.1fr 1.5fr auto;
+    grid-template-columns: 80px 1.1fr 1.5fr 110px;
     gap: 10px;
     padding: 11px 24px;
     align-items: center;
@@ -143,9 +143,11 @@
   body.mode-overview .col-date,
   body.mode-overview .col-owner,
   body.mode-overview .col-status,
+  body.mode-overview .col-tags,
   body.mode-overview .item-date-cell,
   body.mode-overview .item-owner-cell,
-  body.mode-overview .item-status-cell { display: none !important; }
+  body.mode-overview .item-status-cell,
+  body.mode-overview .item-tags { display: none !important; }
 
   /* EVENT MODE GRID: stage | date | name | desc | owner | status */
   body.mode-event .cat-col-header,
@@ -157,7 +159,9 @@
     align-items: center;
   }
   body.mode-event .col-tags,
-  body.mode-event .item-tags { display: none !important; }
+  body.mode-event .item-tags,
+  body.mode-event .col-required,
+  body.mode-event .item-required-cell { display: none !important; }
 
   .cat-col-header { padding-top: 8px !important; padding-bottom: 8px !important; background: var(--cream); border-bottom: 1px solid var(--cream-deep); }
   .cat-item { border-bottom: 1px solid var(--cream-deep); }
@@ -208,6 +212,111 @@
   .cat-item.is-notneeded { opacity: 0.4; background: #FBFAF6; }
   .cat-item.is-notneeded .item-name { text-decoration: line-through; text-decoration-color: var(--grey-light); }
   .cat-item.is-notneeded:hover { opacity: 0.85; transition: opacity 0.2s; }
+
+  /* SOP MODE: TASK REQUIRED CELL (replaces tags) */
+  .item-required-cell { display: flex; align-items: center; }
+  .required-select {
+    font-family: inherit; font-size: 11px; font-weight: 600;
+    padding: 4px 6px; border-radius: 4px;
+    border: 1.5px solid var(--cream-deep); background: var(--white);
+    color: var(--grey-warm); cursor: pointer; width: 100%;
+    transition: all 0.15s;
+  }
+  .required-select:hover { border-color: var(--grey-light); }
+  .required-select.r-set-req { background: var(--white); color: var(--grey-warm); border-color: var(--cream-deep); }
+  .required-select.r-set-opt { background: #FFF4E0; color: var(--o-q); border-color: var(--o-q); }
+  .required-select.r-set-no { background: #EAE6DC; color: var(--grey-mid); border-color: #DAD4C5; font-style: italic; }
+  .cat-item.is-no-required { opacity: 0.4; background: #FBFAF6; }
+  .cat-item.is-no-required:hover { opacity: 0.85; transition: opacity 0.2s; }
+
+  /* SOP TASK FILTER ROW (inside filter-bar) */
+  .task-filter-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px dashed var(--cream-deep);
+    flex-wrap: wrap;
+  }
+  .task-filter-row .task-filter-label {
+    font-size: 11px; font-weight: 600; color: var(--grey-mid);
+    letter-spacing: 2px; display: flex; align-items: center; gap: 8px;
+  }
+  .task-filter-row .task-filter-label svg { width: 14px; height: 14px; }
+  .task-filter-spacer { flex: 1; }
+  .task-pill {
+    font-size: 11px; padding: 6px 14px; border-radius: 20px;
+    border: 1.5px solid var(--grey-light); background: var(--white);
+    cursor: pointer; transition: all 0.2s;
+    color: var(--grey-warm); font-family: inherit; white-space: nowrap;
+  }
+  .task-pill:hover { border-color: var(--dark); color: var(--dark); }
+  .task-pill.active { background: var(--dark); border-color: var(--dark); color: var(--cream); font-weight: 600; }
+
+  /* SUMMARY VIEW */
+  .summary-view { max-width: 1300px; margin: 0 auto; padding: 24px 24px 60px; display: none; }
+  body.mode-summary .summary-view { display: block; }
+  body.mode-summary .event-status,
+  body.mode-summary #sopDetails,
+  body.mode-summary .footer-actions { display: none !important; }
+
+  .sum-header { text-align: center; padding: 20px 0 32px; }
+  .sum-header-label { font-size: 11px; letter-spacing: 3px; color: var(--gold); font-weight: 600; margin-bottom: 8px; }
+  .sum-header h2 { font-family: 'Noto Serif TC', serif; font-size: 22px; font-weight: 700; letter-spacing: 1px; color: var(--dark); }
+  .sum-header-sub { font-size: 12px; color: var(--grey-mid); margin-top: 6px; }
+
+  .sum-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px; }
+  .sum-card { background: var(--white); border: 1px solid var(--cream-deep); border-radius: 8px; padding: 18px 20px; }
+  .sum-card-label { font-size: 10px; letter-spacing: 1.5px; color: var(--grey-mid); font-weight: 600; margin-bottom: 6px; text-transform: uppercase; }
+  .sum-card-value { font-family: 'Noto Serif TC', serif; font-size: 32px; font-weight: 900; color: var(--dark); line-height: 1; }
+  .sum-card-meta { font-size: 11px; color: var(--grey-light); margin-top: 6px; }
+  .sum-card.accent-yc { border-top: 3px solid var(--accent-blue); }
+  .sum-card.accent-dn { border-top: 3px solid var(--s-dn); }
+  .sum-card.accent-ip { border-top: 3px solid var(--s-ip); }
+  .sum-card.accent-q { border-top: 3px solid var(--o-q); }
+
+  .sum-section { background: var(--white); border: 1px solid var(--cream-deep); border-radius: 8px; padding: 20px 24px; margin-bottom: 20px; }
+  .sum-section-title { font-family: 'Noto Serif TC', serif; font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 16px; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+  .sum-section-title::before { content: ''; width: 3px; height: 14px; background: var(--gold); border-radius: 2px; }
+
+  /* EVENT PROGRESS BARS */
+  .ep-row { display: grid; grid-template-columns: 220px 1fr 100px; gap: 14px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--cream); }
+  .ep-row:last-child { border-bottom: none; }
+  .ep-info { display: flex; flex-direction: column; gap: 2px; }
+  .ep-name { font-size: 12.5px; font-weight: 600; color: var(--dark); }
+  .ep-meta { font-size: 10px; color: var(--grey-mid); }
+  .ep-bar { height: 22px; background: var(--cream); border-radius: 4px; overflow: hidden; display: flex; }
+  .ep-seg { height: 100%; transition: all 0.3s; }
+  .ep-seg-dn { background: var(--s-dn); }
+  .ep-seg-ip { background: var(--s-ip); }
+  .ep-seg-ps { background: var(--s-ps); }
+  .ep-seg-ns { background: #DDD6C2; }
+  .ep-stats { font-size: 11px; color: var(--grey-warm); text-align: right; font-weight: 500; }
+  .ep-stats strong { color: var(--dark); font-size: 13px; }
+
+  /* MATRIX TABLES */
+  .matrix-wrap { overflow-x: auto; }
+  .matrix { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .matrix th, .matrix td { padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--cream); }
+  .matrix thead th { font-size: 10px; letter-spacing: 1px; color: var(--grey-mid); font-weight: 600; background: var(--cream); border-bottom: 1px solid var(--cream-deep); white-space: nowrap; }
+  .matrix thead th:first-child, .matrix tbody td:first-child { text-align: left; font-weight: 600; color: var(--dark); white-space: nowrap; padding-left: 16px; }
+  .matrix tbody tr:hover { background: var(--cream); }
+  .matrix .person-cell { display: flex; align-items: center; gap: 6px; }
+  .matrix .person-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .matrix .cell-num { display: inline-block; min-width: 28px; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
+  .matrix .cell-zero { color: var(--grey-light); font-weight: 400; }
+  .matrix .cell-low { background: rgba(201,169,78,0.12); color: var(--grey-warm); }
+  .matrix .cell-mid { background: rgba(201,169,78,0.28); color: var(--dark); }
+  .matrix .cell-high { background: rgba(201,169,78,0.5); color: var(--dark); font-weight: 700; }
+  .matrix .cell-vhigh { background: rgba(184,71,94,0.55); color: var(--white); font-weight: 700; }
+  .matrix tfoot td { font-weight: 700; color: var(--dark); border-top: 2px solid var(--cream-deep); padding-top: 12px; background: #FBF9F2; }
+
+  /* MONTH GRID */
+  .month-info { font-size: 11px; color: var(--grey-mid); margin-top: 12px; padding: 10px 14px; background: var(--cream); border-radius: 6px; line-height: 1.6; }
+
+  @media (max-width: 900px) {
+    .sum-cards { grid-template-columns: repeat(2, 1fr); }
+    .ep-row { grid-template-columns: 1fr; gap: 6px; }
+    .ep-stats { text-align: left; }
+  }
 
   /* FOOTER WITH EXPORT */
   .footer-actions { max-width: 1300px; margin: 0 auto; padding: 0 24px 24px; display: none; justify-content: center; gap: 12px; }
@@ -270,7 +379,7 @@
       <button class="es-pill" id="onlyPendingBtn" onclick="toggleOnlyPending()">只看待確認</button>
       <div class="multi-dd" id="statusDd">
         <button class="md-trigger" id="statusDdTrigger" onclick="toggleStatusDd(event)">
-          <span id="statusDdLabel">事件狀態</span>
+          <span id="statusDdLabel">任務狀態</span>
           <span class="md-arrow">▼</span>
         </button>
         <div class="md-panel" id="statusDdPanel" onclick="event.stopPropagation()">
@@ -303,6 +412,27 @@
       <div class="filter-tag ft-dinner active" data-tag="dinner" onclick="toggleFilter(this)">晚宴</div>
       <div class="filter-tag ft-banquet active" data-tag="banquet" onclick="toggleFilter(this)">餐敘</div>
       <button class="filter-reset" onclick="resetFilters()">全部顯示</button>
+    </div>
+
+    <div class="task-filter-row">
+      <div class="task-filter-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        任務狀態
+      </div>
+      <button class="task-pill active" id="reqAllBtn" onclick="reqShowAll()">顯示全部</button>
+      <button class="task-pill" id="reqHideBtn" onclick="reqHideOptional()">隱藏非必要</button>
+      <div class="multi-dd" id="reqDd">
+        <button class="md-trigger" id="reqDdTrigger" onclick="toggleReqDd(event)">
+          <span id="reqDdLabel">任務狀態</span>
+          <span class="md-arrow">▼</span>
+        </button>
+        <div class="md-panel" id="reqDdPanel" onclick="event.stopPropagation()">
+          <div class="md-option" onclick="toggleReqFilter('req')"><input type="checkbox" id="rf-req" checked> 必要</div>
+          <div class="md-option" onclick="toggleReqFilter('opt')"><input type="checkbox" id="rf-opt" checked> 不一定</div>
+          <div class="md-option" onclick="toggleReqFilter('no')"><input type="checkbox" id="rf-no" checked> 非必要</div>
+        </div>
+      </div>
+      <div class="task-filter-spacer"></div>
     </div>
   </div>
 </div>
@@ -453,6 +583,29 @@
 
 </div>
 
+<div class="summary-view" id="summaryView">
+  <div class="sum-header">
+    <div class="sum-header-label">CROSS-EVENT DASHBOARD</div>
+    <h2>活動總覽</h2>
+    <div class="sum-header-sub">5 場活動 ∙ 跨活動人員工作量分析</div>
+  </div>
+  <div class="sum-cards" id="sumCards"></div>
+  <div class="sum-section">
+    <div class="sum-section-title">各活動進度</div>
+    <div id="sumEventProgress"></div>
+  </div>
+  <div class="sum-section">
+    <div class="sum-section-title">人員 × 活動 工作量分配</div>
+    <div class="matrix-wrap"><table class="matrix" id="sumPersonEventMatrix"></table></div>
+    <div class="month-info">數字代表該人員在該活動中需處理的有效任務數（不含「不需要」項目）。深色＝工作量較重。</div>
+  </div>
+  <div class="sum-section">
+    <div class="sum-section-title">人員 × 月份 工作量分布</div>
+    <div class="matrix-wrap"><table class="matrix" id="sumPersonMonthMatrix"></table></div>
+    <div class="month-info">依任務的「日期」欄位歸入月份；未填日期者以該活動日期計算。可協助看出哪個月份哪個人最忙碌。</div>
+  </div>
+</div>
+
 <div class="footer-actions">
   <button class="footer-btn" onclick="exportData()">📥 匯出 / 備份所有活動資料</button>
   <button class="footer-btn" onclick="importData()">📤 匯入備份</button>
@@ -500,10 +653,15 @@ function switchMode(mode) {
   currentMode = mode;
   document.body.classList.toggle('mode-event', mode === 'event');
   document.body.classList.toggle('mode-overview', mode === 'overview');
+  if (mode === 'overview') document.body.classList.remove('mode-summary');
   document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
   if (mode === 'event') {
-    if (!currentEventId) currentEventId = EVENTS[0].id;
-    selectEvent(currentEventId);
+    if (currentEventId === '__summary__') {
+      selectSummary();
+    } else {
+      if (!currentEventId) currentEventId = EVENTS[0].id;
+      selectEvent(currentEventId);
+    }
   } else {
     activeTags.clear();
     allTags.forEach(t => activeTags.add(t));
@@ -529,18 +687,199 @@ function renderEventTabs() {
     const days = Math.ceil((evDate - today) / 86400000);
     const dateStr = ev.dateLabel || evDate.toISOString().slice(5,10).replace('-','.');
     const countdown = days > 0 ? `D-${days}` : (days === 0 ? '今天' : '已結束');
-    const isActive = ev.id === currentEventId;
+    const isActive = ev.id === currentEventId && currentEventId !== '__summary__';
     return `<button class="event-tab ${isActive?'active':''}" onclick="selectEvent('${ev.id}')">
       <div class="ev-date">2026.${dateStr}</div>
       <div class="ev-name">${ev.name}</div>
       <div class="ev-meta"><span>${ev.loc}</span><span>·</span><span>${ev.typeName}</span><span class="ev-countdown">${countdown}</span></div>
     </button>`;
   }).join('');
-  document.getElementById('eventTabs').innerHTML = tabs;
+  const sumActive = currentEventId === '__summary__' ? 'active' : '';
+  const summaryTab = `<button class="event-tab ${sumActive}" onclick="selectSummary()" style="background:${sumActive?'var(--dark)':'#FBF9F2'}; border-color:${sumActive?'var(--dark)':'var(--gold-light)'};">
+      <div class="ev-date" style="color:${sumActive?'var(--gold)':'var(--gold)'};">📊 ALL EVENTS</div>
+      <div class="ev-name" style="color:${sumActive?'var(--cream)':'var(--dark)'};">活動總覽</div>
+      <div class="ev-meta" style="color:${sumActive?'var(--grey-light)':'var(--grey-mid)'};"><span>5 場活動</span><span>·</span><span>跨活動分析</span></div>
+    </button>`;
+  document.getElementById('eventTabs').innerHTML = tabs + summaryTab;
+}
+
+function selectSummary() {
+  currentEventId = '__summary__';
+  document.body.classList.add('mode-summary');
+  renderEventTabs();
+  renderSummary();
+}
+
+function renderSummary() {
+  // Aggregate data across all events
+  const allItems = document.querySelectorAll('.cat-item');
+  const eventStats = {}; // {eid: {total, ns, ip, ps, dn, nn, byPerson: {}}}
+  const personEventCount = {}; // {personKey: {eid: count}}
+  const personMonthCount = {}; // {personKey: {YYYY-MM: count}}
+  const monthSet = new Set();
+  
+  PERSON_KEYS.forEach(p => {
+    personEventCount[p] = {};
+    personMonthCount[p] = {};
+  });
+  
+  EVENTS.forEach(ev => {
+    eventStats[ev.id] = { total: 0, ns: 0, ip: 0, ps: 0, dn: 0, nn: 0, byPerson: {} };
+    PERSON_KEYS.forEach(p => { eventStats[ev.id].byPerson[p] = 0; personEventCount[p][ev.id] = 0; });
+    
+    const data = getEventData(ev.id);
+    allItems.forEach(item => {
+      const tid = item.dataset.taskId;
+      const itemTags = item.dataset.tags.split(',');
+      const isRelevant = itemTags.includes(ev.type);
+      const saved = data[tid] || {};
+      const status = saved.status !== undefined ? saved.status : (isRelevant ? 'ns' : 'nn');
+      const owner = saved.owner !== undefined ? saved.owner : item.dataset.defaultOwner;
+      const date = saved.date || ev.date;
+      
+      if (status === 'nn') { eventStats[ev.id].nn++; return; }
+      eventStats[ev.id].total++;
+      eventStats[ev.id][status]++;
+      eventStats[ev.id].byPerson[owner] = (eventStats[ev.id].byPerson[owner] || 0) + 1;
+      
+      personEventCount[owner][ev.id]++;
+      const month = date.slice(0, 7);
+      monthSet.add(month);
+      personMonthCount[owner][month] = (personMonthCount[owner][month] || 0) + 1;
+    });
+  });
+  
+  // ===== TOP CARDS =====
+  let totalActive = 0, totalDone = 0, totalIp = 0, totalPending = 0;
+  Object.values(eventStats).forEach(es => {
+    totalActive += es.total;
+    totalDone += es.dn;
+    totalIp += es.ip;
+    totalPending += (es.byPerson.q || 0);
+  });
+  
+  document.getElementById('sumCards').innerHTML = `
+    <div class="sum-card accent-yc">
+      <div class="sum-card-label">總工作量</div>
+      <div class="sum-card-value">${totalActive}</div>
+      <div class="sum-card-meta">5 場活動 · 有效任務數</div>
+    </div>
+    <div class="sum-card accent-dn">
+      <div class="sum-card-label">已完成</div>
+      <div class="sum-card-value">${totalDone}</div>
+      <div class="sum-card-meta">${totalActive > 0 ? Math.round(totalDone/totalActive*100) : 0}% 完成率</div>
+    </div>
+    <div class="sum-card accent-ip">
+      <div class="sum-card-label">進行中</div>
+      <div class="sum-card-value">${totalIp}</div>
+      <div class="sum-card-meta">目前推進中</div>
+    </div>
+    <div class="sum-card accent-q">
+      <div class="sum-card-label">待確認分工</div>
+      <div class="sum-card-value">${totalPending}</div>
+      <div class="sum-card-meta">未指派負責人</div>
+    </div>
+  `;
+  
+  // ===== EVENT PROGRESS =====
+  const progressHtml = EVENTS.map(ev => {
+    const es = eventStats[ev.id];
+    const total = es.total;
+    if (total === 0) return '';
+    const dnPct = es.dn / total * 100;
+    const ipPct = es.ip / total * 100;
+    const psPct = es.ps / total * 100;
+    const nsPct = es.ns / total * 100;
+    const dateStr = ev.dateLabel || ev.date.slice(5).replace('-','.');
+    return `<div class="ep-row">
+      <div class="ep-info">
+        <div class="ep-name">${ev.name}</div>
+        <div class="ep-meta">2026.${dateStr} · ${ev.loc} · ${ev.typeName}</div>
+      </div>
+      <div class="ep-bar">
+        ${dnPct > 0 ? `<div class="ep-seg ep-seg-dn" style="width:${dnPct}%" title="已完成 ${es.dn}"></div>` : ''}
+        ${ipPct > 0 ? `<div class="ep-seg ep-seg-ip" style="width:${ipPct}%" title="進行中 ${es.ip}"></div>` : ''}
+        ${psPct > 0 ? `<div class="ep-seg ep-seg-ps" style="width:${psPct}%" title="暫停 ${es.ps}"></div>` : ''}
+        ${nsPct > 0 ? `<div class="ep-seg ep-seg-ns" style="width:${nsPct}%" title="未開始 ${es.ns}"></div>` : ''}
+      </div>
+      <div class="ep-stats"><strong>${es.dn}</strong> / ${total}<br><span style="font-size:10px;color:var(--grey-mid)">${Math.round(dnPct)}% 完成</span></div>
+    </div>`;
+  }).join('');
+  document.getElementById('sumEventProgress').innerHTML = progressHtml;
+  
+  // ===== PERSON x EVENT MATRIX =====
+  const activePersons = PERSON_KEYS.filter(p => {
+    return EVENTS.some(ev => personEventCount[p][ev.id] > 0);
+  });
+  
+  function cellClass(n, max) {
+    if (n === 0) return 'cell-zero';
+    const ratio = n / max;
+    if (ratio >= 0.75) return 'cell-vhigh';
+    if (ratio >= 0.5) return 'cell-high';
+    if (ratio >= 0.25) return 'cell-mid';
+    return 'cell-low';
+  }
+  
+  let maxPE = 0;
+  activePersons.forEach(p => EVENTS.forEach(ev => { if (personEventCount[p][ev.id] > maxPE) maxPE = personEventCount[p][ev.id]; }));
+  
+  const peHeader = '<thead><tr><th>負責人</th>' + EVENTS.map(ev => {
+    const dateStr = ev.dateLabel || ev.date.slice(5).replace('-','.');
+    return `<th>${dateStr}<br><span style="font-weight:400;text-transform:none;letter-spacing:0;">${ev.typeName}</span></th>`;
+  }).join('') + '<th>合計</th></tr></thead>';
+  
+  const peBody = '<tbody>' + activePersons.map(p => {
+    let rowTotal = 0;
+    const cells = EVENTS.map(ev => {
+      const n = personEventCount[p][ev.id];
+      rowTotal += n;
+      return `<td><span class="cell-num ${cellClass(n, maxPE)}">${n}</span></td>`;
+    }).join('');
+    return `<tr><td><div class="person-cell"><div class="person-dot" style="background:var(--o-${p})"></div>${PERSON_LABELS[p]}</div></td>${cells}<td><strong>${rowTotal}</strong></td></tr>`;
+  }).join('') + '</tbody>';
+  
+  // Footer row with column totals
+  const peFooter = '<tfoot><tr><td>合計</td>' + EVENTS.map(ev => {
+    const colSum = activePersons.reduce((s, p) => s + personEventCount[p][ev.id], 0);
+    return `<td>${colSum}</td>`;
+  }).join('') + `<td>${totalActive}</td></tr></tfoot>`;
+  
+  document.getElementById('sumPersonEventMatrix').innerHTML = peHeader + peBody + peFooter;
+  
+  // ===== PERSON x MONTH MATRIX =====
+  const months = Array.from(monthSet).sort();
+  const monthLabels = { '2026-04':'4月','2026-05':'5月','2026-06':'6月','2026-07':'7月','2026-08':'8月','2026-09':'9月','2026-10':'10月','2026-11':'11月','2026-12':'12月' };
+  
+  let maxPM = 0;
+  activePersons.forEach(p => months.forEach(m => { 
+    const n = personMonthCount[p][m] || 0;
+    if (n > maxPM) maxPM = n;
+  }));
+  
+  const pmHeader = '<thead><tr><th>負責人</th>' + months.map(m => `<th>${monthLabels[m] || m}</th>`).join('') + '<th>合計</th></tr></thead>';
+  
+  const pmBody = '<tbody>' + activePersons.map(p => {
+    let rowTotal = 0;
+    const cells = months.map(m => {
+      const n = personMonthCount[p][m] || 0;
+      rowTotal += n;
+      return `<td><span class="cell-num ${cellClass(n, maxPM)}">${n}</span></td>`;
+    }).join('');
+    return `<tr><td><div class="person-cell"><div class="person-dot" style="background:var(--o-${p})"></div>${PERSON_LABELS[p]}</div></td>${cells}<td><strong>${rowTotal}</strong></td></tr>`;
+  }).join('') + '</tbody>';
+  
+  const pmFooter = '<tfoot><tr><td>合計</td>' + months.map(m => {
+    const colSum = activePersons.reduce((s, p) => s + (personMonthCount[p][m] || 0), 0);
+    return `<td>${colSum}</td>`;
+  }).join('') + `<td>${totalActive}</td></tr></tfoot>`;
+  
+  document.getElementById('sumPersonMonthMatrix').innerHTML = pmHeader + pmBody + pmFooter;
 }
 
 function selectEvent(eid) {
   currentEventId = eid;
+  document.body.classList.remove('mode-summary');
   const ev = EVENTS.find(e => e.id === eid);
   if (!ev) return;
   
@@ -587,28 +926,38 @@ function updateStatusStyle(sel, item) {
 }
 
 document.addEventListener('change', e => {
-  if (!currentEventId && currentMode === 'event') return;
   const item = e.target.closest('.cat-item');
   if (!item) return;
   const tid = item.dataset.taskId;
   
+  // GLOBAL: required-select works in any mode (saves to global storage)
+  if (e.target.classList.contains('required-select')) {
+    setTaskRequiredField(tid, e.target.value);
+    updateRequiredStyle(e.target);
+    applyFilters();
+    return;
+  }
+  
+  // Per-event fields require currentEventId
+  if (!currentEventId || currentEventId === '__summary__') return;
+  
   if (e.target.classList.contains('stage-select')) {
-    if (currentEventId) setEventField(currentEventId, tid, 'stage', e.target.value);
+    setEventField(currentEventId, tid, 'stage', e.target.value);
     updateStageStyle(e.target);
   }
   if (e.target.classList.contains('owner-select')) {
-    if (currentEventId) setEventField(currentEventId, tid, 'owner', e.target.value);
+    setEventField(currentEventId, tid, 'owner', e.target.value);
     updateOwnerStyle(e.target);
     updateEventStats();
   }
   if (e.target.classList.contains('status-select')) {
-    if (currentEventId) setEventField(currentEventId, tid, 'status', e.target.value);
+    setEventField(currentEventId, tid, 'status', e.target.value);
     updateStatusStyle(e.target, item);
     updateEventStats();
     applyFilters();
   }
   if (e.target.classList.contains('date-input')) {
-    if (currentEventId) setEventField(currentEventId, tid, 'date', e.target.value);
+    setEventField(currentEventId, tid, 'date', e.target.value);
   }
 });
 
@@ -625,6 +974,8 @@ function toggleStatusDd(e) {
 }
 document.addEventListener('click', () => {
   document.getElementById('statusDd').classList.remove('open');
+  const reqDd = document.getElementById('reqDd');
+  if (reqDd) reqDd.classList.remove('open');
 });
 
 function toggleStatusFilter(s) {
@@ -643,13 +994,13 @@ function updateStatusDdLabel() {
   const trigger = document.getElementById('statusDdTrigger');
   const label = document.getElementById('statusDdLabel');
   if (count === total) {
-    label.textContent = '事件狀態';
+    label.textContent = '任務狀態';
     trigger.classList.remove('has-filter');
   } else if (count === 0) {
-    label.textContent = '事件狀態 (全關)';
+    label.textContent = '任務狀態 (全關)';
     trigger.classList.add('has-filter');
   } else {
-    label.textContent = `事件狀態 (${count})`;
+    label.textContent = `任務狀態 (${count})`;
     trigger.classList.add('has-filter');
   }
 }
@@ -705,6 +1056,114 @@ function resetFilters() {
   applyFilters();
 }
 
+// ===== TASK REQUIRED (SOP overview) =====
+function getTaskRequired() {
+  try { return JSON.parse(localStorage.getItem('sop_task_required') || '{}'); }
+  catch(e) { return {}; }
+}
+function setTaskRequiredField(tid, value) {
+  const data = getTaskRequired();
+  data[tid] = value;
+  localStorage.setItem('sop_task_required', JSON.stringify(data));
+}
+
+const activeRequired = new Set(['req','opt','no']);
+
+function updateRequiredStyle(sel) {
+  sel.classList.remove('r-set-req','r-set-opt','r-set-no');
+  sel.classList.add('r-set-' + sel.value);
+  const item = sel.closest('.cat-item');
+  if (item) item.classList.toggle('is-no-required', sel.value === 'no');
+}
+
+function injectRequiredCells() {
+  const data = getTaskRequired();
+  document.querySelectorAll('.cat-item').forEach(item => {
+    if (item.querySelector('.item-required-cell')) return;
+    const tid = item.dataset.taskId;
+    const cell = document.createElement('div');
+    cell.className = 'item-required-cell';
+    cell.innerHTML = '<select class="required-select" data-task-id="' + tid + '">' +
+      '<option value="req">必要</option>' +
+      '<option value="opt">不一定</option>' +
+      '<option value="no">非必要</option>' +
+      '</select>';
+    item.appendChild(cell);
+    const sel = cell.querySelector('select');
+    sel.value = data[tid] || 'req';
+    updateRequiredStyle(sel);
+  });
+  document.querySelectorAll('.cat-col-header').forEach(header => {
+    if (header.querySelector('.col-required')) return;
+    const lbl = document.createElement('div');
+    lbl.className = 'col-label col-required';
+    lbl.textContent = '任務狀態';
+    header.appendChild(lbl);
+  });
+}
+
+function reqShowAll() {
+  activeRequired.clear();
+  ['req','opt','no'].forEach(v => activeRequired.add(v));
+  ['req','opt','no'].forEach(v => {
+    const cb = document.getElementById('rf-' + v);
+    if (cb) { cb.checked = true; cb.parentElement.classList.add('checked'); }
+  });
+  document.getElementById('reqAllBtn').classList.add('active');
+  document.getElementById('reqHideBtn').classList.remove('active');
+  updateReqDdLabel();
+  applyFilters();
+}
+
+function reqHideOptional() {
+  activeRequired.clear();
+  ['req','opt'].forEach(v => activeRequired.add(v));
+  ['req','opt','no'].forEach(v => {
+    const cb = document.getElementById('rf-' + v);
+    if (cb) { cb.checked = activeRequired.has(v); cb.parentElement.classList.toggle('checked', cb.checked); }
+  });
+  document.getElementById('reqAllBtn').classList.remove('active');
+  document.getElementById('reqHideBtn').classList.add('active');
+  updateReqDdLabel();
+  applyFilters();
+}
+
+function toggleReqDd(e) {
+  e.stopPropagation();
+  document.getElementById('reqDd').classList.toggle('open');
+}
+
+function toggleReqFilter(v) {
+  const cb = document.getElementById('rf-' + v);
+  cb.checked = !cb.checked;
+  if (cb.checked) activeRequired.add(v);
+  else activeRequired.delete(v);
+  cb.parentElement.classList.toggle('checked', cb.checked);
+  const isAll = activeRequired.size === 3;
+  const isHide = activeRequired.size === 2 && activeRequired.has('req') && activeRequired.has('opt');
+  document.getElementById('reqAllBtn').classList.toggle('active', isAll);
+  document.getElementById('reqHideBtn').classList.toggle('active', isHide);
+  updateReqDdLabel();
+  applyFilters();
+}
+
+function updateReqDdLabel() {
+  const total = 3;
+  const count = activeRequired.size;
+  const trigger = document.getElementById('reqDdTrigger');
+  const label = document.getElementById('reqDdLabel');
+  if (count === total) {
+    label.textContent = '任務狀態';
+    trigger.classList.remove('has-filter');
+  } else if (count === 0) {
+    label.textContent = '任務狀態 (全關)';
+    trigger.classList.add('has-filter');
+  } else {
+    label.textContent = '任務狀態 (' + count + ')';
+    trigger.classList.add('has-filter');
+  }
+}
+
 function applyFilters() {
   if (currentMode === 'overview') {
     document.querySelectorAll('.filter-tag').forEach(btn => {
@@ -721,7 +1180,11 @@ function applyFilters() {
     items.forEach(item => {
       let show = true;
       if (currentMode === 'overview') {
-        show = item.dataset.tags.split(',').some(t => activeTags.has(t));
+        const tagMatch = item.dataset.tags.split(',').some(t => activeTags.has(t));
+        const reqSel = item.querySelector('.required-select');
+        const reqVal = reqSel ? reqSel.value : 'req';
+        const reqMatch = activeRequired.has(reqVal);
+        show = tagMatch && reqMatch;
       } else {
         // Event mode
         const statusSel = item.querySelector('.status-select');
@@ -794,7 +1257,9 @@ function updateEventStats() {
 document.querySelectorAll('.md-option input').forEach(cb => {
   cb.parentElement.classList.toggle('checked', cb.checked);
 });
+injectRequiredCells();
 updateStatusDdLabel();
+updateReqDdLabel();
 renderEventTabs();
 applyFilters();
 </script>
