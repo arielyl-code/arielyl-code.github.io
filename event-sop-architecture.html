@@ -228,6 +228,8 @@
   .required-select.r-set-no { background: #EAE6DC; color: var(--grey-mid); border-color: #DAD4C5; font-style: italic; }
   .cat-item.is-no-required { opacity: 0.4; background: #FBFAF6; }
   .cat-item.is-no-required:hover { opacity: 0.85; transition: opacity 0.2s; }
+  .cat-item.is-tag-greyed { opacity: 0.4; background: #FBFAF6; }
+  .cat-item.is-tag-greyed:hover { opacity: 0.85; transition: opacity 0.2s; }
 
   /* SOP TASK FILTER ROW (inside filter-bar) */
   .task-filter-row {
@@ -420,7 +422,7 @@
         任務狀態
       </div>
       <button class="task-pill active" id="reqAllBtn" onclick="reqShowAll()">顯示全部</button>
-      <button class="task-pill" id="reqHideBtn" onclick="reqHideOptional()">隱藏非必要</button>
+      <button class="task-pill" id="reqHideBtn" onclick="reqHideOptional()">隱藏不需要</button>
       <div class="multi-dd" id="reqDd">
         <button class="md-trigger" id="reqDdTrigger" onclick="toggleReqDd(event)">
           <span id="reqDdLabel">任務狀態</span>
@@ -429,7 +431,7 @@
         <div class="md-panel" id="reqDdPanel" onclick="event.stopPropagation()">
           <div class="md-option" onclick="toggleReqFilter('req')"><input type="checkbox" id="rf-req" checked> 必要</div>
           <div class="md-option" onclick="toggleReqFilter('opt')"><input type="checkbox" id="rf-opt" checked> 不一定</div>
-          <div class="md-option" onclick="toggleReqFilter('no')"><input type="checkbox" id="rf-no" checked> 非必要</div>
+          <div class="md-option" onclick="toggleReqFilter('no')"><input type="checkbox" id="rf-no" checked> 不需要</div>
         </div>
       </div>
       <div class="task-filter-spacer"></div>
@@ -1086,7 +1088,7 @@ function injectRequiredCells() {
     cell.innerHTML = '<select class="required-select" data-task-id="' + tid + '">' +
       '<option value="req">必要</option>' +
       '<option value="opt">不一定</option>' +
-      '<option value="no">非必要</option>' +
+      '<option value="no">不需要</option>' +
       '</select>';
     item.appendChild(cell);
     const sel = cell.querySelector('select');
@@ -1178,13 +1180,25 @@ function applyFilters() {
     const items = section.querySelectorAll('.cat-item');
     let vis = 0;
     items.forEach(item => {
+      // Clear visual greying class (recomputed below)
+      item.classList.remove('is-tag-greyed');
+      
       let show = true;
       if (currentMode === 'overview') {
         const tagMatch = item.dataset.tags.split(',').some(t => activeTags.has(t));
         const reqSel = item.querySelector('.required-select');
         const reqVal = reqSel ? reqSel.value : 'req';
         const reqMatch = activeRequired.has(reqVal);
-        show = tagMatch && reqMatch;
+        const isShowAllReq = activeRequired.size === 3;
+        
+        if (isShowAllReq) {
+          // 顯示全部：show ALL items, grey-out the ones that don't match active tag filter
+          show = true;
+          if (!tagMatch) item.classList.add('is-tag-greyed');
+        } else {
+          // 隱藏不需要 or custom filter: standard behavior — hide tag mismatches and req mismatches
+          show = tagMatch && reqMatch;
+        }
       } else {
         // Event mode
         const statusSel = item.querySelector('.status-select');
@@ -1205,8 +1219,19 @@ function applyFilters() {
   });
   
   if (currentMode === 'overview') {
-    const isAll = activeTags.size === allTags.length;
-    document.getElementById('filterCount').textContent = isAll ? `顯示全部 ${TOTAL_TASKS} 項` : '篩選顯示 ' + totalVisible + ' 項';
+    const isAllTags = activeTags.size === allTags.length;
+    const isShowAllReq = activeRequired.size === 3;
+    let countText;
+    if (isShowAllReq && isAllTags) {
+      countText = `顯示全部 ${TOTAL_TASKS} 項`;
+    } else if (isShowAllReq && !isAllTags) {
+      // 顯示全部 with tag filter: show all 58, with greyed-out non-matches
+      const greyedCount = document.querySelectorAll('.cat-item.is-tag-greyed').length;
+      countText = `顯示全部 ${TOTAL_TASKS} 項 · ${TOTAL_TASKS - greyedCount} 項與所選活動相關`;
+    } else {
+      countText = '篩選顯示 ' + totalVisible + ' 項';
+    }
+    document.getElementById('filterCount').textContent = countText;
   }
   updateEventStats();
 }
