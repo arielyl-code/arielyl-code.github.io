@@ -142,6 +142,23 @@
   .timeline-time { font-size: 13px; color: #999; font-weight: 600; width: 52px; flex-shrink: 0; font-variant-numeric: tabular-nums; }
   .timeline-name { font-size: 14px; color: #444; font-weight: 500; }
 
+  .export-group { display: flex; flex-direction: column; gap: 8px; margin-top: 2px; }
+  .export-btn {
+    background: #2E5090; border: none; border-radius: 10px; padding: 13px;
+    color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%;
+    font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: background .15s;
+  }
+  .export-btn:active { background: #1B3A5C; }
+  .export-btn.secondary { background: #fff; color: #2E5090; border: 1.5px solid #2E5090; }
+  .export-btn.secondary:active { background: #EDF2FA; }
+  .export-toast {
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+    background: #333; color: #fff; padding: 10px 24px; border-radius: 10px;
+    font-size: 14px; font-weight: 600; z-index: 100; opacity: 0;
+    transition: opacity .3s; pointer-events: none; white-space: nowrap;
+  }
+  .export-toast.show { opacity: 1; }
   .reset-btn {
     background: none; border: 1.5px solid #E0CCCC; border-radius: 10px; padding: 12px;
     color: #C44; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%;
@@ -153,6 +170,7 @@
 <body>
 
 <div class="shell">
+  <div class="export-toast" id="toast"></div>
   <!-- Header -->
   <div class="header">
     <div class="header-top">
@@ -401,10 +419,83 @@ function renderStats() {
     html += '</div>';
   }
 
+  html += '<div class="export-group">' +
+    '<button class="export-btn" onclick="exportCopy()">📋 複製簽到紀錄到剪貼簿</button>' +
+    '<button class="export-btn secondary" onclick="exportCSV()">⬇ 下載 CSV 檔案</button>' +
+  '</div>';
   html += '<button class="reset-btn" onclick="resetAll()">清除所有簽到紀錄</button>';
   html += '</div>';
 
   document.getElementById("pageStats").innerHTML = html;
+}
+
+// ── Export ──
+function buildExportData() {
+  const today = new Date().toLocaleDateString("zh-TW", { year:"numeric", month:"2-digit", day:"2-digit" });
+  const rows = GUESTS.map(g => {
+    const isChecked = checkedMap[g.id];
+    return {
+      name: g.name,
+      company: g.company,
+      title: g.title,
+      status: isChecked ? "已報到" : "未到場",
+      time: isChecked ? (timeMap[g.id] || "") : "",
+    };
+  });
+  return { today, rows };
+}
+
+function exportCopy() {
+  const { today, rows } = buildExportData();
+  let text = "姓名\t公司\t職稱\t狀態\t報到時間\n";
+  rows.forEach(r => {
+    text += r.name + "\t" + r.company + "\t" + r.title + "\t" + r.status + "\t" + r.time + "\n";
+  });
+  text += "\n匯出日期：" + today + "　已到 " + checkedCount() + " / " + GUESTS.length + " 人";
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showToast("已複製！可直接貼到表格")).catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.cssText = "position:fixed;left:-9999px";
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand("copy"); showToast("已複製！可直接貼到表格"); }
+  catch(e) { showToast("複製失敗，請手動選取"); }
+  document.body.removeChild(ta);
+}
+
+function exportCSV() {
+  const { today, rows } = buildExportData();
+  const BOM = "\uFEFF";
+  let csv = BOM + "姓名,公司,職稱,狀態,報到時間\n";
+  rows.forEach(r => {
+    csv += '"' + r.name + '","' + r.company + '","' + r.title + '","' + r.status + '","' + r.time + '"\n';
+  });
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "簽到紀錄_" + today.replace(/\//g, "") + ".csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast("CSV 已下載");
+}
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2000);
 }
 
 // ── Reset ──
