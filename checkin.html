@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>活動簽到 — Smart Capital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { height: 100%; -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: 'Noto Sans TC', -apple-system, 'Helvetica Neue', sans-serif;
+    background: #F5F5F0;
+    color: #222;
+    min-height: 100%;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+  }
+
+  /* ── Shell ── */
+  .shell { max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+
+  /* ── Header ── */
+  .header {
+    background: linear-gradient(135deg, #1B3A5C 0%, #2E5090 100%);
+    padding: 20px 20px 14px;
+    color: #fff;
+    position: sticky; top: 0; z-index: 20;
+  }
+  .header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .logo { background: rgba(255,255,255,.15); border-radius: 6px; padding: 3px 8px; font-size: 13px; font-weight: 700; letter-spacing: 1.5px; }
+  .header-title { flex: 1; font-size: 20px; font-weight: 700; letter-spacing: 1px; }
+  .header-badge { background: rgba(255,255,255,.2); border-radius: 20px; padding: 4px 14px; font-size: 15px; font-weight: 600; }
+  .progress-track { height: 4px; background: rgba(255,255,255,.15); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #6EEBBE, #A8F0D0); border-radius: 2px; transition: width .4s cubic-bezier(.4,0,.2,1); width: 0%; }
+
+  /* ── Tabs ── */
+  .tab-bar {
+    display: flex; background: #fff; border-bottom: 1px solid #E8E8E4;
+    position: sticky; top: 78px; z-index: 19;
+  }
+  .tab-btn {
+    flex: 1; border: none; background: transparent; padding: 13px 0; font-size: 15px;
+    font-weight: 500; color: #999; cursor: pointer; display: flex; align-items: center;
+    justify-content: center; gap: 6px; border-bottom: 2.5px solid transparent;
+    transition: all .2s; font-family: inherit;
+  }
+  .tab-btn.active { color: #2E5090; border-bottom-color: #2E5090; font-weight: 700; }
+
+  /* ── Content ── */
+  .content { flex: 1; overflow-y: auto; padding-bottom: 48px; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── Toolbar ── */
+  .toolbar { padding: 14px 16px 6px; }
+  .search-wrap { position: relative; margin-bottom: 10px; }
+  .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #aaa; pointer-events: none; }
+  .search-input {
+    width: 100%; padding: 10px 36px; border: 1.5px solid #E0E0DC; border-radius: 10px;
+    font-size: 15px; background: #fff; outline: none; font-family: inherit; transition: border-color .2s;
+  }
+  .search-input:focus { border-color: #2E5090; }
+  .clear-btn {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    border: none; background: #ddd; border-radius: 50%; width: 22px; height: 22px;
+    font-size: 11px; cursor: pointer; color: #666; display: none; align-items: center; justify-content: center;
+  }
+  .clear-btn.show { display: flex; }
+  .filter-row { display: flex; gap: 8px; }
+  .filter-btn {
+    flex: 1; border: 1.5px solid #E0E0DC; background: #fff; border-radius: 8px; padding: 7px 0;
+    font-size: 13px; font-weight: 500; color: #888; cursor: pointer; display: flex;
+    align-items: center; justify-content: center; gap: 5px; transition: all .2s; font-family: inherit;
+  }
+  .filter-btn.active { border-color: #2E5090; color: #2E5090; background: #EDF2FA; font-weight: 700; }
+  .filter-count { font-size: 12px; opacity: .7; }
+
+  /* ── Guest Cards ── */
+  .list { padding: 6px 16px; display: flex; flex-direction: column; gap: 6px; }
+  .card {
+    display: flex; align-items: center; justify-content: space-between;
+    background: #fff; border: 1.5px solid #EAEAE6; border-radius: 12px;
+    padding: 14px; cursor: pointer; transition: all .15s cubic-bezier(.4,0,.2,1);
+    -webkit-user-select: none; user-select: none; width: 100%; text-align: left;
+  }
+  .card:active { transform: scale(.97); }
+  .card.checked { background: #F0F7EF; border-color: #B8DABB; }
+  .card.companion { padding-left: 38px; opacity: .85; }
+  .card-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+  .checkbox {
+    width: 28px; height: 28px; border-radius: 8px; border: 2px solid #D0D0CC;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    transition: all .2s; background: #fff;
+  }
+  .card.checked .checkbox { background: #3D8C40; border-color: #3D8C40; }
+  .checkmark { color: #fff; font-size: 16px; font-weight: 800; line-height: 1; display: none; }
+  .card.checked .checkmark { display: block; }
+  .card-info { flex: 1; min-width: 0; }
+  .card-name { font-size: 16px; font-weight: 700; color: #222; line-height: 1.3; }
+  .card-sub { display: flex; flex-wrap: wrap; gap: 2px 8px; margin-top: 3px; }
+  .card-company { font-size: 12.5px; color: #777; line-height: 1.4; }
+  .card-title-tag { font-size: 12px; color: #2E5090; font-weight: 600; background: #EDF2FA; border-radius: 4px; padding: 1px 6px; }
+  .time-tag { font-size: 12px; color: #3D8C40; font-weight: 600; background: #E6F4E6; border-radius: 6px; padding: 3px 8px; flex-shrink: 0; margin-left: 8px; white-space: nowrap; }
+  .empty { text-align: center; padding: 48px 16px; color: #aaa; font-size: 14px; }
+
+  /* ── Stats ── */
+  .stats-page { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-card { border-radius: 14px; padding: 18px 14px; text-align: center; }
+  .stat-total { background: #fff; border: 1.5px solid #E0E0DC; }
+  .stat-arrived { background: #E6F4E6; border: 1.5px solid #B8DABB; }
+  .stat-pending { background: #FFF5E6; border: 1.5px solid #F0D9A8; }
+  .stat-rate { background: linear-gradient(135deg, #2E5090, #1B3A5C); border: none; }
+  .stat-num { font-size: 32px; font-weight: 800; color: #222; line-height: 1.2; }
+  .stat-rate .stat-num { color: #fff; }
+  .stat-rate .stat-label { color: rgba(255,255,255,.7); }
+  .stat-label { font-size: 13px; color: #777; margin-top: 4px; font-weight: 500; }
+
+  .info-card { background: #fff; border-radius: 14px; padding: 16px; border: 1.5px solid #E8E8E4; }
+  .info-card-title { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 14px; }
+  .breakdown-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .breakdown-label { font-size: 13px; color: #666; width: 68px; flex-shrink: 0; }
+  .breakdown-bar { flex: 1; height: 8px; background: #EEEEE8; border-radius: 4px; overflow: hidden; }
+  .breakdown-fill { height: 100%; background: linear-gradient(90deg, #3D8C40, #6ABF6E); border-radius: 4px; transition: width .5s cubic-bezier(.4,0,.2,1); }
+  .breakdown-fill.alt { background: linear-gradient(90deg, #D4A853, #E8C876); }
+  .breakdown-num { font-size: 13px; font-weight: 700; color: #444; width: 40px; text-align: right; flex-shrink: 0; }
+
+  .missing-row { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid #F2F2EE; }
+  .missing-row:last-child { border-bottom: none; }
+  .missing-dot { color: #E8A040; font-size: 8px; }
+  .missing-name { font-size: 14px; font-weight: 600; color: #444; }
+  .missing-company { font-size: 12px; color: #999; margin-left: auto; }
+  .all-arrived { text-align: center; padding: 20px; font-size: 15px; color: #3D8C40; font-weight: 600; }
+
+  .timeline-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid #F5F5F0; }
+  .timeline-row:last-child { border-bottom: none; }
+  .timeline-dot { width: 8px; height: 8px; border-radius: 50%; background: #3D8C40; flex-shrink: 0; }
+  .timeline-time { font-size: 13px; color: #999; font-weight: 600; width: 52px; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  .timeline-name { font-size: 14px; color: #444; font-weight: 500; }
+
+  .reset-btn {
+    background: none; border: 1.5px solid #E0CCCC; border-radius: 10px; padding: 12px;
+    color: #C44; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%;
+    font-family: inherit; margin-top: 4px;
+  }
+  .reset-btn:active { background: #FFF0F0; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-top">
+      <span class="logo">SC</span>
+      <span class="header-title">活動簽到</span>
+      <span class="header-badge" id="headerBadge">0/14</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="checkin" onclick="switchTab('checkin')">☑ 簽到</button>
+    <button class="tab-btn" data-tab="stats" onclick="switchTab('stats')">◉ 統計</button>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Checkin Page -->
+    <div class="page active" id="pageCheckin">
+      <div class="toolbar">
+        <div class="search-wrap">
+          <span class="search-icon">⌕</span>
+          <input class="search-input" id="searchInput" type="text" placeholder="搜尋姓名或公司⋯">
+          <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
+        </div>
+        <div class="filter-row">
+          <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">全部 <span class="filter-count" id="countAll">14</span></button>
+          <button class="filter-btn" data-filter="unchecked" onclick="setFilter('unchecked')">未到 <span class="filter-count" id="countUnchecked">14</span></button>
+          <button class="filter-btn" data-filter="checked" onclick="setFilter('checked')">已到 <span class="filter-count" id="countChecked">0</span></button>
+        </div>
+      </div>
+      <div class="list" id="guestList"></div>
+    </div>
+
+    <!-- Stats Page -->
+    <div class="page" id="pageStats"></div>
+  </div>
+</div>
+
+<script>
+// ── Data ──
+const GUESTS = [
+  { id:1,  name:"藍翰捷", company:"珖藝印花設計股份有限公司", title:"總經理", companion:false },
+  { id:2,  name:"謝勝傑", company:"優雅客有限公司", title:"創辦人", companion:false },
+  { id:3,  name:"陳鴻麒", company:"苡樂拉法股份有限公司（苡樂創新平台）", title:"副執行長", companion:false },
+  { id:4,  name:"陳力新", company:"永聖弘業股份有限公司", title:"負責人", companion:false },
+  { id:5,  name:"陳力新（同行夥伴）", company:"", title:"", companion:true },
+  { id:6,  name:"鄒介中", company:"華影國際影藝有限公司", title:"執行長", companion:false },
+  { id:7,  name:"石罡宇", company:"點拾事業有限公司", title:"創辦人", companion:false },
+  { id:8,  name:"吳文凱", company:"偷懶辦公室", title:"創辦人", companion:false },
+  { id:9,  name:"林敬軒", company:"傳光行銷", title:"創辦人", companion:false },
+  { id:10, name:"張益豪", company:"白袍人生學院", title:"創辦人", companion:false },
+  { id:11, name:"鍾新亮", company:"領頭羊媒體", title:"創辦人", companion:false },
+  { id:12, name:"鍾新亮（同行夥伴）", company:"", title:"", companion:true },
+  { id:13, name:"杜懷生", company:"楊桃美食網", title:"CEO", companion:false },
+  { id:14, name:"杜懷生（同行夥伴）", company:"", title:"", companion:true },
+];
+
+// ── State ──
+let checkedMap = {};   // { id: true }
+let timeMap = {};      // { id: "14:30" }
+let currentTab = "checkin";
+let currentFilter = "all";
+let searchText = "";
+
+// ── LocalStorage ──
+const STORAGE_KEY = "sc_checkin_v1";
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ checkedMap, timeMap })); } catch(e) {}
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) { const d = JSON.parse(raw); checkedMap = d.checkedMap || {}; timeMap = d.timeMap || {}; }
+  } catch(e) {}
+}
+
+// ── Helpers ──
+function now() {
+  return new Date().toLocaleTimeString("zh-TW", { hour:"2-digit", minute:"2-digit" });
+}
+function checkedCount() { return Object.keys(checkedMap).length; }
+
+// ── Tab Switch ──
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+  document.getElementById("pageCheckin").classList.toggle("active", tab === "checkin");
+  document.getElementById("pageStats").classList.toggle("active", tab === "stats");
+  if (tab === "stats") renderStats();
+}
+
+// ── Filter ──
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.toggle("active", b.dataset.filter === f));
+  renderList();
+}
+
+// ── Search ──
+document.getElementById("searchInput").addEventListener("input", function() {
+  searchText = this.value.trim();
+  document.getElementById("clearBtn").classList.toggle("show", searchText.length > 0);
+  renderList();
+});
+function clearSearch() {
+  searchText = "";
+  document.getElementById("searchInput").value = "";
+  document.getElementById("clearBtn").classList.remove("show");
+  renderList();
+}
+
+// ── Toggle Check ──
+function toggleGuest(id) {
+  if (checkedMap[id]) {
+    delete checkedMap[id];
+    delete timeMap[id];
+  } else {
+    checkedMap[id] = true;
+    timeMap[id] = now();
+  }
+  saveState();
+  updateHeader();
+  updateFilterCounts();
+  renderList();
+}
+
+// ── Update Header ──
+function updateHeader() {
+  const c = checkedCount();
+  const t = GUESTS.length;
+  document.getElementById("headerBadge").textContent = c + "/" + t;
+  document.getElementById("progressFill").style.width = (t > 0 ? (c / t) * 100 : 0) + "%";
+}
+
+// ── Update Filter Counts ──
+function updateFilterCounts() {
+  const c = checkedCount();
+  const t = GUESTS.length;
+  document.getElementById("countAll").textContent = t;
+  document.getElementById("countChecked").textContent = c;
+  document.getElementById("countUnchecked").textContent = t - c;
+}
+
+// ── Render Guest List ──
+function renderList() {
+  const container = document.getElementById("guestList");
+  const filtered = GUESTS.filter(g => {
+    const matchSearch = !searchText || g.name.includes(searchText) || g.company.includes(searchText);
+    const matchFilter = currentFilter === "all" ||
+      (currentFilter === "checked" ? checkedMap[g.id] : !checkedMap[g.id]);
+    return matchSearch && matchFilter;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="empty"><div style="font-size:32px;margin-bottom:8px">🔍</div>沒有符合條件的來賓</div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map(g => {
+    const isChecked = checkedMap[g.id];
+    const cls = ["card"];
+    if (isChecked) cls.push("checked");
+    if (g.companion) cls.push("companion");
+
+    let sub = "";
+    if (!g.companion && g.company) {
+      sub = '<div class="card-sub"><span class="card-company">' + esc(g.company) + '</span>' +
+        (g.title ? '<span class="card-title-tag">' + esc(g.title) + '</span>' : '') + '</div>';
+    }
+
+    const timeHtml = isChecked && timeMap[g.id]
+      ? '<div class="time-tag">' + timeMap[g.id] + '</div>'
+      : '';
+
+    return '<div class="' + cls.join(" ") + '" onclick="toggleGuest(' + g.id + ')">' +
+      '<div class="card-left">' +
+        '<div class="checkbox"><span class="checkmark">✓</span></div>' +
+        '<div class="card-info"><div class="card-name">' + esc(g.name) + '</div>' + sub + '</div>' +
+      '</div>' + timeHtml + '</div>';
+  }).join("");
+}
+
+function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+// ── Render Stats ──
+function renderStats() {
+  const total = GUESTS.length;
+  const c = checkedCount();
+  const mainGuests = GUESTS.filter(g => !g.companion);
+  const companions = GUESTS.filter(g => g.companion);
+  const mainChecked = mainGuests.filter(g => checkedMap[g.id]).length;
+  const compChecked = companions.filter(g => checkedMap[g.id]).length;
+  const rate = total > 0 ? Math.round((c / total) * 100) : 0;
+
+  const missing = GUESTS.filter(g => !checkedMap[g.id]);
+  const timeline = Object.entries(timeMap)
+    .map(([id, time]) => ({ guest: GUESTS.find(g => g.id === Number(id)), time }))
+    .filter(t => t.guest)
+    .sort((a, b) => b.time.localeCompare(a.time));
+
+  let html = '<div class="stats-page">';
+
+  // Summary grid
+  html += '<div class="stats-grid">' +
+    '<div class="stat-card stat-total"><div class="stat-num">' + total + '</div><div class="stat-label">邀請總人數</div></div>' +
+    '<div class="stat-card stat-arrived"><div class="stat-num">' + c + '</div><div class="stat-label">已報到</div></div>' +
+    '<div class="stat-card stat-pending"><div class="stat-num">' + (total - c) + '</div><div class="stat-label">未到場</div></div>' +
+    '<div class="stat-card stat-rate"><div class="stat-num">' + rate + '%</div><div class="stat-label">到場率</div></div>' +
+  '</div>';
+
+  // Breakdown
+  const mainPct = mainGuests.length > 0 ? (mainChecked / mainGuests.length) * 100 : 0;
+  const compPct = companions.length > 0 ? (compChecked / companions.length) * 100 : 0;
+  html += '<div class="info-card"><div class="info-card-title">出席分類</div>' +
+    '<div class="breakdown-row"><span class="breakdown-label">主要來賓</span>' +
+      '<div class="breakdown-bar"><div class="breakdown-fill" style="width:' + mainPct + '%"></div></div>' +
+      '<span class="breakdown-num">' + mainChecked + '/' + mainGuests.length + '</span></div>' +
+    '<div class="breakdown-row"><span class="breakdown-label">同行夥伴</span>' +
+      '<div class="breakdown-bar"><div class="breakdown-fill alt" style="width:' + compPct + '%"></div></div>' +
+      '<span class="breakdown-num">' + compChecked + '/' + companions.length + '</span></div>' +
+  '</div>';
+
+  // Missing
+  html += '<div class="info-card"><div class="info-card-title">尚未到場</div>';
+  if (missing.length === 0) {
+    html += '<div class="all-arrived"><div style="font-size:28px;margin-bottom:6px">🎉</div>全員到齊！</div>';
+  } else {
+    missing.forEach(g => {
+      html += '<div class="missing-row"><span class="missing-dot">●</span>' +
+        '<span class="missing-name">' + esc(g.name) + '</span>' +
+        (g.company ? '<span class="missing-company">' + esc(g.company) + '</span>' : '') + '</div>';
+    });
+  }
+  html += '</div>';
+
+  // Timeline
+  if (timeline.length > 0) {
+    html += '<div class="info-card"><div class="info-card-title">報到紀錄</div>';
+    timeline.forEach(t => {
+      html += '<div class="timeline-row"><span class="timeline-dot"></span>' +
+        '<span class="timeline-time">' + t.time + '</span>' +
+        '<span class="timeline-name">' + esc(t.guest.name) + '</span></div>';
+    });
+    html += '</div>';
+  }
+
+  html += '<button class="reset-btn" onclick="resetAll()">清除所有簽到紀錄</button>';
+  html += '</div>';
+
+  document.getElementById("pageStats").innerHTML = html;
+}
+
+// ── Reset ──
+function resetAll() {
+  if (confirm("確定要清除所有簽到紀錄嗎？")) {
+    checkedMap = {};
+    timeMap = {};
+    saveState();
+    updateHeader();
+    updateFilterCounts();
+    renderList();
+    renderStats();
+  }
+}
+
+// ── Init ──
+loadState();
+updateHeader();
+updateFilterCounts();
+renderList();
+</script>
+</body>
+</html>
