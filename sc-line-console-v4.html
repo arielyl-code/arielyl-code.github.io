@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Capital · LINE Console</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root{--bg:#faf8f5;--bg-card:#fff;--bg-sub:#f3f0eb;--bg-input:#f7f5f1;--nav:#1B2A4A;--gold:#B08D57;--gold-lt:#D4AF7A;--gold-bg:#FBF4E8;--gold-bdr:#DFC898;--t1:#1C1C1C;--t2:#4A4A4A;--t3:#888;--bd:#E5E1DA;--bd2:#CCC8C0;--line-grn:#06C755;--r-sm:6px;--r-md:10px;--r-lg:14px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--t1);font-size:13px;line-height:1.65;min-height:100vh}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--bg-sub)}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:3px}
+.topbar{display:flex;align-items:center;gap:12px;padding:11px 20px;background:var(--nav);position:sticky;top:0;z-index:100}
+.topbar-brand{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--gold-lt);letter-spacing:.5px}
+.topbar-sub{font-size:11px;color:rgba(255,255,255,.45)}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.online-dot{width:7px;height:7px;background:var(--line-grn);border-radius:50%}
+.topbar-status{font-size:11px;color:rgba(255,255,255,.5)}
+.btn-topbar{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:var(--r-sm);border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.7);font-size:11px;cursor:pointer;font-family:inherit}
+.btn-topbar:hover{background:rgba(255,255,255,.1)}
+.nav-bar{display:flex;background:var(--bg-card);border-bottom:1px solid var(--bd);overflow-x:auto;padding:0 16px}
+.nav-bar::-webkit-scrollbar{height:0}
+.nav-group{display:flex;align-items:center}
+.nav-sep{width:1px;height:18px;background:var(--bd);margin:0 6px}
+.tab{display:inline-flex;align-items:center;gap:5px;padding:9px 13px;font-size:12px;color:var(--t3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s;font-family:'Noto Sans TC',sans-serif}
+.tab:hover{color:var(--t2)}.tab.active{color:var(--nav);border-bottom-color:var(--gold);font-weight:500}.tab i{font-size:14px}
+.sub-tabs{display:flex;padding:0 20px;background:var(--bg-sub);border-bottom:1px solid var(--bd)}
+.sub-tab{padding:7px 14px;font-size:11px;color:var(--t3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;font-family:inherit;transition:color .15s}
+.sub-tab:hover{color:var(--t2)}.sub-tab.active{color:var(--nav);border-bottom-color:var(--gold);font-weight:500}
+.panel{display:none;padding:16px 20px}.panel.active{display:block}
+.card{background:var(--bg-card);border:1px solid var(--bd);border-radius:var(--r-lg);padding:16px;margin-bottom:12px}
+.card-gold{border-color:var(--gold-bdr);background:var(--gold-bg)}
+label{display:block;font-size:11px;color:var(--t3);margin-bottom:3px}
+input,select,textarea{width:100%;background:var(--bg-input);border:1px solid var(--bd);border-radius:var(--r-sm);color:var(--t1);padding:7px 10px;font-size:12px;font-family:'Noto Sans TC',sans-serif;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
+textarea{resize:vertical}
+select option{background:#fff;color:var(--t1)}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:var(--r-sm);border:1px solid var(--bd2);background:var(--bg-card);color:var(--t2);font-size:12px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;transition:all .15s}
+.btn:hover{background:var(--bg-sub);color:var(--t1)}
+.btn-primary{background:var(--nav);border-color:var(--nav);color:#fff}.btn-primary:hover{background:#253d6b;border-color:#253d6b}
+.btn-gold{background:var(--gold);border-color:var(--gold);color:#fff}.btn-gold:hover{background:var(--gold-lt)}
+.btn-danger{border-color:#d4938a;color:#c0392b;background:transparent}.btn-danger:hover{background:#fdf0ee}
+.btn-sm{padding:3px 9px;font-size:11px}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.b-gold{background:var(--gold-bg);color:#7A5E2A;border:1px solid var(--gold-bdr)}
+.b-green{background:#edf6ee;color:#2d7a3a}.b-red{background:#fdf0ee;color:#c0392b}
+.b-blue{background:#eef4fb;color:#1B5FA5}.b-gray{background:#f2f0eb;color:#666}
+.b-purple{background:#f2eefb;color:#5B3DA8}.b-warn{background:#fdf5e8;color:#8C5E00}
+.b-teal{background:#eaf7f4;color:#1A7A65}.b-navy{background:#e8ecf5;color:var(--nav)}
+.table-wrap{overflow-x:auto;border:1px solid var(--bd);border-radius:var(--r-md)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{padding:8px 10px;text-align:left;background:var(--bg-sub);font-weight:500;color:var(--t3);border-bottom:1px solid var(--bd);white-space:nowrap;font-size:11px;letter-spacing:.03em}
+td{padding:8px 10px;border-bottom:1px solid var(--bd);vertical-align:middle;color:var(--t2)}
+tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg-sub)}
+.row{display:flex;gap:10px;flex-wrap:wrap}.col{flex:1;min-width:100px}
+.sidebar-layout{display:flex;gap:12px;align-items:flex-start}
+.sidebar-main{flex:1.5;min-width:260px}.sidebar-side{flex:1;min-width:180px}
+.divider{border:none;border-top:1px solid var(--bd);margin:12px 0}
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.filter-bar select,.filter-bar input{width:auto;min-width:90px;font-size:11px}
+.sec-title{font-size:10px;font-weight:500;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-bottom:14px}
+.stat{background:var(--bg-sub);border:1px solid var(--bd);border-radius:var(--r-md);padding:12px 14px}
+.stat-val{font-size:22px;font-weight:500;color:var(--nav);margin-bottom:2px;font-family:'Cormorant Garamond',serif}
+.stat-lbl{font-size:11px;color:var(--t3)}
+.tag{display:inline-block;padding:1px 6px;background:var(--bg-sub);border-radius:20px;font-size:10px;color:var(--t3);margin:1px}
+.avatar{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;background:linear-gradient(135deg,var(--nav),#2E4B7A);color:#fff;flex-shrink:0}
+.flex-row{display:flex;align-items:center;gap:8px}
+.col-toggle{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--bd);cursor:pointer;background:var(--bg-sub);color:var(--t3);margin:2px;transition:all .15s}
+.col-toggle.on{background:var(--gold-bg);color:#7A5E2A;border-color:var(--gold-bdr)}
+.progress-bar{height:5px;background:var(--bg-sub);border-radius:3px;overflow:hidden;margin-top:5px}
+.progress-fill{height:100%;background:var(--gold);border-radius:3px}
+.msg-block{border:1px solid var(--bd);border-radius:var(--r-md);margin-bottom:8px;overflow:hidden}
+.msg-block-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg-sub);border-bottom:1px solid var(--bd)}
+.msg-type-row{display:flex;gap:5px;flex-wrap:wrap;padding:10px 12px}
+.msg-type-btn{padding:5px 10px;border-radius:var(--r-sm);border:1px solid var(--bd);background:var(--bg-card);font-size:11px;cursor:pointer;color:var(--t3);font-family:inherit;transition:all .15s}
+.msg-type-btn:hover{color:var(--t1)}.msg-type-btn.sel{background:var(--gold-bg);color:#7A5E2A;border-color:var(--gold-bdr)}
+.msg-block-body{padding:10px 12px}
+.tpl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:8px;margin-bottom:12px}
+.tpl-card{border:1px solid var(--bd);border-radius:var(--r-md);padding:12px;cursor:pointer;background:var(--bg-card);transition:border-color .15s}
+.tpl-card:hover{border-color:var(--gold-bdr)}.tpl-card.sel{border:2px solid var(--gold);background:var(--gold-bg)}
+.phone-mock{background:var(--bg-sub);border:1px solid var(--bd);border-radius:var(--r-md);padding:10px 12px;font-size:12px;min-height:60px;color:var(--t2)}
+.json-area{font-family:'Courier New',monospace;font-size:11px;min-height:120px}
+.ai-output{background:var(--bg-sub);border:1px solid var(--bd);border-radius:var(--r-sm);padding:10px 12px;font-size:11px;font-family:'Courier New',monospace;min-height:80px;color:var(--nav);white-space:pre-wrap;word-break:break-all}
+.ar-item{border:1px solid var(--bd);border-radius:var(--r-md);padding:12px 14px;margin-bottom:8px;background:var(--bg-card)}
+.ar-item-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.ar-trigger-type{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.status-ok{background:#4CAF50}.status-err{background:#f44336}.status-idle{background:var(--bd2)}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--bd);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.test-target-btn{padding:4px 12px;border-radius:20px;border:1px solid var(--bd);background:var(--bg-card);font-size:11px;cursor:pointer;color:var(--t2);font-family:inherit;transition:all .15s}
+.test-target-btn:hover{background:var(--bg-sub)}.test-target-btn.sel{background:var(--gold-bg);color:#7A5E2A;border-color:var(--gold-bdr);font-weight:500}
+.admin-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-sub);border-radius:var(--r-md);border:1px solid var(--bd);margin-bottom:6px}
+.admin-uid{font-family:monospace;font-size:11px;color:var(--t3)}
+.rm-thumb{width:46px;height:22px;background:var(--bg-sub);border-radius:3px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <i class="ti ti-brand-line" style="font-size:20px;color:var(--line-grn)"></i>
+  <div><div class="topbar-brand">Smart Capital · LINE Console</div><div class="topbar-sub">識富天使會 · 管理後台</div></div>
+  <div class="topbar-right">
+    <div class="online-dot"></div><div class="topbar-status">OA 已連線</div>
+    <button class="btn-topbar" onclick="sw('settings',null)"><i class="ti ti-settings"></i> 設定</button>
+  </div>
+</div>
+
+<div class="nav-bar">
+  <div class="nav-group">
+    <button class="tab active" onclick="sw('broadcast',this)"><i class="ti ti-send"></i> 群發訊息</button>
+    <button class="tab" onclick="sw('log',this)"><i class="ti ti-history"></i> 發送紀錄</button>
+  </div>
+  <div class="nav-sep"></div>
+  <div class="nav-group">
+    <button class="tab" onclick="sw('members',this)"><i class="ti ti-users"></i> 會員名單</button>
+    <button class="tab" onclick="sw('segment',this)"><i class="ti ti-adjustments-horizontal"></i> 分眾管理</button>
+  </div>
+  <div class="nav-sep"></div>
+  <button class="tab" onclick="sw('assets',this)"><i class="ti ti-layers-linked"></i> 訊息與素材</button>
+  <div class="nav-sep"></div>
+  <button class="tab" onclick="sw('settings',this)"><i class="ti ti-settings"></i> 設定</button>
+</div>
+
+<div class="sub-tabs" id="sub-tabs-assets" style="display:none">
+  <button class="sub-tab active" onclick="swSub('tpl',this)"><i class="ti ti-bookmark"></i> 訊息範本庫</button>
+  <button class="sub-tab" onclick="swSub('richmenu',this)"><i class="ti ti-layout-grid"></i> 圖文選單</button>
+  <button class="sub-tab" onclick="swSub('autoreply',this)"><i class="ti ti-bolt"></i> 自動回應訊息</button>
+  <button class="sub-tab" onclick="swSub('rmseg',this)"><i class="ti ti-user-check"></i> 選單分眾</button>
+</div>
+
+<!-- ===== 群發訊息 ===== -->
+<div id="panel-broadcast" class="panel active">
+  <div class="sidebar-layout">
+    <div class="sidebar-main">
+      <div class="card">
+        <div class="sec-title">發送設定</div>
+        <div class="row" style="margin-bottom:10px">
+          <div class="col"><label>發送對象</label>
+            <select id="bc-target" onchange="updTarget()">
+              <option value="all">全體好友（廣播）</option>
+              <option value="seg">分眾群組</option>
+              <option value="uid">指定 UID 清單</option>
+            </select>
+          </div>
+          <div class="col" id="seg-col" style="display:none"><label>選擇群組</label>
+            <select><option>VIP 會員（42人）</option><option>台北區（78人）</option><option>潛在會員（31人）</option></select>
+          </div>
+        </div>
+        <div id="uid-box" style="display:none;margin-bottom:10px"><label>UID 清單（每行一個，最多 500）</label><textarea style="min-height:60px" placeholder="Uxxxxxxxx"></textarea></div>
+        <div id="tc" style="font-size:11px;color:var(--t3);margin-bottom:10px">預計發送：<strong style="color:var(--nav)">168 人</strong>（所有好友）</div>
+        <hr class="divider">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div class="sec-title" style="margin-bottom:0">訊息元件 <span style="font-weight:400;font-size:10px;color:var(--t3)">最多 5 個</span></div>
+          <button class="btn btn-sm" onclick="addBlock()" id="add-block-btn"><i class="ti ti-plus"></i> 新增元件</button>
+        </div>
+        <div id="blocks-container"></div>
+        <div class="btns">
+          <button class="btn" onclick="showTestPicker()"><i class="ti ti-flask"></i> 測試發送</button>
+          <button class="btn btn-primary" onclick="if(confirm('確定正式發送？此動作不可撤回。'))alert('發送成功！')"><i class="ti ti-send"></i> 正式發送</button>
+        </div>
+        <div id="test-picker" style="display:none;margin-top:10px;padding:10px 12px;background:var(--gold-bg);border:1px solid var(--gold-bdr);border-radius:var(--r-md)">
+          <div style="font-size:11px;color:var(--t3);margin-bottom:6px">選擇測試發送對象（可複選）</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap" id="test-picker-btns"></div>
+          <div class="btns" style="margin-top:8px">
+            <button class="btn btn-gold btn-sm" onclick="doTestSend()"><i class="ti ti-send"></i> 發送</button>
+            <button class="btn btn-sm" onclick="document.getElementById('test-picker').style.display='none'">取消</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-side">
+      <div class="card">
+        <div class="sec-title">訊息預覽</div>
+        <div id="bc-preview-area"><div class="phone-mock" style="text-align:center;padding:20px 12px;color:var(--t3)">新增元件後顯示預覽</div></div>
+        <hr class="divider">
+        <div class="sec-title">快捷範本</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <button class="btn" style="font-size:11px;justify-content:flex-start" onclick="loadTpl('forum')"><i class="ti ti-calendar-event"></i> 6/24 論壇邀請</button>
+          <button class="btn" style="font-size:11px;justify-content:flex-start" onclick="loadTpl('member')"><i class="ti ti-user"></i> 會員建檔提醒</button>
+          <button class="btn" style="font-size:11px;justify-content:flex-start" onclick="loadTpl('event')"><i class="ti ti-news"></i> 活動報名通知</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 發送紀錄 ===== -->
+<div id="panel-log" class="panel">
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-val">12</div><div class="stat-lbl">本月發送次數</div></div>
+    <div class="stat"><div class="stat-val">1,243</div><div class="stat-lbl">總觸及人次</div></div>
+    <div class="stat"><div class="stat-val">98.2%</div><div class="stat-lbl">成功率</div></div>
+    <div class="stat"><div class="stat-val">3</div><div class="stat-lbl">失敗筆數</div></div>
+  </div>
+  <div class="card">
+    <div class="filter-bar">
+      <input type="text" placeholder="搜尋..." style="min-width:160px;width:auto">
+      <select style="width:auto"><option>所有類型</option><option>廣播</option><option>分眾</option><option>指定 UID</option></select>
+      <select style="width:auto"><option>本月</option><option>上月</option><option>全部</option></select>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>時間</th><th>類型</th><th>對象</th><th>訊息摘要</th><th>人數</th><th>狀態</th><th>操作</th></tr></thead>
+      <tbody>
+        <tr><td>05/09 14:32</td><td><span class="badge b-blue">Flex</span></td><td>VIP 會員</td><td>6/24 論壇邀請卡片</td><td>42</td><td><span class="badge b-green">成功</span></td><td><button class="btn btn-sm">再次發送</button></td></tr>
+        <tr><td>05/07 10:15</td><td><span class="badge b-gray">文字</span></td><td>全體好友</td><td>親愛的識富會員...</td><td>168</td><td><span class="badge b-green">成功</span></td><td><button class="btn btn-sm">再次發送</button></td></tr>
+        <tr><td>05/05 16:48</td><td><span class="badge b-warn">圖片</span></td><td>台北區</td><td>[圖片訊息]</td><td>78</td><td><span class="badge b-green">成功</span></td><td><button class="btn btn-sm">再次發送</button></td></tr>
+        <tr><td>05/03 09:22</td><td><span class="badge b-purple">影片</span></td><td>指定 UID（12）</td><td>[影片訊息]</td><td>12</td><td><span class="badge b-red">部分失敗</span></td><td><button class="btn btn-sm">查看</button></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ===== 會員名單 ===== -->
+<div id="panel-members" class="panel">
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-val">168</div><div class="stat-lbl">總會員數</div></div>
+    <div class="stat"><div class="stat-val">112</div><div class="stat-lbl">有效會籍</div></div>
+    <div class="stat"><div class="stat-val">31</div><div class="stat-lbl">潛在會員</div></div>
+    <div class="stat"><div class="stat-val">25</div><div class="stat-lbl">企業會員</div></div>
+  </div>
+  <div class="card">
+    <div class="filter-bar">
+      <input type="text" placeholder="搜尋姓名、公司..." style="min-width:140px;width:auto">
+      <select style="width:auto"><option>所有屬性</option><option>個人會員</option><option>企業會員</option><option>潛在會員</option></select>
+      <select style="width:auto"><option>所有會籍</option><option>有效</option><option>失效</option><option>無</option></select>
+      <select style="width:auto"><option>所有區域</option><option>台北</option><option>新竹</option><option>台中</option><option>海外</option></select>
+      <select style="width:auto"><option>所有標籤</option><option>天使投資</option><option>新創</option><option>科技業</option></select>
+      <select style="width:auto"><option>所有活動</option><option>2026 論壇</option><option>香港考察</option><option>Q3 聚會</option></select>
+      <button class="btn btn-sm" onclick="alert('新增')"><i class="ti ti-plus"></i> 新增</button>
+      <button class="btn btn-sm" onclick="alert('匯入')"><i class="ti ti-upload"></i> 匯入</button>
+    </div>
+    <div style="margin-bottom:8px"><div style="font-size:11px;color:var(--t3);margin-bottom:4px">顯示欄位</div><div id="col-toggles"></div></div>
+    <div class="table-wrap"><table style="table-layout:fixed;min-width:700px"><thead><tr id="member-thead-row"></tr></thead><tbody id="member-tbody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ===== 分眾管理 ===== -->
+<div id="panel-segment" class="panel">
+  <div class="card" style="margin-bottom:12px">
+    <div class="filter-bar" style="margin-bottom:0">
+      <select style="width:auto"><option>所有屬性</option><option>個人會員</option><option>企業會員</option><option>潛在會員</option></select>
+      <select style="width:auto"><option>所有會籍</option><option>有效</option><option>失效</option></select>
+      <select style="width:auto"><option>所有區域</option><option>台北</option><option>新竹</option><option>台中</option><option>海外</option></select>
+      <select style="width:auto"><option>所有投資標籤</option><option>天使投資</option><option>PE</option></select>
+      <select style="width:auto"><option>所有活動</option><option>2026 論壇</option><option>香港考察</option></select>
+      <div style="font-size:11px;color:var(--t3);align-self:center">符合：<strong style="color:var(--nav)">55 人</strong></div>
+    </div>
+  </div>
+  <div class="sidebar-layout">
+    <div class="sidebar-main">
+      <div class="card">
+        <div class="sec-title">建立分眾群組</div>
+        <div class="row" style="margin-bottom:10px">
+          <div class="col"><label>群組名稱</label><input value="6/24 論壇邀請名單"></div>
+          <div class="col"><label>備註</label><input placeholder="選填"></div>
+        </div>
+        <div style="font-size:12px;padding:8px 10px;background:var(--gold-bg);border:1px solid var(--gold-bdr);border-radius:var(--r-sm);margin:8px 0">
+          符合 <strong>55 人</strong>，含有效 UID <strong>49 人</strong>
+          <div class="progress-bar"><div class="progress-fill" style="width:89%"></div></div>
+        </div>
+        <div class="btns"><button class="btn btn-primary" onclick="alert('已儲存')"><i class="ti ti-device-floppy"></i> 儲存群組</button><button class="btn" onclick="alert('立即群發')"><i class="ti ti-send"></i> 立即群發</button></div>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>排序</th><th>群組名稱</th><th>條件</th><th>人數</th><th>最後更新</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>VIP 會員</strong></td><td><span class="tag">有效</span><span class="tag">個人/企業</span></td><td>42</td><td>05/08 Ariel</td><td><div style="display:flex;gap:4px"><button class="btn btn-sm"><i class="ti ti-send"></i></button><button class="btn btn-sm"><i class="ti ti-edit"></i></button><button class="btn btn-sm btn-danger"><i class="ti ti-trash"></i></button></div></td></tr>
+          <tr><td>2</td><td><strong>台北區</strong></td><td><span class="tag">台北</span></td><td>78</td><td>05/06 Chester</td><td><div style="display:flex;gap:4px"><button class="btn btn-sm"><i class="ti ti-send"></i></button><button class="btn btn-sm"><i class="ti ti-edit"></i></button><button class="btn btn-sm btn-danger"><i class="ti ti-trash"></i></button></div></td></tr>
+          <tr><td>3</td><td><strong>論壇已報名</strong></td><td><span class="tag">2026 論壇</span></td><td>55</td><td>05/09 Ariel</td><td><div style="display:flex;gap:4px"><button class="btn btn-sm"><i class="ti ti-send"></i></button><button class="btn btn-sm"><i class="ti ti-edit"></i></button><button class="btn btn-sm btn-danger"><i class="ti ti-trash"></i></button></div></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sidebar-side">
+      <div class="card">
+        <div class="sec-title">快速統計</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">個人會員</span><span>87</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">企業會員</span><span>25</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">潛在會員</span><span>31</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">有效 UID</span><span style="color:var(--nav);font-weight:500">143</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0"><span style="color:var(--t3)">未綁定</span><span style="color:#c0392b">25</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 訊息與素材 ===== -->
+<div id="panel-assets" class="panel">
+  <!-- sub: 訊息範本庫 -->
+  <div id="sub-tpl" class="sub-panel">
+    <div class="sidebar-layout" style="align-items:flex-start">
+      <div class="sidebar-main">
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div class="sec-title" style="margin-bottom:0">範本列表</div>
+            <div style="display:flex;gap:6px">
+              <select style="width:auto;font-size:11px"><option>所有類型</option><option>文字</option><option>圖片</option><option>Flex</option><option>Giga</option></select>
+              <button class="btn btn-primary btn-sm" onclick="showNewTpl()"><i class="ti ti-plus"></i> 新增</button>
+            </div>
+          </div>
+          <div class="tpl-grid" id="tpl-grid"></div>
+        </div>
+        <div class="card" id="tpl-editor" style="display:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div class="sec-title" style="margin-bottom:0">新增範本</div>
+            <button class="btn btn-sm" onclick="document.getElementById('tpl-editor').style.display='none'"><i class="ti ti-x"></i></button>
+          </div>
+          <div class="row" style="margin-bottom:10px">
+            <div class="col"><label>範本名稱</label><input id="tpl-name" placeholder="例：6/24 論壇 Flex 邀請卡"></div>
+            <div class="col"><label>類型</label><select id="tpl-type" onchange="switchTplEditor()"><option value="text">文字</option><option value="image">圖片</option><option value="flex">Flex JSON</option><option value="giga">Giga</option></select></div>
+          </div>
+          <div id="tpl-text-fields"><label>訊息內容</label><textarea id="tpl-text-content" style="min-height:80px" placeholder="輸入文字..."></textarea></div>
+          <div id="tpl-image-fields" style="display:none"><label>圖片 URL</label><input placeholder="https://..."><label style="margin-top:7px">預覽圖 URL</label><input placeholder="https://...preview.jpg"></div>
+          <div id="tpl-giga-fields" style="display:none"><label>Giga 圖片 URL</label><input placeholder="https://...giga.jpg"><label style="margin-top:7px">點擊連結</label><input placeholder="https://..."></div>
+          <div id="tpl-flex-fields" style="display:none">
+            <div style="display:flex;gap:6px;margin-bottom:8px">
+              <button class="btn btn-sm" onclick="showAiGen()"><i class="ti ti-sparkles"></i> AI 生成 Flex</button>
+              <button class="btn btn-sm" onclick="document.getElementById('tpl-ai-section').style.display='none';document.getElementById('tpl-json-section').style.display='block'">貼入 JSON</button>
+            </div>
+            <div id="tpl-ai-section" style="display:none;background:var(--gold-bg);border:1px solid var(--gold-bdr);border-radius:var(--r-sm);padding:10px 12px;margin-bottom:8px">
+              <div style="font-size:11px;color:var(--t3);margin-bottom:6px">描述需求，AI 生成 Flex JSON</div>
+              <textarea id="ai-prompt" style="min-height:60px;background:var(--bg-input)" placeholder="例：識富 6/24 論壇邀請卡，深色商務調，含報名按鈕"></textarea>
+              <div class="btns" style="margin-top:8px">
+                <button class="btn btn-gold btn-sm" onclick="runAiGen()"><i class="ti ti-sparkles"></i> 生成</button>
+                <span id="ai-spinner" style="display:none;align-items:center;gap:6px"><span class="spinner"></span><span style="font-size:11px;color:var(--t3)">生成中...</span></span>
+              </div>
+              <div id="ai-result-wrap" style="display:none;margin-top:8px">
+                <div style="font-size:11px;color:var(--t3);margin-bottom:4px">生成結果（可直接編輯）</div>
+                <div class="ai-output" id="ai-result-box" contenteditable="true"></div>
+                <button class="btn btn-sm" style="margin-top:6px" onclick="copyAiToJson()"><i class="ti ti-copy"></i> 複製到 JSON</button>
+              </div>
+            </div>
+            <div id="tpl-json-section"><label>Flex JSON（bubble 或 carousel）</label><textarea id="tpl-flex-json" class="json-area" style="min-height:140px" placeholder='{"type":"bubble","header":{...},"body":{...},"footer":{...}}' oninput="previewFlex(this.value)"></textarea></div>
+          </div>
+          <div class="btns" style="margin-top:12px">
+            <button class="btn" onclick="previewTpl()"><i class="ti ti-eye"></i> 預覽</button>
+            <button class="btn btn-primary" onclick="saveTpl()"><i class="ti ti-device-floppy"></i> 儲存範本</button>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-side">
+        <div class="card">
+          <div class="sec-title">範本預覽</div>
+          <div id="tpl-preview-area"><div class="phone-mock" style="text-align:center;padding:20px 12px;color:var(--t3);font-size:11px">選擇範本後顯示</div></div>
+          <div id="tpl-preview-json" style="display:none;margin-top:8px">
+            <div class="sec-title" style="margin-bottom:4px">JSON 結構</div>
+            <div class="ai-output" id="tpl-preview-json-content" style="max-height:180px;overflow:auto;font-size:10px"></div>
+          </div>
+          <div style="margin-top:8px;display:none" id="tpl-preview-actions">
+            <button class="btn btn-sm" onclick="alert('已加入群發')"><i class="ti ti-send"></i> 加入群發</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- sub: 圖文選單 -->
+  <div id="sub-richmenu" class="sub-panel" style="display:none">
+    <div class="sidebar-layout">
+      <div class="sidebar-main">
+        <div class="card">
+          <div class="sec-title">選單設定</div>
+          <div class="row" style="margin-bottom:10px"><div class="col"><label>選單名稱</label><input value="2026 論壇選單"></div><div class="col"><label>收合文字</label><input value="開啟選單"></div></div>
+          <div style="margin-bottom:10px"><label>版型</label><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+            <button class="btn btn-sm" id="ly-3" onclick="setLy(3,1,this)" style="background:var(--gold-bg);border-color:var(--gold-bdr);color:#7A5E2A">3格</button>
+            <button class="btn btn-sm" id="ly-4" onclick="setLy(2,2,this)">2×2格</button>
+            <button class="btn btn-sm" id="ly-6" onclick="setLy(3,2,this)">3×2格</button>
+            <button class="btn btn-sm" id="ly-1" onclick="setLy(1,1,this)">大圖</button>
+          </div></div>
+          <div style="margin-bottom:10px"><label>底圖上傳</label><input type="file" accept="image/*" style="font-size:11px"></div>
+          <hr class="divider"><div class="sec-title">按鈕動作</div>
+          <div id="btn-cfg"></div>
+          <div class="btns" style="margin-top:10px"><button class="btn"><i class="ti ti-upload"></i> 上傳選單</button><button class="btn btn-primary"><i class="ti ti-check"></i> 設為預設</button></div>
+        </div>
+      </div>
+      <div class="sidebar-side">
+        <div class="card">
+          <div class="sec-title">版面預覽</div>
+          <div style="background:var(--bg-sub);border:1px dashed var(--bd2);border-radius:var(--r-sm);padding:10px;text-align:center;min-height:80px;display:flex;align-items:center;justify-content:center" id="rm-prev"><div style="font-size:11px;color:var(--t3)">選版型後顯示</div></div>
+          <hr class="divider"><div class="sec-title">已上傳選單</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:7px 9px;background:var(--bg-sub);border:1px solid var(--bd);border-radius:var(--r-sm)"><span>2026 論壇選單 <span class="badge b-green" style="margin-left:4px">預設</span></span><div style="display:flex;gap:4px"><button class="btn btn-sm">編輯</button><button class="btn btn-sm btn-danger">刪除</button></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:7px 9px;background:var(--bg-sub);border:1px solid var(--bd);border-radius:var(--r-sm)"><span>2025 年會選單</span><div style="display:flex;gap:4px"><button class="btn btn-sm">編輯</button><button class="btn btn-sm btn-danger">刪除</button></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- sub: 自動回應訊息 -->
+  <div id="sub-autoreply" class="sub-panel" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="font-size:12px;color:var(--t3)">設定 message / postback 觸發後的自動回應內容</div>
+      <button class="btn btn-primary btn-sm" onclick="document.getElementById('ar-editor').style.display='block'"><i class="ti ti-plus"></i> 新增規則</button>
+    </div>
+    <div id="ar-list"></div>
+    <div class="card" id="ar-editor" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div class="sec-title" style="margin-bottom:0">新增自動回應規則</div>
+        <button class="btn btn-sm" onclick="document.getElementById('ar-editor').style.display='none'"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="row" style="margin-bottom:10px">
+        <div class="col"><label>規則名稱</label><input id="ar-name" placeholder="例：報名確認"></div>
+        <div class="col"><label>觸發類型</label>
+          <select id="ar-trigger-type" onchange="updArTrigger()">
+            <option value="message">message（關鍵字觸發）</option>
+            <option value="postback">postback（按鈕回傳）</option>
+          </select>
+        </div>
+      </div>
+      <div id="ar-trigger-msg"><label>觸發關鍵字（逗號分隔）</label><input placeholder="例：報名, 我要報名"></div>
+      <div id="ar-trigger-post" style="display:none"><label>Postback Data（精確比對）</label><input placeholder="例：action=register&event=forum_0624"></div>
+      <hr class="divider"><div class="sec-title">回應內容</div>
+      <div style="margin-bottom:8px">
+        <label>內容來源</label>
+        <div style="display:flex;gap:6px;margin-top:4px">
+          <button class="btn btn-sm" id="ar-src-custom" onclick="setArSrc('custom',this)" style="background:var(--gold-bg);border-color:var(--gold-bdr);color:#7A5E2A">自行填寫</button>
+          <button class="btn btn-sm" id="ar-src-tpl" onclick="setArSrc('tpl',this)">選擇訊息範本</button>
+        </div>
+      </div>
+      <div id="ar-content-custom">
+        <div style="margin-bottom:8px"><label>回應類型</label>
+          <div style="display:flex;gap:6px;margin-top:4px">
+            <button class="msg-type-btn sel" onclick="setArType('text',this)"><i class="ti ti-typography"></i> 文字</button>
+            <button class="msg-type-btn" onclick="setArType('flex',this)"><i class="ti ti-code"></i> Flex</button>
+            <button class="msg-type-btn" onclick="setArType('image',this)"><i class="ti ti-photo"></i> 圖片</button>
+          </div>
+        </div>
+        <div id="ar-text-field"><label>回應文字</label><textarea style="min-height:80px" placeholder="感謝報名！已收到申請，活動詳情將另行通知。"></textarea></div>
+        <div id="ar-flex-field" style="display:none"><label>Flex JSON</label><textarea class="json-area" placeholder='{"type":"bubble","body":{...}}'></textarea></div>
+        <div id="ar-image-field" style="display:none"><label>圖片 URL</label><input placeholder="https://..."></div>
+      </div>
+      <div id="ar-content-tpl" style="display:none">
+        <label>選擇範本</label>
+        <select id="ar-tpl-select" onchange="updArTplPreview()">
+          <option value="">— 選擇範本 —</option>
+          <option>6/24 論壇邀請 Flex 卡</option><option>會員建檔提醒</option><option>香港考察活動通知</option>
+        </select>
+        <div id="ar-tpl-preview" style="display:none;margin-top:8px">
+          <div class="phone-mock" style="font-size:11px;color:var(--t2);text-align:center;padding:12px"><i class="ti ti-bookmark" style="font-size:20px;color:var(--gold)"></i><div style="margin-top:4px" id="ar-tpl-preview-name"></div><div style="font-size:10px;color:var(--t3);margin-top:3px">點擊下方按鈕可更換範本</div></div>
+        </div>
+      </div>
+      <div class="btns" style="margin-top:12px">
+        <button class="btn btn-primary" onclick="saveAr()"><i class="ti ti-device-floppy"></i> 儲存規則</button>
+        <button class="btn" onclick="document.getElementById('ar-editor').style.display='none'">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- sub: 選單分眾 -->
+  <div id="sub-rmseg" class="sub-panel" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="filter-bar" style="margin-bottom:0">
+        <select style="width:auto;font-size:11px"><option>所有選單</option><option>2026 論壇選單</option></select>
+        <select style="width:auto;font-size:11px"><option>所有狀態</option><option>進行中</option><option>關閉</option></select>
+        <input type="text" placeholder="搜尋..." style="min-width:120px;font-size:11px;width:auto">
+      </div>
+      <button class="btn btn-primary btn-sm"><i class="ti ti-plus"></i> 新增設定</button>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>排序</th><th>選單名稱</th><th>縮圖</th><th>套用分眾</th><th>人數</th><th>狀態</th><th>期間</th><th>最後更新</th><th>操作</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="#" style="color:var(--nav);text-decoration:none" onclick="return false">2026 論壇選單</a></td><td><div class="rm-thumb"><i class="ti ti-layout-grid" style="font-size:12px;color:var(--t3)"></i></div></td><td><span class="badge b-gold">VIP 會員</span> <span class="badge b-teal">論壇已報名</span></td><td>97</td><td><span class="badge b-green">開啟 進行中</span></td><td style="font-size:11px;color:var(--t3)">2025/08/05<br>→ 2030/01/01</td><td style="font-size:11px;color:var(--t3)">Ariel Wu</td><td><div style="display:flex;gap:4px"><button class="btn btn-sm"><i class="ti ti-edit"></i></button><button class="btn btn-sm btn-danger"><i class="ti ti-trash"></i></button></div></td></tr>
+        <tr><td>2</td><td><a href="#" style="color:var(--nav);text-decoration:none" onclick="return false">好友歡迎選單</a></td><td><div class="rm-thumb"><i class="ti ti-layout-grid" style="font-size:12px;color:var(--t3)"></i></div></td><td><span class="badge b-gray">非會員好友</span></td><td>25</td><td><span class="badge b-green">開啟 進行中</span></td><td style="font-size:11px;color:var(--t3)">2025/08/05<br>→ 2030/01/01</td><td style="font-size:11px;color:var(--t3)">Sunny 馮永璨</td><td><div style="display:flex;gap:4px"><button class="btn btn-sm"><i class="ti ti-edit"></i></button><button class="btn btn-sm btn-danger"><i class="ti ti-trash"></i></button></div></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ===== 設定 ===== -->
+<div id="panel-settings" class="panel">
+  <div class="sidebar-layout" style="align-items:flex-start">
+    <div class="sidebar-main">
+      <div class="card">
+        <div class="sec-title">LINE API 串接</div>
+        <div style="margin-bottom:10px"><label>Channel Access Token</label>
+          <div style="display:flex;gap:6px"><input type="password" id="line-token" placeholder="Bearer xxxxx..." value="6dziE8CZ/kGEFHxlKYK..." style="flex:1"><button class="btn btn-sm" onclick="toggleVis('line-token','eye-token')"><i class="ti ti-eye" id="eye-token"></i></button></div>
+        </div>
+        <div style="margin-bottom:10px"><label>Channel Secret</label><input type="password" placeholder="Channel Secret"></div>
+        <div style="margin-bottom:10px"><label>Webhook URL</label>
+          <div style="display:flex;gap:6px"><input value="https://script.google.com/macros/s/AKfy.../exec" readonly style="flex:1;background:var(--bg-sub);color:var(--t3)"><button class="btn btn-sm" onclick="alert('已複製')"><i class="ti ti-copy"></i></button></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="status-dot status-ok" id="line-dot"></div>
+          <span style="font-size:11px;color:var(--t3)" id="line-txt">OA 已連線・最後驗證 05/11 10:22</span>
+          <button class="btn btn-sm" style="margin-left:auto" onclick="testLine()"><i class="ti ti-plug"></i> 測試</button>
+        </div>
+        <div class="btns"><button class="btn btn-primary" onclick="alert('已儲存 LINE API 設定')"><i class="ti ti-device-floppy"></i> 儲存設定</button></div>
+      </div>
+      <div class="card">
+        <div class="sec-title">AI 串接設定</div>
+        <div style="margin-bottom:10px"><label>AI 服務商</label>
+          <select id="ai-provider" onchange="updAiModels()"><option value="claude">Claude（Anthropic）</option><option value="gpt">ChatGPT（OpenAI）</option><option value="gemini">Gemini（Google）</option></select>
+        </div>
+        <div style="margin-bottom:10px"><label>API Key</label>
+          <div style="display:flex;gap:6px"><input type="password" id="ai-key" placeholder="sk-ant-..." style="flex:1"><button class="btn btn-sm" onclick="toggleVis('ai-key','eye-ai')"><i class="ti ti-eye" id="eye-ai"></i></button></div>
+        </div>
+        <div style="margin-bottom:10px"><label>模型</label><select id="ai-models"><option>claude-sonnet-4-20250514</option><option>claude-opus-4</option></select></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="status-dot status-idle" id="ai-dot"></div>
+          <span style="font-size:11px;color:var(--t3)" id="ai-txt">尚未驗證</span>
+          <button class="btn btn-sm" style="margin-left:auto" onclick="testAi()"><i class="ti ti-plug"></i> 測試</button>
+        </div>
+        <div style="font-size:11px;color:var(--t3);margin-top:6px">API Key 僅存於本機 localStorage，不會傳至外部伺服器。</div>
+        <div class="btns"><button class="btn btn-primary" onclick="alert('已儲存 AI 設定')"><i class="ti ti-device-floppy"></i> 儲存設定</button></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div class="sec-title" style="margin-bottom:0">後台管理者帳號</div>
+          <button class="btn btn-sm" onclick="addAdmin()"><i class="ti ti-plus"></i> 新增管理者</button>
+        </div>
+        <div style="font-size:11px;color:var(--t3);margin-bottom:10px">可在群發測試時選擇對哪位管理者發送測試訊息</div>
+        <div id="admin-list"></div>
+        <hr class="divider">
+        <div class="sec-title" style="margin-bottom:6px">測試發送預設對象</div>
+        <div id="default-tests"></div>
+        <div class="btns"><button class="btn btn-primary" onclick="alert('已儲存管理者設定')"><i class="ti ti-device-floppy"></i> 儲存設定</button></div>
+      </div>
+    </div>
+    <div class="sidebar-side">
+      <div class="card card-gold">
+        <div class="sec-title">系統狀態</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0;border-bottom:1px solid var(--gold-bdr)"><span>LINE OA</span><span style="display:flex;align-items:center;gap:5px"><div class="status-dot status-ok"></div><span style="color:#2d7a3a;font-size:11px">正常</span></span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0;border-bottom:1px solid var(--gold-bdr)"><span>AI API</span><span style="display:flex;align-items:center;gap:5px"><div class="status-dot status-idle" id="ai-sys-dot"></div><span style="color:var(--t3);font-size:11px" id="ai-sys-txt">未驗證</span></span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0;border-bottom:1px solid var(--gold-bdr)"><span>Webhook</span><span style="display:flex;align-items:center;gap:5px"><div class="status-dot status-ok"></div><span style="color:#2d7a3a;font-size:11px">已啟用</span></span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0"><span>管理者帳號</span><span style="color:var(--nav);font-size:11px" id="admin-count">3 人</span></div>
+        </div>
+        <hr class="divider">
+        <div class="sec-title" style="margin-bottom:4px">本月使用量</div>
+        <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:4px"><span style="font-size:22px;font-weight:500;color:var(--nav);font-family:'Cormorant Garamond',serif">1,243</span><span style="font-size:11px;color:var(--t3)">/ 10,000 則</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:12%"></div></div>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px">剩餘 8,757 則</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ADMINS=[
+  {id:1,name:'Ariel Wu',role:'管理者',uid:'Ua1b2c3...',defTest:true},
+  {id:2,name:'Chester Chen',role:'管理者',uid:'Ub2c3d4...',defTest:false},
+  {id:3,name:'Kate Huang',role:'管理者',uid:'Uc3d4e5...',defTest:false},
+];
+let selTests=new Set([1]);
+const TPLS=[
+  {name:'6/24 論壇邀請 Flex 卡',type:'flex',desc:'深色商務 Bubble，含報名按鈕'},
+  {name:'會員建檔提醒',type:'text',desc:'純文字，附個人化連結'},
+  {name:'香港考察活動通知',type:'image',desc:'橫幅圖片 + 連結'},
+  {name:'Giga 全圖邀請',type:'giga',desc:'2500px 全幅圖文訊息'},
+];
+const TPLBADGE={text:'b-gray',image:'b-warn',flex:'b-blue',giga:'b-teal'};
+const TPLICON={text:'ti-typography',image:'ti-photo',flex:'ti-code',giga:'ti-file-description'};
+const TPLQ={forum:'親愛的識富會員，\n\n2026 國際投資論壇將於 6/24 於台北艾麗希爾頓格芮精選酒店舉行，誠摯邀請您蒞臨出席。',member:'您好，\n\n識富會員資料更新期間已開始，請點選連結完成建檔或更新。',event:'親愛的識富夥伴，\n\n活動報名通知：本次活動名額有限，請儘早完成報名。'};
+const TYPEBADGE={text:'b-gray',image:'b-warn',flex:'b-blue',json:'b-purple',template:'b-teal',video:'b-purple'};
+const TYPELABEL={text:'文字',image:'圖片',flex:'Flex 卡片',json:'JSON',template:'選範本',video:'影片'};
+let blockCount=0;
+const ARS=[
+  {id:1,name:'報名確認回覆',triggerType:'postback',trigger:'action=register&event=forum_0624',srcType:'tpl',content:'6/24 論壇邀請 Flex 卡',enabled:true},
+  {id:2,name:'會員建檔自動導引',triggerType:'message',trigger:'進行會員建檔或更新',srcType:'custom',content:'感謝您的訊息，建檔連結已傳送。',enabled:true},
+  {id:3,name:'活動查詢',triggerType:'message',trigger:'活動, 近期活動',srcType:'custom',content:'識富近期活動請至官網查閱。',enabled:false},
+];
+
+function sw(name,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  if(el)el.classList.add('active');
+  else{document.querySelectorAll('.tab').forEach(t=>{if(t.textContent.includes('設定'))t.classList.add('active');});}
+  const sb=document.getElementById('sub-tabs-assets');
+  if(sb)sb.style.display=name==='assets'?'flex':'none';
+}
+function swSub(name,el){
+  document.querySelectorAll('.sub-panel').forEach(p=>p.style.display='none');
+  document.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sub-'+name).style.display='block';
+  if(el)el.classList.add('active');
+}
+function updTarget(){const v=document.getElementById('bc-target').value;document.getElementById('seg-col').style.display=v==='seg'?'block':'none';document.getElementById('uid-box').style.display=v==='uid'?'block':'none';document.getElementById('tc').innerHTML=v==='all'?'預計發送：<strong style="color:var(--nav)">168 人</strong>（所有好友）':v==='seg'?'預計發送：<strong style="color:var(--nav)">42 人</strong>（VIP 會員）':'預計發送：依清單而定';}
+function addBlock(){if(blockCount>=5){alert('最多 5 個元件');return;}blockCount++;const id='blk'+blockCount;const div=document.createElement('div');div.className='msg-block';div.id=id;div.innerHTML=`<div class="msg-block-hdr"><div class="flex-row"><span class="badge b-gray" style="font-size:10px">${blockCount}</span><span id="${id}-lbl" style="font-size:12px;color:var(--t3)">選擇類型</span></div><button class="btn btn-sm btn-danger" onclick="removeBlock('${id}')"><i class="ti ti-trash"></i></button></div><div class="msg-type-row"><button class="msg-type-btn" onclick="sBT('${id}','text',this)"><i class="ti ti-typography"></i> 文字</button><button class="msg-type-btn" onclick="sBT('${id}','image',this)"><i class="ti ti-photo"></i> 圖片</button><button class="msg-type-btn" onclick="sBT('${id}','video',this)"><i class="ti ti-video"></i> 影片</button><button class="msg-type-btn" onclick="sBT('${id}','template',this)"><i class="ti ti-bookmark"></i> 選範本</button><button class="msg-type-btn" onclick="sBT('${id}','json',this)"><i class="ti ti-braces"></i> JSON</button></div><div class="msg-block-body" id="${id}-body" style="display:none"></div>`;document.getElementById('blocks-container').appendChild(div);if(blockCount>=5)document.getElementById('add-block-btn').disabled=true;updNums();}
+function removeBlock(id){document.getElementById(id).remove();blockCount=document.querySelectorAll('.msg-block').length;document.getElementById('add-block-btn').disabled=false;updNums();updPreview();}
+function updNums(){document.querySelectorAll('.msg-block').forEach((b,i)=>{const bj=b.querySelector('.badge');if(bj)bj.textContent=i+1;});}
+function sBT(id,type,btn){btn.closest('.msg-type-row').querySelectorAll('.msg-type-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');const lbl=document.getElementById(id+'-lbl');if(lbl)lbl.innerHTML=`<span class="badge ${TYPEBADGE[type]}" style="font-size:10px">${TYPELABEL[type]}</span>`;const body=document.getElementById(id+'-body');body.style.display='block';if(type==='text')body.innerHTML=`<label>訊息文字</label><textarea style="min-height:64px" oninput="updPreview()" placeholder="輸入文字..."></textarea>`;else if(type==='image')body.innerHTML=`<label>圖片 URL</label><input placeholder="https://..."><label style="margin-top:6px">預覽圖 URL</label><input placeholder="https://...">`;else if(type==='video')body.innerHTML=`<label>影片 URL（MP4）</label><input placeholder="https://..."><label style="margin-top:6px">預覽圖 URL</label><input placeholder="https://...">`;else if(type==='template')body.innerHTML=`<label>選擇訊息範本</label><select onchange="updPreview()"><option value="">— 選擇 —</option><option>6/24 論壇邀請 Flex 卡</option><option>會員建檔提醒</option><option>香港考察活動通知</option></select>`;else if(type==='json')body.innerHTML=`<label>貼入 Flex JSON</label><textarea class="json-area" style="min-height:100px" placeholder='{"type":"bubble","body":{...}}'></textarea>`;updPreview();}
+function updPreview(){const area=document.getElementById('bc-preview-area');const blocks=document.querySelectorAll('.msg-block');if(!blocks.length){area.innerHTML='<div class="phone-mock" style="text-align:center;padding:20px;color:var(--t3)">新增元件後顯示</div>';return;}let html='';blocks.forEach((b,i)=>{const body=b.querySelector('[id$="-body"]');if(!body||body.style.display==='none')return;const ta=body.querySelector('textarea');const sel=body.querySelector('select');const lbl=b.querySelector('.badge');const t=lbl?lbl.textContent:'';html+=`<div class="phone-mock" style="margin-bottom:6px">`;if(t==='文字'&&ta&&ta.value)html+=`<div style="white-space:pre-wrap;font-size:12px">${ta.value}</div>`;else if(t==='選範本'&&sel&&sel.value)html+=`<div style="font-size:12px;color:var(--nav)">[範本] ${sel.value}</div>`;else if(t==='JSON'||t==='Flex 卡片')html+=`<div style="font-size:11px;color:var(--t3);text-align:center;padding:8px"><i class="ti ti-code" style="font-size:18px;color:var(--gold)"></i><br>Flex 訊息</div>`;else if(t==='圖片')html+=`<div style="font-size:11px;color:var(--t3);text-align:center;padding:8px"><i class="ti ti-photo" style="font-size:18px;color:var(--gold)"></i><br>圖片訊息</div>`;else if(t==='影片')html+=`<div style="font-size:11px;color:var(--t3);text-align:center;padding:8px"><i class="ti ti-video" style="font-size:18px;color:var(--gold)"></i><br>影片訊息</div>`;else html+=`<div style="font-size:11px;color:var(--t3);text-align:center;padding:6px">元件 ${i+1}（填入後顯示）</div>`;html+='</div>';});area.innerHTML=html||'<div class="phone-mock" style="color:var(--t3);text-align:center;padding:16px">填入後顯示</div>';}
+function loadTpl(k){if(!blockCount)addBlock();const last=document.querySelector('.msg-block:last-child');if(!last)return;const tb=last.querySelector('.msg-type-btn');if(tb)sBT(last.id,'text',tb);const ta=last.querySelector('textarea');if(ta){ta.value=TPLQ[k];updPreview();}}
+function showTestPicker(){document.getElementById('test-picker-btns').innerHTML=ADMINS.map(a=>`<button class="test-target-btn ${selTests.has(a.id)?'sel':''}" onclick="togTest(${a.id},this)">${a.name}</button>`).join('');document.getElementById('test-picker').style.display='block';}
+function togTest(id,btn){if(selTests.has(id)){selTests.delete(id);btn.classList.remove('sel');}else{selTests.add(id);btn.classList.add('sel');}}
+function doTestSend(){const names=[...selTests].map(id=>ADMINS.find(a=>a.id===id)?.name).filter(Boolean).join('、');if(!names)return alert('請選擇至少一位對象');alert('已發送測試訊息給：'+names);document.getElementById('test-picker').style.display='none';}
+function renderTpls(){const g=document.getElementById('tpl-grid');g.innerHTML=TPLS.map((t,i)=>`<div class="tpl-card" onclick="selTpl(${i})"><div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><i class="ti ${TPLICON[t.type]||'ti-file'}" style="font-size:16px;color:var(--t3)"></i><span class="badge ${TPLBADGE[t.type]}">${t.type}</span></div><div style="font-size:12px;font-weight:500;margin-bottom:3px">${t.name}</div><div style="font-size:11px;color:var(--t3)">${t.desc}</div><div style="display:flex;gap:4px;margin-top:8px"><button class="btn btn-sm" onclick="event.stopPropagation();selTpl(${i})"><i class="ti ti-eye"></i></button><button class="btn btn-sm" onclick="event.stopPropagation();alert('加入群發')"><i class="ti ti-send"></i></button><button class="btn btn-sm btn-danger" onclick="event.stopPropagation();if(confirm('刪除？')){TPLS.splice(${i},1);renderTpls()}"><i class="ti ti-trash"></i></button></div></div>`).join('');}
+renderTpls();
+function selTpl(i){document.querySelectorAll('.tpl-card').forEach((c,j)=>c.classList.toggle('sel',j===i));const t=TPLS[i];const pa=document.getElementById('tpl-preview-area');const pj=document.getElementById('tpl-preview-json');if(t.type==='text'){pa.innerHTML=`<div class="phone-mock" style="white-space:pre-wrap;font-size:12px">${TPLQ.forum}</div>`;pj.style.display='none';}else if(t.type==='image'){pa.innerHTML=`<div class="phone-mock" style="text-align:center;padding:16px"><i class="ti ti-photo" style="font-size:28px;color:var(--t3)"></i></div>`;pj.style.display='none';}else{pa.innerHTML=`<div class="phone-mock" style="text-align:center;padding:12px"><i class="ti ${TPLICON[t.type]||'ti-file'}" style="font-size:24px;color:var(--gold)"></i><div style="font-size:11px;color:var(--nav);margin-top:4px">${t.name}</div></div>`;pj.style.display='block';document.getElementById('tpl-preview-json-content').textContent='{"type":"flex","altText":"'+t.name+'","contents":{"type":"bubble","body":{"type":"box","layout":"vertical","contents":[{"type":"text","text":"'+t.name+'"}]}}}';}document.getElementById('tpl-preview-actions').style.display='flex';}
+function showNewTpl(){document.getElementById('tpl-editor').style.display='block';document.getElementById('tpl-name').value='';document.getElementById('tpl-type').value='text';switchTplEditor();}
+function switchTplEditor(){const t=document.getElementById('tpl-type').value;['text','image','giga','flex'].forEach(x=>{const el=document.getElementById('tpl-'+x+'-fields');if(el)el.style.display=x===t?'block':'none';});}
+function showAiGen(){document.getElementById('tpl-ai-section').style.display='block';document.getElementById('tpl-json-section').style.display='none';}
+async function runAiGen(){const prompt=document.getElementById('ai-prompt').value.trim();if(!prompt){alert('請輸入描述');return;}document.getElementById('ai-spinner').style.display='inline-flex';document.getElementById('ai-result-wrap').style.display='none';try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:`你是 LINE Flex Message 專家。根據以下描述生成一個完整的 Flex Message JSON（bubble 類型）。只回傳 JSON，不要任何說明文字或 markdown。\n\n描述：${prompt}`}]})});const data=await res.json();const text=data.content?.[0]?.text||'{}';document.getElementById('ai-result-box').textContent=text.replace(/```json|```/g,'').trim();document.getElementById('ai-result-wrap').style.display='block';}catch(e){alert('生成失敗：'+e.message);}document.getElementById('ai-spinner').style.display='none';}
+function copyAiToJson(){const v=document.getElementById('ai-result-box').textContent;document.getElementById('tpl-json-section').style.display='block';document.getElementById('tpl-flex-json').value=v;previewFlex(v);}
+function previewFlex(v){if(!v.trim())return;try{JSON.parse(v);document.getElementById('tpl-preview-area').innerHTML='<div class="phone-mock" style="text-align:center;padding:12px"><i class="ti ti-code" style="font-size:22px;color:var(--gold)"></i><div style="font-size:11px;color:var(--nav);margin-top:4px">JSON 格式正確</div></div>';document.getElementById('tpl-preview-json').style.display='block';document.getElementById('tpl-preview-json-content').textContent=v.slice(0,400);}catch(e){document.getElementById('tpl-preview-area').innerHTML='<div class="phone-mock" style="text-align:center;padding:12px"><i class="ti ti-alert-triangle" style="font-size:18px;color:#c0392b"></i><div style="font-size:11px;color:#c0392b;margin-top:4px">JSON 格式錯誤</div></div>';}}
+function saveTpl(){const name=document.getElementById('tpl-name').value.trim();const type=document.getElementById('tpl-type').value;if(!name){alert('請填入範本名稱');return;}TPLS.unshift({name,type,desc:'自訂範本'});renderTpls();document.getElementById('tpl-editor').style.display='none';alert('已儲存：'+name);}
+function previewTpl(){const name=document.getElementById('tpl-name').value||'（未命名）';const type=document.getElementById('tpl-type').value;document.getElementById('tpl-preview-area').innerHTML=`<div class="phone-mock" style="text-align:center;padding:14px"><i class="ti ${TPLICON[type]||'ti-file'}" style="font-size:22px;color:var(--gold)"></i><div style="font-size:12px;color:var(--nav);margin-top:4px">${name}</div></div>`;}
+function setLy(cols,rows,btn){document.querySelectorAll('[id^="ly-"]').forEach(b=>{b.style.background='';b.style.borderColor='';b.style.color='';});btn.style.background='var(--gold-bg)';btn.style.borderColor='var(--gold-bdr)';btn.style.color='#7A5E2A';const n=cols*rows;document.getElementById('rm-prev').innerHTML=`<div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:3px;width:100%">${Array.from({length:n},(_,i)=>`<div style="padding:7px 4px;background:var(--bg-card);border-radius:3px;border:1px solid var(--bd);text-align:center;font-size:11px;color:var(--t3)">按鈕${i+1}</div>`).join('')}</div>`;const labels=['論壇報名','會員建檔','聯絡我們','最新活動','更多資訊','回到首頁'];document.getElementById('btn-cfg').innerHTML=Array.from({length:n},(_,i)=>`<div style="padding:7px 0;border-bottom:1px solid var(--bd)"><div style="font-size:11px;font-weight:500;margin-bottom:4px">按鈕 ${i+1}</div><div class="row"><div class="col"><label>標籤</label><input value="${labels[i]||''}"></div><div class="col"><label>類型</label><select><option>message</option><option>postback</option><option>uri</option></select></div></div><div><label>內容</label><input placeholder="訊息 / data / URL"></div></div>`).join('');}
+setLy(3,1,document.getElementById('ly-3'));
+function renderARs(){const el=document.getElementById('ar-list');if(!el)return;el.innerHTML=ARS.map((r,i)=>`<div class="ar-item"><div class="ar-item-hdr"><div class="flex-row"><span class="badge ${r.triggerType==='postback'?'b-purple':'b-teal'}" style="font-size:10px">${r.triggerType}</span><strong style="font-size:13px">${r.name}</strong><span class="badge ${r.enabled?'b-green':'b-gray'}" style="font-size:10px">${r.enabled?'啟用':'停用'}</span></div><div style="display:flex;gap:4px"><button class="btn btn-sm" onclick="ARS[${i}].enabled=!ARS[${i}].enabled;renderARs()"><i class="ti ti-${r.enabled?'player-pause':'player-play'}"></i></button><button class="btn btn-sm"><i class="ti ti-edit"></i></button><button class="btn btn-sm btn-danger" onclick="if(confirm('刪除？')){ARS.splice(${i},1);renderARs()}"><i class="ti ti-trash"></i></button></div></div><div style="font-size:11px;color:var(--t3);margin-bottom:4px">觸發：<code style="background:var(--bg-sub);padding:1px 5px;border-radius:3px">${r.trigger}</code></div><div style="font-size:11px;color:var(--t3)">回應：${r.srcType==='tpl'?`[範本] ${r.content}`:r.content.slice(0,60)}</div></div>`).join('');}
+renderARs();
+function updArTrigger(){const t=document.getElementById('ar-trigger-type').value;document.getElementById('ar-trigger-msg').style.display=t==='message'?'block':'none';document.getElementById('ar-trigger-post').style.display=t==='postback'?'block':'none';}
+function setArSrc(src,btn){document.querySelectorAll('[id^="ar-src-"]').forEach(b=>{b.style.background='';b.style.borderColor='';b.style.color='';});btn.style.background='var(--gold-bg)';btn.style.borderColor='var(--gold-bdr)';btn.style.color='#7A5E2A';document.getElementById('ar-content-custom').style.display=src==='custom'?'block':'none';document.getElementById('ar-content-tpl').style.display=src==='tpl'?'block':'none';}
+function setArType(t,btn){document.querySelectorAll('#ar-content-custom .msg-type-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');['text','flex','image'].forEach(x=>{const el=document.getElementById('ar-'+x+'-field');if(el)el.style.display=x===t?'block':'none';});}
+function updArTplPreview(){const v=document.getElementById('ar-tpl-select').value;const pv=document.getElementById('ar-tpl-preview');const pvn=document.getElementById('ar-tpl-preview-name');if(v){pv.style.display='block';pvn.textContent=v;}else pv.style.display='none';}
+function saveAr(){const name=document.getElementById('ar-name').value.trim();if(!name){alert('請填入規則名稱');return;}ARS.push({id:Date.now(),name,triggerType:'message',trigger:'',srcType:'custom',content:'',enabled:true});renderARs();document.getElementById('ar-editor').style.display='none';alert('已儲存：'+name);}
+function renderAdmins(){const el=document.getElementById('admin-list');if(!el)return;el.innerHTML=ADMINS.map((a,i)=>`<div class="admin-item"><div class="avatar" style="font-size:10px">${a.name[0]}</div><div style="flex:1"><div style="font-size:12px;font-weight:500">${a.name}</div><div class="admin-uid">${a.uid}</div></div><span class="badge b-navy" style="font-size:10px">${a.role}</span><button class="btn btn-sm btn-danger" onclick="if(confirm('移除？')){ADMINS.splice(${i},1);renderAdmins();}"><i class="ti ti-trash"></i></button></div>`).join('');const dt=document.getElementById('default-tests');if(dt)dt.innerHTML=ADMINS.map(a=>`<label style="display:inline-flex;align-items:center;gap:6px;font-size:12px;margin-right:12px;margin-bottom:6px;cursor:pointer"><input type="checkbox" ${a.defTest?'checked':''} onchange="ADMINS.find(x=>x.id===${a.id}).defTest=this.checked"> ${a.name}</label>`).join('');const cnt=document.getElementById('admin-count');if(cnt)cnt.textContent=ADMINS.length+' 人';}
+renderAdmins();
+function addAdmin(){const name=prompt('管理者姓名：');if(!name)return;const uid=prompt('LINE UID（U 開頭）：');if(!uid)return;ADMINS.push({id:Date.now(),name,role:'管理者',uid,defTest:false});renderAdmins();}
+function toggleVis(inputId,eyeId){const inp=document.getElementById(inputId);const eye=document.getElementById(eyeId);inp.type=inp.type==='password'?'text':'password';eye.className=inp.type==='password'?'ti ti-eye':'ti ti-eye-off';}
+function testLine(){const dot=document.getElementById('line-dot');const txt=document.getElementById('line-txt');dot.className='status-dot status-idle';txt.textContent='測試中...';setTimeout(()=>{dot.className='status-dot status-ok';txt.textContent='OA 已連線・驗證成功 '+new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});},1200);}
+function testAi(){const dot=document.getElementById('ai-dot');const txt=document.getElementById('ai-txt');const sysDot=document.getElementById('ai-sys-dot');const sysTxt=document.getElementById('ai-sys-txt');dot.className='status-dot status-idle';txt.textContent='測試中...';setTimeout(()=>{const key=document.getElementById('ai-key').value;if(key){dot.className='status-dot status-ok';txt.textContent='API 連線正常';sysDot.className='status-dot status-ok';sysTxt.textContent='正常';}else{dot.className='status-dot status-err';txt.textContent='請先填入 API Key';}},1000);}
+function updAiModels(){const p=document.getElementById('ai-provider').value;const sel=document.getElementById('ai-models');const m={claude:['claude-sonnet-4-20250514','claude-opus-4'],gpt:['gpt-4o','gpt-4o-mini'],gemini:['gemini-2.5-pro','gemini-2.0-flash']};sel.innerHTML=m[p].map(x=>`<option>${x}</option>`).join('');}
+const allCols=[{key:'name',label:'姓名',show:true},{key:'en',label:'英文名',show:true},{key:'call',label:'稱呼',show:true},{key:'gender',label:'性別',show:false},{key:'birthday',label:'生日',show:false},{key:'attr',label:'屬性',show:true},{key:'membership',label:'會籍',show:true},{key:'region',label:'區域',show:true},{key:'overseas',label:'海外區域',show:false},{key:'tags',label:'興趣標籤',show:false},{key:'invest',label:'投資標籤',show:true},{key:'events',label:'參與活動',show:true},{key:'joined',label:'加入日期',show:true},{key:'uid',label:'UID',show:true},{key:'groupid',label:'Group ID',show:false},{key:'chatid',label:'Chat ID',show:false},{key:'gchatid',label:'Group Chat ID',show:false}];
+const members=[{name:'陳志明',en:'David Chen',call:'志明兄',gender:'男',birthday:'1975-03',attr:'個人會員',membership:'有效',region:'台北',overseas:'—',tags:['閱讀'],invest:['天使投資','科技業'],events:['2026 論壇'],joined:'2021-03',uid:'Ua1b2c3...',groupid:'—',chatid:'—',gchatid:'—'},{name:'林美華',en:'Mei-Hua Lin',call:'美華',gender:'女',birthday:'1968-11',attr:'企業會員',membership:'有效',region:'新竹',overseas:'—',tags:['旅遊'],invest:['半導體'],events:['2026 論壇','香港考察'],joined:'2020-06',uid:'Ub2c3d4...',groupid:'Ca1b2...',chatid:'—',gchatid:'—'},{name:'王大衛',en:'David Wang',call:'大衛',gender:'男',birthday:'1980-07',attr:'個人會員',membership:'失效',region:'台中',overseas:'—',tags:['健身'],invest:['新創'],events:['Q3 聚會'],joined:'2019-11',uid:'Uc3d4e5...',groupid:'—',chatid:'—',gchatid:'—'},{name:'張淑芬',en:'Susan Chang',call:'淑芬姐',gender:'女',birthday:'1985-02',attr:'潛在會員',membership:'無',region:'台北',overseas:'東南亞',tags:['藝術'],invest:['金融業'],events:['—'],joined:'2024-01',uid:'—',groupid:'—',chatid:'—',gchatid:'—'},{name:'李建國',en:'Tom Lee',call:'建國',gender:'男',birthday:'1972-09',attr:'個人會員',membership:'有效',region:'海外',overseas:'美國',tags:['音樂'],invest:['家族辦公室','PE'],events:['2026 論壇','香港考察'],joined:'2022-04',uid:'Ud4e5f6...',groupid:'—',chatid:'Rd1e2...',gchatid:'—'}];
+const attrC={'個人會員':'b-blue','企業會員':'b-purple','潛在會員':'b-warn'};
+const membC={'有效':'b-green','失效':'b-red','無':'b-gray'};
+function renderToggles(){document.getElementById('col-toggles').innerHTML=allCols.map((c,i)=>`<span class="col-toggle ${c.show?'on':''}" onclick="togCol(${i})">${c.label}</span>`).join('');}
+function togCol(i){allCols[i].show=!allCols[i].show;renderToggles();renderMembers();}
+function renderMembers(){const vis=allCols.filter(c=>c.show);document.getElementById('member-thead-row').innerHTML=vis.map(c=>`<th>${c.label}</th>`).join('')+'<th>操作</th>';document.getElementById('member-tbody').innerHTML=members.map(m=>`<tr>${vis.map(c=>{if(c.key==='name')return`<td><div class="flex-row"><div class="avatar">${m.name[0]}</div><strong style="font-size:12px">${m.name}</strong></div></td>`;if(c.key==='attr')return`<td><span class="badge ${attrC[m.attr]}">${m.attr}</span></td>`;if(c.key==='membership')return`<td><span class="badge ${membC[m.membership]}">${m.membership}</span></td>`;if(c.key==='tags'||c.key==='invest')return`<td>${m[c.key].map(t=>`<span class="tag">${t}</span>`).join('')}</td>`;if(c.key==='events')return`<td>${(Array.isArray(m.events)?m.events:[m.events]).map(t=>`<span class="tag">${t}</span>`).join('')}</td>`;const v=m[c.key]||'—';const mono=['uid','groupid','chatid','gchatid'].includes(c.key);return`<td style="${mono?'font-family:monospace;font-size:10px;':''}color:${v==='—'?'var(--t3)':'var(--t2)'}">${v}</td>`}).join('')}<td><div style="display:flex;gap:4px"><button class="btn btn-sm"><i class="ti ti-edit"></i></button><button class="btn btn-sm btn-danger"><i class="ti ti-trash"></i></button></div></td></tr>`).join('');}
+renderToggles();renderMembers();
+addBlock();
+</script>
+</body>
+</html>
