@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LINE 管理後台</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root{
+  --bg:#faf8f5;--bg-card:#fff;--bg-sub:#f3f0eb;--bg-inp:#f7f5f1;
+  --nav:#1B2A4A;--nav2:#253d6b;
+  --gold:#B08D57;--gold-lt:#D4AF7A;--gold-bg:#FBF4E8;--gold-bd:#DFC898;
+  --t1:#1C1C1C;--t2:#4A4A4A;--t3:#888;
+  --bd:#E5E1DA;--bd2:#CCC8C0;
+  --grn:#06C755;--r1:6px;--r2:10px;--r3:14px;
+  --sidebar-w:220px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--t1);font-size:13px;line-height:1.65;min-height:100vh;display:flex;flex-direction:column}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--bg-sub)}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:3px}
+
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:center;gap:12px;padding:0 20px;height:48px;background:var(--nav);flex-shrink:0;z-index:200;position:sticky;top:0}
+.tb-brand{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--gold-lt);letter-spacing:.5px}
+.tb-sub{font-size:10px;color:rgba(255,255,255,.4)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.dot-on{width:7px;height:7px;background:var(--grn);border-radius:50%}
+.tb-st{font-size:11px;color:rgba(255,255,255,.5)}
+.btn-tb{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:var(--r1);border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.7);font-size:11px;cursor:pointer;font-family:inherit}
+.btn-tb:hover{background:rgba(255,255,255,.1)}
+
+/* ── LAYOUT ── */
+.app-body{display:flex;flex:1;min-height:0}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar-w);background:var(--bg-card);border-right:1px solid var(--bd);flex-shrink:0;display:flex;flex-direction:column;overflow-y:auto;position:sticky;top:48px;height:calc(100vh - 48px)}
+.sb-section{padding:8px 0}
+.sb-section-label{font-size:10px;font-weight:500;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;padding:6px 16px 4px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 16px;font-size:12px;color:var(--t2);cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:inherit;transition:all .15s;border-left:3px solid transparent}
+.sb-item i{font-size:15px;flex-shrink:0;color:var(--t3)}
+.sb-item:hover{background:var(--bg-sub);color:var(--t1)}
+.sb-item.active{background:var(--gold-bg);color:var(--nav);font-weight:500;border-left-color:var(--gold)}
+.sb-item.active i{color:var(--gold)}
+.sb-divider{height:1px;background:var(--bd);margin:4px 12px}
+
+/* ── CONTENT ── */
+.content{flex:1;overflow-y:auto;min-width:0}
+.page{display:none;padding:18px 22px}.page.active{display:block}
+
+/* ── PAGE HEADER ── */
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.ph-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:var(--nav)}
+.ph-sub{font-size:11px;color:var(--t3);margin-top:1px}
+
+/* ── CARDS ── */
+.card{background:var(--bg-card);border:1px solid var(--bd);border-radius:var(--r3);padding:16px;margin-bottom:12px}
+.card-gold{border-color:var(--gold-bd);background:var(--gold-bg)}
+
+/* ── FORM ── */
+label{display:block;font-size:11px;color:var(--t3);margin-bottom:3px}
+input,select,textarea{width:100%;background:var(--bg-inp);border:1px solid var(--bd);border-radius:var(--r1);color:var(--t1);padding:7px 10px;font-size:12px;font-family:inherit;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
+textarea{resize:vertical}select option{background:#fff}
+input[type=radio],input[type=checkbox]{width:auto;accent-color:var(--nav)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:var(--r1);border:1px solid var(--bd2);background:var(--bg-card);color:var(--t2);font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn:hover{background:var(--bg-sub);color:var(--t1)}
+.bp{background:var(--nav);border-color:var(--nav);color:#fff}.bp:hover{background:var(--nav2)}
+.bg{background:var(--gold);border-color:var(--gold);color:#fff}.bg:hover{background:var(--gold-lt)}
+.bd2{border-color:#d4938a;color:#c0392b;background:transparent}.bd2:hover{background:#fdf0ee}
+.bs{padding:3px 9px;font-size:11px}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+/* ── BADGES ── */
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.b-gold{background:var(--gold-bg);color:#7A5E2A;border:1px solid var(--gold-bd)}
+.b-green{background:#edf6ee;color:#2d7a3a}.b-red{background:#fdf0ee;color:#c0392b}
+.b-blue{background:#eef4fb;color:#1B5FA5}.b-gray{background:#f2f0eb;color:#666}
+.b-purple{background:#f2eefb;color:#5B3DA8}.b-warn{background:#fdf5e8;color:#8C5E00}
+.b-teal{background:#eaf7f4;color:#1A7A65}.b-navy{background:#e8ecf5;color:var(--nav)}
+.b-line{background:#e8faf0;color:#057a3a;border:1px solid #a5d8b8}
+.b-grp{background:#e8f4fb;color:#1565a0}
+.b-blocked{background:#fdf0ee;color:#c0392b}
+.b-none{background:#f5f5f5;color:#999}
+
+/* ── TABLE ── */
+.tw{overflow-x:auto;border:1px solid var(--bd);border-radius:var(--r2)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{padding:7px 9px;text-align:left;background:var(--bg-sub);font-weight:500;color:var(--t3);border-bottom:1px solid var(--bd);white-space:nowrap;font-size:11px;cursor:pointer;user-select:none}
+th:hover{color:var(--t2)}
+.si::after{content:'⇅';font-size:9px;margin-left:3px;opacity:.4}
+th.sa .si::after{content:'▲';opacity:1}
+th.sd .si::after{content:'▼';opacity:1}
+td{padding:7px 9px;border-bottom:1px solid var(--bd);vertical-align:middle;color:var(--t2)}
+tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg-sub)}
+
+/* ── LAYOUT UTILS ── */
+.row{display:flex;gap:10px;flex-wrap:wrap}.col{flex:1;min-width:100px}
+.sl{display:flex;gap:14px;align-items:flex-start}
+.sm{flex:1.5;min-width:260px}.ss{flex:1;min-width:180px}
+.dvd{border:none;border-top:1px solid var(--bd);margin:12px 0}
+.fb{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.fb select,.fb input{width:auto;min-width:90px;font-size:11px}
+.st{font-size:10px;font-weight:500;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-bottom:14px}
+.stat{background:var(--bg-sub);border:1px solid var(--bd);border-radius:var(--r2);padding:12px 14px}
+.sv{font-size:22px;font-weight:500;color:var(--nav);margin-bottom:2px;font-family:'Cormorant Garamond',serif}
+.sl2{font-size:11px;color:var(--t3)}
+.tag{display:inline-block;padding:1px 6px;background:var(--bg-sub);border-radius:20px;font-size:10px;color:var(--t3);margin:1px}
+.ctog{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--bd);cursor:pointer;background:var(--bg-sub);color:var(--t3);margin:2px;transition:all .15s}
+.ctog.on{background:var(--gold-bg);color:#7A5E2A;border-color:var(--gold-bd)}
+.pb{height:5px;background:var(--bg-sub);border-radius:3px;overflow:hidden;margin-top:5px}
+.pf{height:100%;background:var(--gold);border-radius:3px}
+.fr{display:flex;align-items:center;gap:8px}
+.mono{font-family:monospace;font-size:11px}
+.sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.s-ok{background:#4CAF50}.s-err{background:#f44336}.s-idle{background:var(--bd2)}
+.spn{display:inline-block;width:14px;height:14px;border:2px solid var(--bd);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── MSG BLOCKS ── */
+.mblk{border:1px solid var(--bd);border-radius:var(--r2);margin-bottom:8px;overflow:hidden}
+.mhdr{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg-sub);border-bottom:1px solid var(--bd)}
+.mtr{display:flex;gap:5px;flex-wrap:wrap;padding:10px 12px}
+.mtb{padding:5px 10px;border-radius:var(--r1);border:1px solid var(--bd);background:var(--bg-card);font-size:11px;cursor:pointer;color:var(--t3);font-family:inherit;transition:all .15s}
+.mtb:hover{color:var(--t1)}.mtb.sel{background:var(--gold-bg);color:#7A5E2A;border-color:var(--gold-bd)}
+.mbdy{padding:10px 12px}
+.pmk{background:var(--bg-sub);border:1px solid var(--bd);border-radius:var(--r2);padding:10px 12px;font-size:12px;min-height:60px;color:var(--t2)}
+.pbtn{padding:4px 10px;border-radius:20px;border:1px solid var(--gold-bd);background:var(--gold-bg);font-size:11px;cursor:pointer;color:#7A5E2A;font-family:inherit;font-weight:500}
+.pbtn:hover{background:var(--gold);color:#fff}
+
+/* ── TEMPLATE CARDS (list style) ── */
+.tpl-list-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .15s}
+.tpl-list-item:last-child{border-bottom:none}
+.tpl-list-item:hover{background:var(--bg-sub)}
+.tpl-list-item.sel{background:var(--gold-bg)}
+.tpl-li-icon{width:36px;height:36px;border-radius:var(--r1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px}
+.tpl-li-text{flex:1;min-width:0}
+.tpl-li-name{font-size:13px;font-weight:500;color:var(--t1)}
+.tpl-li-desc{font-size:11px;color:var(--t3);margin-top:1px}
+
+/* ── RIGHT DRAWER ── */
+.dr-ov{position:fixed;inset:0;background:rgba(0,0,0,.2);z-index:300;opacity:0;pointer-events:none;transition:opacity .25s}
+.dr-ov.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100vh;width:440px;max-width:95vw;background:var(--bg-card);border-left:1px solid var(--bd);z-index:301;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+.drawer.open{transform:translateX(0)}
+.dr-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--bd);background:var(--nav);flex-shrink:0}
+.dr-title{font-size:14px;font-weight:500;color:var(--gold-lt);font-family:'Cormorant Garamond',serif}
+.dr-body{padding:18px;flex:1;overflow-y:auto}
+.dr-sec{margin-bottom:18px}
+.dr-sec-t{font-size:10px;font-weight:500;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--bd)}
+.ir{display:flex;padding:6px 0;border-bottom:1px solid var(--bg-sub)}
+.ir:last-child{border-bottom:none}
+.il{font-size:11px;color:var(--t3);min-width:80px}
+.iv{font-size:12px;color:var(--t1);flex:1}
+
+/* ── MODAL ── */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:400;display:none;align-items:center;justify-content:center}
+.modal-ov.open{display:flex}
+.modal{background:var(--bg-card);border-radius:var(--r3);width:560px;max-width:95vw;max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--bd)}
+.modal-title{font-size:14px;font-weight:500;color:var(--nav)}
+.modal-body{padding:16px 18px;overflow-y:auto;flex:1}
+.modal-foot{padding:12px 18px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end}
+
+/* ── AUDIENCE CONDITION ── */
+.aud-cond{border:1px solid var(--bd);border-radius:var(--r2);padding:12px;margin-bottom:8px;background:var(--bg-inp)}
+.aud-cond-hdr{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.inc-exc-toggle{display:flex;gap:0;border-radius:var(--r1);overflow:hidden;border:1px solid var(--bd)}
+.iet{padding:3px 10px;font-size:11px;cursor:pointer;border:none;background:var(--bg-sub);color:var(--t3);font-family:inherit;transition:all .15s}
+.iet.sel-inc{background:#edf6ee;color:#2d7a3a;font-weight:500}
+.iet.sel-exc{background:#fdf0ee;color:#c0392b;font-weight:500}
+
+/* ── PROG FLOW ── */
+.flow-v{display:flex;flex-direction:column;align-items:center;gap:0;max-width:500px;margin:0 auto}
+.flow-node{width:100%;border:1px solid var(--bd);border-radius:var(--r2);background:var(--bg-card);overflow:hidden;margin-bottom:0}
+.fn-hdr{display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--bg-sub);border-bottom:1px solid var(--bd)}
+.fn-body{padding:12px 14px}
+.flow-arr{display:flex;justify-content:center;padding:3px 0;color:var(--bd2);font-size:20px}
+.flow-add-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;border:1px dashed var(--bd2);border-radius:var(--r2);width:100%;cursor:pointer;color:var(--t3);font-size:12px;background:transparent;font-family:inherit;justify-content:center;transition:all .15s;margin-top:4px}
+.flow-add-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-bg)}
+.nt-w{background:#e8ecf5;color:var(--nav)}.nt-m{background:var(--gold-bg);color:#7A5E2A}
+
+/* ── JSON ── */
+.jarea{font-family:'Courier New',monospace;font-size:11px;min-height:120px}
+.jout{background:var(--bg-sub);border:1px solid var(--bd);border-radius:var(--r1);padding:10px 12px;font-size:11px;font-family:'Courier New',monospace;min-height:80px;color:var(--nav);white-space:pre-wrap;word-break:break-all}
+
+/* ── MEMBER DETAIL TAGS ── */
+.chan-tags{display:flex;flex-wrap:wrap;gap:4px}
+.chan-cb{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;border:1px solid var(--bd);cursor:pointer;font-size:11px;background:var(--bg-sub);color:var(--t3);transition:all .15s}
+.chan-cb.sel{background:#edf6ee;color:#2d7a3a;border-color:#a5d8b8}
+
+/* ── DATA COMPLETION ── */
+.dc-step{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--bd)}
+.dc-step:last-child{border-bottom:none}
+.dc-num{width:24px;height:24px;border-radius:50%;background:var(--gold-bg);color:#7A5E2A;border:1px solid var(--gold-bd);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;margin-top:2px}
+.dc-content{flex:1}
+.dc-title{font-size:13px;font-weight:500;margin-bottom:4px}
+.dc-desc{font-size:11px;color:var(--t3);line-height:1.7}
+
+/* ── ADMINISTER ── */
+.adm-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-sub);border-radius:var(--r2);border:1px solid var(--bd);margin-bottom:6px}
+/* SEG TAG BUTTONS */
+.seg-tag-btn{padding:4px 11px;border-radius:20px;border:1px solid var(--bd);background:var(--bg-sub);font-size:11px;cursor:pointer;color:var(--t2);font-family:inherit;transition:all .15s}
+.seg-tag-btn:hover{border-color:var(--bd2);color:var(--t1)}
+.seg-tag-btn.inc{background:#edf6ee;color:#2d7a3a;border-color:#a5d8b8;font-weight:500}
+.seg-tag-btn.exc{background:#fdf0ee;color:#c0392b;border-color:#f4b8b0;font-weight:500}
+/* TAG INC/EXC ROW */
+.tag-ie-row{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--bg-sub);border-radius:var(--r1);border:1px solid var(--bd)}
+.ie-toggle{display:flex;border-radius:var(--r1);overflow:hidden;border:1px solid var(--bd);flex-shrink:0}
+.iet{padding:3px 9px;font-size:11px;cursor:pointer;border:none;background:var(--bg-inp);color:var(--t3);font-family:inherit;transition:all .15s}
+.iet.on-inc{background:#edf6ee;color:#2d7a3a;font-weight:500}
+.iet.on-exc{background:#fdf0ee;color:#c0392b;font-weight:500}
+.rmth{width:46px;height:22px;background:var(--bg-sub);border-radius:3px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center}
+.tpbtn{padding:4px 12px;border-radius:20px;border:1px solid var(--bd);background:var(--bg-card);font-size:11px;cursor:pointer;color:var(--t2);font-family:inherit;transition:all .15s}
+.tpbtn:hover{background:var(--bg-sub)}.tpbtn.sel{background:var(--gold-bg);color:#7A5E2A;border-color:var(--gold-bd);font-weight:500}
+</style>
+</head>
+<body>
+
+<!-- OVERLAY & DRAWER -->
+<div class="dr-ov" id="dr-ov" onclick="closeDr()"></div>
+<div class="drawer" id="member-drawer">
+  <div class="dr-hdr"><div class="dr-title" id="dr-name">會員資訊</div><button class="btn-tb" onclick="closeDr()"><i class="ti ti-x"></i></button></div>
+  <div class="dr-body" id="dr-body"></div>
+</div>
+
+<!-- MEMBER LIST MODAL -->
+<div class="modal-ov" id="aud-modal">
+  <div class="modal">
+    <div class="modal-hdr"><div class="modal-title">預計發送名單</div><button class="btn bs" onclick="closeModal('aud-modal')"><i class="ti ti-x"></i></button></div>
+    <div class="modal-body">
+      <div class="fb" style="margin-bottom:8px"><input type="text" placeholder="搜尋姓名..." style="min-width:160px;width:auto"><span style="font-size:11px;color:var(--t3);align-self:center">共 <strong id="aud-count">0</strong> 人</span></div>
+      <div class="tw"><table><thead><tr><th><input type="checkbox" onchange="toggleAllAud(this)"></th><th>會員 ID</th><th>姓名</th><th>發送管道</th></tr></thead><tbody id="aud-tbody"></tbody></table></div>
+    </div>
+    <div class="modal-foot"><button class="btn bp" onclick="closeModal('aud-modal')"><i class="ti ti-check"></i> 確認名單</button></div>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <i class="ti ti-brand-line" style="font-size:20px;color:var(--grn)"></i>
+  <div><div class="tb-brand">LINE 管理後台</div><div class="tb-sub">OA Console</div></div>
+  <div class="tb-right">
+    <div class="dot-on"></div><div class="tb-st">OA 已連線</div>
+    <button class="btn-tb" onclick="nav('settings')"><i class="ti ti-settings"></i> 設定</button>
+  </div>
+</div>
+
+<div class="app-body">
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-section">
+    <div class="sb-section-label">群發</div>
+    <button class="sb-item active" id="sb-broadcast" onclick="nav('broadcast')"><i class="ti ti-send"></i> 新增群發</button>
+    <button class="sb-item" id="sb-broadcast-list" onclick="nav('broadcast-list')"><i class="ti ti-list"></i> 群發管理</button>
+    <button class="sb-item" id="sb-log" onclick="nav('log')"><i class="ti ti-history"></i> 發送紀錄</button>
+    <button class="sb-item" id="sb-datafix" onclick="nav('datafix')"><i class="ti ti-variable"></i> 參數化群發</button>
+  </div>
+  <div class="sb-divider"></div>
+  <div class="sb-section">
+    <div class="sb-section-label">會員與分眾</div>
+    <button class="sb-item" id="sb-members" onclick="nav('members')"><i class="ti ti-table"></i> 會員名單</button>
+    <button class="sb-item" id="sb-segment" onclick="nav('segment')"><i class="ti ti-adjustments-horizontal"></i> 分眾管理</button>
+    <button class="sb-item" id="sb-tags" onclick="nav('tags')"><i class="ti ti-tags"></i> 標籤管理</button>
+  </div>
+  <div class="sb-divider"></div>
+  <div class="sb-section">
+    <div class="sb-section-label">訊息與素材</div>
+    <button class="sb-item" id="sb-tpl" onclick="nav('tpl')"><i class="ti ti-bookmark"></i> 訊息範本庫</button>
+    <button class="sb-item" id="sb-prog" onclick="nav('prog')"><i class="ti ti-player-track-next"></i> 漸進式訊息</button>
+    <button class="sb-item" id="sb-autoreply" onclick="nav('autoreply')"><i class="ti ti-bolt"></i> 自動回應</button>
+    <button class="sb-item" id="sb-richmenu" onclick="nav('richmenu')"><i class="ti ti-layout-grid"></i> 圖文選單</button>
+    <button class="sb-item" id="sb-rmseg" onclick="nav('rmseg')"><i class="ti ti-user-check"></i> 選單分眾</button>
+  </div>
+  <div class="sb-divider"></div>
+  <div class="sb-section">
+    <button class="sb-item" id="sb-settings" onclick="nav('settings')"><i class="ti ti-settings"></i> 系統設定</button>
+  </div>
+</nav>
+
+<!-- CONTENT -->
+<main class="content">
+
+<!-- ===== 新增群發 ===== -->
+<div id="page-broadcast" class="page active">
+  <div class="ph"><div><div class="ph-title">新增群發</div><div class="ph-sub">設定發送對象與訊息內容</div></div></div>
+  <div class="sl">
+    <div class="sm">
+      <div class="card">
+        <div class="st">發送對象</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t1);cursor:pointer"><input type="radio" name="bc-type" value="all" checked onchange="updBcTarget(this)"> 全部好友（廣播）</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t1);cursor:pointer"><input type="radio" name="bc-type" value="seg" onchange="updBcTarget(this)"> 選擇分眾</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t1);cursor:pointer"><input type="radio" name="bc-type" value="uid" onchange="updBcTarget(this)"> 指定 UID 清單</label>
+        </div>
+        <!-- 分眾條件區塊 -->
+        <div id="seg-area" style="display:none">
+          <div id="aud-conds"></div>
+          <button class="btn bs" style="margin-top:4px" onclick="addAudCond()"><i class="ti ti-plus"></i> 新增分眾條件</button>
+          <div style="font-size:11px;color:var(--t3);margin-top:6px">多個條件之間為「聯集」（OR），每個條件可設定包含或排除</div>
+        </div>
+        <!-- UID 清單 -->
+        <div id="uid-area" style="display:none"><label>UID 清單（每行一個）</label><textarea style="min-height:60px" placeholder="Uxxxxxxxx"></textarea></div>
+        <!-- 預計人數 -->
+        <div id="tc-wrap" style="margin-top:10px;padding:8px 12px;background:var(--bg-sub);border-radius:var(--r1);display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:12px">預計發送：<strong style="color:var(--nav)" id="tc-num">168 人</strong></span>
+          <button class="btn bs" onclick="openAudModal()"><i class="ti ti-list"></i> 查看名單</button>
+        </div>
+        <div class="dvd"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div class="st" style="margin-bottom:0">訊息元件 <span style="font-weight:400;font-size:10px;color:var(--t3)">最多 5 個</span></div>
+          <button class="btn bs" onclick="addBlk()" id="add-blk-btn"><i class="ti ti-plus"></i> 新增元件</button>
+        </div>
+        <div id="blks"></div>
+        <div class="btns">
+          <button class="btn" onclick="showTP()"><i class="ti ti-flask"></i> 測試發送</button>
+          <button class="btn" onclick="alert('儲存草稿')"><i class="ti ti-device-floppy"></i> 儲存草稿</button>
+          <button class="btn bp" onclick="if(confirm('確定正式發送？'))alert('發送成功！')"><i class="ti ti-send"></i> 正式發送</button>
+        </div>
+        <div id="tp-pick" style="display:none;margin-top:10px;padding:10px 12px;background:var(--gold-bg);border:1px solid var(--gold-bd);border-radius:var(--r2)">
+          <div style="font-size:11px;color:var(--t3);margin-bottom:6px">選擇測試對象</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap" id="tp-btns"></div>
+          <div class="btns" style="margin-top:8px">
+            <button class="btn bg bs" onclick="doTest()"><i class="ti ti-send"></i> 發送</button>
+            <button class="btn bs" onclick="document.getElementById('tp-pick').style.display='none'">取消</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ss">
+      <div class="card">
+        <div class="st">訊息預覽</div>
+        <div id="bc-prev"><div class="pmk" style="text-align:center;padding:20px 12px;color:var(--t3)">新增元件後顯示</div></div>
+        <div class="dvd"></div>
+        <div class="st">快捷範本</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <button class="btn" style="font-size:11px;justify-content:flex-start" onclick="loadQ('forum')"><i class="ti ti-calendar-event"></i> 6/24 論壇邀請</button>
+          <button class="btn" style="font-size:11px;justify-content:flex-start" onclick="loadQ('member')"><i class="ti ti-user"></i> 會員建檔提醒</button>
+          <button class="btn" style="font-size:11px;justify-content:flex-start" onclick="loadQ('event')"><i class="ti ti-news"></i> 活動報名通知</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 群發管理 ===== -->
+<div id="page-broadcast-list" class="page">
+  <div class="ph"><div><div class="ph-title">群發管理</div><div class="ph-sub">草稿與排程中的群發訊息</div></div><button class="btn bp" onclick="nav('broadcast')"><i class="ti ti-plus"></i> 新增群發</button></div>
+  <div class="card">
+    <div class="fb"><input type="text" placeholder="搜尋..." style="min-width:160px;width:auto"><select style="width:auto"><option>所有狀態</option><option>草稿</option><option>排程中</option><option>已發送</option></select></div>
+    <div class="tw"><table>
+      <thead><tr><th>名稱</th><th>對象</th><th>發送時間</th><th>狀態</th><th>操作</th></tr></thead>
+      <tbody>
+        <tr><td><strong>6/24 論壇邀請 — VIP</strong></td><td>VIP 會員（42人）</td><td>05/20 10:00</td><td><span class="badge b-warn">草稿</span></td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-edit"></i> 編輯</button><button class="btn bs bd2"><i class="ti ti-trash"></i></button></div></td></tr>
+        <tr><td><strong>6/24 論壇邀請 — 台北區</strong></td><td>台北區（78人）</td><td>05/22 09:30</td><td><span class="badge b-blue">排程中</span></td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-eye"></i> 查看</button><button class="btn bs bd2"><i class="ti ti-trash"></i></button></div></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ===== 發送紀錄 ===== -->
+<div id="page-log" class="page">
+  <div class="ph"><div><div class="ph-title">發送紀錄</div><div class="ph-sub">所有已完成的發送記錄</div></div></div>
+  <div class="sgrid">
+    <div class="stat"><div class="sv">12</div><div class="sl2">本月發送次數</div></div>
+    <div class="stat"><div class="sv">1,243</div><div class="sl2">總觸及人次</div></div>
+    <div class="stat"><div class="sv">98.2%</div><div class="sl2">成功率</div></div>
+    <div class="stat"><div class="sv">3</div><div class="sl2">失敗筆數</div></div>
+  </div>
+  <div class="card">
+    <div class="fb"><input type="text" placeholder="搜尋..." style="min-width:160px;width:auto"><select style="width:auto"><option>所有類型</option><option>廣播</option><option>分眾</option></select><select style="width:auto"><option>本月</option><option>上月</option><option>全部</option></select></div>
+    <div class="tw"><table>
+      <thead><tr><th>時間</th><th>類型</th><th>對象</th><th>訊息摘要</th><th>人數</th><th>狀態</th><th>操作</th></tr></thead>
+      <tbody>
+        <tr><td>05/09 14:32</td><td><span class="badge b-blue">Flex</span></td><td>VIP 會員</td><td>6/24 論壇邀請</td><td>42</td><td><span class="badge b-green">成功</span></td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-send"></i> 再次發送</button><button class="btn bs"><i class="ti ti-eye"></i> 查看</button></div></td></tr>
+        <tr><td>05/07 10:15</td><td><span class="badge b-gray">文字</span></td><td>全體好友</td><td>親愛的會員...</td><td>168</td><td><span class="badge b-green">成功</span></td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-send"></i> 再次發送</button><button class="btn bs"><i class="ti ti-eye"></i> 查看</button></div></td></tr>
+        <tr><td>05/05 16:48</td><td><span class="badge b-warn">圖片</span></td><td>台北區</td><td>[圖片訊息]</td><td>78</td><td><span class="badge b-green">成功</span></td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-send"></i> 再次發送</button><button class="btn bs"><i class="ti ti-eye"></i> 查看</button></div></td></tr>
+        <tr><td>05/03 09:22</td><td><span class="badge b-purple">影片</span></td><td>指定 UID</td><td>[影片訊息]</td><td>12</td><td><span class="badge b-red">部分失敗</span></td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-send"></i> 再次發送</button><button class="btn bs"><i class="ti ti-eye"></i> 查看</button></div></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ===== 參數化群發 ===== -->
+<div id="page-datafix" class="page">
+  <div class="ph">
+    <div><div class="ph-title">參數化群發</div><div class="ph-sub">匯入名單 + 自定欄位，每個人收到個人化訊息</div></div>
+    <button class="btn bp" onclick="showNewPB()"><i class="ti ti-plus"></i> 新增任務</button>
+  </div>
+
+  <!-- CONCEPT BANNER -->
+  <div class="card card-gold" style="margin-bottom:16px">
+    <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px">
+        <div style="font-size:13px;font-weight:500;margin-bottom:6px;color:var(--nav)">適用情境</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:12px;color:var(--t2)"><i class="ti ti-check" style="color:var(--gold)"></i> 活動入場通知（帶入姓名、座位、票號）</div>
+          <div style="font-size:12px;color:var(--t2)"><i class="ti ti-check" style="color:var(--gold)"></i> 簽到確認（帶入報名項目、餐飲選擇）</div>
+          <div style="font-size:12px;color:var(--t2)"><i class="ti ti-check" style="color:var(--gold)"></i> 個人化提醒（帶入任何欄位）</div>
+          <div style="font-size:12px;color:var(--t2)"><i class="ti ti-check" style="color:var(--gold)"></i> 會員資料補填通知（帶入缺漏欄位清單）</div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:200px">
+        <div style="font-size:13px;font-weight:500;margin-bottom:6px;color:var(--nav)">運作方式</div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--t2)">
+          <span style="background:var(--bg-card);padding:4px 10px;border-radius:20px;border:1px solid var(--gold-bd)">① 定義欄位</span>
+          <i class="ti ti-arrow-right" style="color:var(--gold)"></i>
+          <span style="background:var(--bg-card);padding:4px 10px;border-radius:20px;border:1px solid var(--gold-bd)">② 上傳名單</span>
+          <i class="ti ti-arrow-right" style="color:var(--gold)"></i>
+          <span style="background:var(--bg-card);padding:4px 10px;border-radius:20px;border:1px solid var(--gold-bd)">③ 撰寫訊息</span>
+          <i class="ti ti-arrow-right" style="color:var(--gold)"></i>
+          <span style="background:var(--bg-card);padding:4px 10px;border-radius:20px;border:1px solid var(--gold-bd)">④ 預覽確認</span>
+          <i class="ti ti-arrow-right" style="color:var(--gold)"></i>
+          <span style="background:var(--nav);color:#fff;padding:4px 10px;border-radius:20px">⑤ 發送</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW TASK FORM -->
+  <div class="card" id="pb-editor" style="display:none;margin-bottom:14px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div class="st" style="margin-bottom:0">新增參數化群發任務</div>
+      <button class="btn bs" onclick="document.getElementById('pb-editor').style.display='none'"><i class="ti ti-x"></i></button>
+    </div>
+    <!-- STEP 1: 基本設定 -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:12px;font-weight:500;color:var(--nav);margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="background:var(--nav);color:#fff;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">1</span> 基本設定</div>
+      <div class="row">
+        <div class="col"><label>任務名稱</label><input id="pb-name" placeholder="例：6/24 論壇入場通知"></div>
+        <div class="col"><label>UID 欄位名稱（CSV 中哪欄是 LINE UID）</label><input id="pb-uid-col" value="uid" placeholder="uid"></div>
+      </div>
+    </div>
+
+    <!-- STEP 2: 欄位定義 -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:12px;font-weight:500;color:var(--nav);margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="background:var(--nav);color:#fff;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">2</span> 自定欄位變數 <span style="font-size:11px;font-weight:400;color:var(--t3)">（可在訊息中用 <code style="background:var(--bg-sub);padding:1px 5px;border-radius:3px">{{欄位名}}</code> 帶入）</span></div>
+      <div id="pb-fields" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px">
+        <div class="pb-field-row" style="display:flex;gap:6px;align-items:center">
+          <input value="name" placeholder="欄位名稱" style="width:120px;flex-shrink:0">
+          <input value="姓名" placeholder="說明（選填）" style="flex:1">
+          <span class="badge b-gold" style="font-size:10px;white-space:nowrap">{{name}}</span>
+          <button class="btn bs bd2" onclick="rmPBField(this)"><i class="ti ti-trash"></i></button>
+        </div>
+        <div class="pb-field-row" style="display:flex;gap:6px;align-items:center">
+          <input value="call" placeholder="欄位名稱" style="width:120px;flex-shrink:0">
+          <input value="稱呼" placeholder="說明（選填）" style="flex:1">
+          <span class="badge b-gold" style="font-size:10px;white-space:nowrap">{{call}}</span>
+          <button class="btn bs bd2" onclick="rmPBField(this)"><i class="ti ti-trash"></i></button>
+        </div>
+        <div class="pb-field-row" style="display:flex;gap:6px;align-items:center">
+          <input value="seat" placeholder="欄位名稱" style="width:120px;flex-shrink:0">
+          <input value="座位號碼" placeholder="說明（選填）" style="flex:1">
+          <span class="badge b-gold" style="font-size:10px;white-space:nowrap">{{seat}}</span>
+          <button class="btn bs bd2" onclick="rmPBField(this)"><i class="ti ti-trash"></i></button>
+        </div>
+      </div>
+      <button class="btn bs" onclick="addPBField()"><i class="ti ti-plus"></i> 新增欄位</button>
+    </div>
+
+    <!-- STEP 3: 上傳名單 -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:12px;font-weight:500;color:var(--nav);margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="background:var(--nav);color:#fff;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">3</span> 上傳名單</div>
+      <div style="margin-bottom:8px">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <input type="file" accept=".csv" style="font-size:11px;flex:1;max-width:260px">
+          <span style="font-size:11px;color:var(--t3)">或</span>
+          <button class="btn bs" onclick="loadPBDemo()"><i class="ti ti-table-import"></i> 載入示範資料</button>
+        </div>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px">CSV 第一行為欄位名稱，需包含上方定義的欄位與 UID 欄</div>
+      </div>
+      <div id="pb-preview-table" style="display:none">
+        <div class="tw"><table id="pb-data-table">
+          <thead><tr id="pb-data-thead"></tr></thead>
+          <tbody id="pb-data-tbody"></tbody>
+        </table></div>
+        <div style="font-size:11px;color:var(--t3);margin-top:6px" id="pb-data-count"></div>
+      </div>
+    </div>
+
+    <!-- STEP 4: 訊息撰寫 -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:12px;font-weight:500;color:var(--nav);margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="background:var(--nav);color:#fff;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">4</span> 訊息內容</div>
+      <div class="row" style="margin-bottom:8px;align-items:flex-start">
+        <div class="col">
+          <label>訊息文字</label>
+          <textarea id="pb-msg" style="min-height:120px" oninput="updPBPreview()" placeholder="輸入訊息...">親愛的 {{call}}，
+
+感謝您報名參加本次活動！
+
+您的座位為：{{seat}}
+
+活動當日請憑此訊息入場，期待見到您！</textarea>
+          <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap" id="pb-param-btns"></div>
+        </div>
+        <div class="col">
+          <label>預覽（第 1 筆資料）</label>
+          <div class="pmk" id="pb-msg-preview" style="min-height:120px;white-space:pre-wrap;font-size:12px">填入資料後顯示預覽</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btns">
+      <button class="btn" onclick="document.getElementById('pb-editor').style.display='none'"><i class="ti ti-device-floppy"></i> 儲存草稿</button>
+      <button class="btn bp" onclick="execPB()"><i class="ti ti-send"></i> 確認並發送</button>
+    </div>
+  </div>
+
+  <!-- TASK LIST -->
+  <div class="card" style="padding:0;overflow:hidden">
+    <div style="padding:12px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between">
+      <div class="st" style="margin-bottom:0">任務列表</div>
+      <select style="width:auto;font-size:11px"><option>所有狀態</option><option>草稿</option><option>等待發送</option><option>已發送</option></select>
+    </div>
+    <div class="tpl-list-item">
+      <div class="tpl-li-icon" style="background:#e8ecf5;color:var(--nav)"><i class="ti ti-ticket"></i></div>
+      <div class="tpl-li-text">
+        <div class="tpl-li-name">6/24 論壇入場通知</div>
+        <div class="tpl-li-desc">欄位：name、seat、ticket_no · 97 人 · 更新：05/10 Ariel</div>
+      </div>
+      <span class="badge b-warn" style="flex-shrink:0">等待發送</span>
+      <div class="fr" style="gap:4px;margin-left:8px">
+        <button class="btn bs"><i class="ti ti-eye"></i> 預覽</button>
+        <button class="btn bs bp"><i class="ti ti-send"></i> 發送</button>
+        <button class="btn bs bd2"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>
+    <div class="tpl-list-item">
+      <div class="tpl-li-icon" style="background:#edf6ee;color:#2d7a3a"><i class="ti ti-user-check"></i></div>
+      <div class="tpl-li-text">
+        <div class="tpl-li-name">會員資料補填通知</div>
+        <div class="tpl-li-desc">欄位：name、call、missing_fields · 23 人 · 更新：05/08 Chester</div>
+      </div>
+      <span class="badge b-green" style="flex-shrink:0">已發送</span>
+      <div class="fr" style="gap:4px;margin-left:8px">
+        <button class="btn bs"><i class="ti ti-eye"></i> 查看</button>
+        <button class="btn bs"><i class="ti ti-send"></i> 再次發送</button>
+      </div>
+    </div>
+    <div class="tpl-list-item">
+      <div class="tpl-li-icon" style="background:var(--bg-sub);color:var(--t3)"><i class="ti ti-file-text"></i></div>
+      <div class="tpl-li-text">
+        <div class="tpl-li-name">香港考察報到通知</div>
+        <div class="tpl-li-desc">欄位：name、hotel、checkin_date · 草稿未完成</div>
+      </div>
+      <span class="badge b-gray" style="flex-shrink:0">草稿</span>
+      <div class="fr" style="gap:4px;margin-left:8px">
+        <button class="btn bs"><i class="ti ti-edit"></i> 編輯</button>
+        <button class="btn bs bd2"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 會員名單 ===== -->
+<div id="page-members" class="page">
+  <div class="ph"><div><div class="ph-title">會員名單</div><div class="ph-sub">共 168 位會員</div></div><div class="fr" style="gap:8px"><button class="btn bp bs" onclick="alert('新增')"><i class="ti ti-plus"></i> 新增</button><button class="btn bs" onclick="alert('匯入')"><i class="ti ti-upload"></i> 匯入</button></div></div>
+  <div class="sgrid">
+    <div class="stat"><div class="sv">168</div><div class="sl2">總會員數</div></div>
+    <div class="stat"><div class="sv">112</div><div class="sl2">有效會籍</div></div>
+    <div class="stat"><div class="sv">31</div><div class="sl2">潛在會員</div></div>
+    <div class="stat"><div class="sv">143</div><div class="sl2">有效 UID</div></div>
+  </div>
+  <div class="card">
+    <div class="fb">
+      <input type="text" placeholder="搜尋姓名、ID..." style="min-width:130px;width:auto">
+      <select style="width:auto"><option>所有屬性</option><option>個人會員</option><option>企業會員</option><option>潛在會員</option></select>
+      <select style="width:auto"><option>所有會籍</option><option>有效</option><option>失效</option><option>無</option></select>
+      <select style="width:auto"><option>所有區域</option><option>台北</option><option>新竹</option><option>台中</option><option>海外</option></select>
+      <select style="width:auto"><option>所有管道</option><option>LINE</option><option>LINE 群組</option><option>封鎖</option><option>未加入</option></select>
+    </div>
+    <div style="margin-bottom:8px"><div style="font-size:11px;color:var(--t3);margin-bottom:4px">顯示欄位</div><div id="col-toggles"></div></div>
+    <div class="tw"><table style="table-layout:fixed;min-width:700px"><thead><tr id="m-thead"></tr></thead><tbody id="m-tbody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ===== 分眾管理 ===== -->
+<div id="page-segment" class="page">
+  <div class="ph"><div><div class="ph-title">分眾管理</div><div class="ph-sub">建立與管理發送群組</div></div></div>
+  <div class="sl" style="align-items:flex-start">
+    <!-- LEFT: builder + list -->
+    <div class="sm">
+      <!-- BUILDER CARD -->
+      <div class="card" id="seg-builder">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div class="st" style="margin-bottom:0" id="seg-builder-title">建立分眾群組</div>
+          <button class="btn bs" id="seg-cancel-btn" style="display:none" onclick="resetSegBuilder()"><i class="ti ti-x"></i> 取消</button>
+        </div>
+        <div class="row" style="margin-bottom:12px">
+          <div class="col"><label>群組名稱</label><input id="seg-name" placeholder="例：2026 VIP 台北區"></div>
+          <div class="col"><label>備註</label><input id="seg-note" placeholder="選填"></div>
+        </div>
+
+        <!-- SYSTEM TAGS: 屬性 / 性別 -->
+        <div style="margin-bottom:12px">
+          <div style="font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">屬性條件（系統欄位）</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <!-- 屬性 -->
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-size:12px;color:var(--t2);min-width:56px">屬性</span>
+              <div style="display:flex;flex-wrap:wrap;gap:6px" id="seg-attr-btns">
+                <button class="seg-tag-btn" data-group="attr" data-val="個人會員" onclick="togSegTag(this)">個人會員</button>
+                <button class="seg-tag-btn" data-group="attr" data-val="企業會員" onclick="togSegTag(this)">企業會員</button>
+                <button class="seg-tag-btn" data-group="attr" data-val="潛在會員" onclick="togSegTag(this)">潛在會員</button>
+              </div>
+            </div>
+            <!-- 會籍 -->
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-size:12px;color:var(--t2);min-width:56px">會籍</span>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <button class="seg-tag-btn" data-group="membership" data-val="有效" onclick="togSegTag(this)">有效</button>
+                <button class="seg-tag-btn" data-group="membership" data-val="失效" onclick="togSegTag(this)">失效</button>
+                <button class="seg-tag-btn" data-group="membership" data-val="無" onclick="togSegTag(this)">無</button>
+              </div>
+            </div>
+            <!-- 性別 -->
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-size:12px;color:var(--t2);min-width:56px">性別</span>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <button class="seg-tag-btn" data-group="gender" data-val="男" onclick="togSegTag(this)">男</button>
+                <button class="seg-tag-btn" data-group="gender" data-val="女" onclick="togSegTag(this)">女</button>
+              </div>
+            </div>
+            <!-- 加入年份 -->
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-size:12px;color:var(--t2);min-width:56px">加入年份</span>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <button class="seg-tag-btn" data-group="year" data-val="2026" onclick="togSegTag(this)">2026</button>
+                <button class="seg-tag-btn" data-group="year" data-val="2025" onclick="togSegTag(this)">2025</button>
+                <button class="seg-tag-btn" data-group="year" data-val="2024" onclick="togSegTag(this)">2024</button>
+                <button class="seg-tag-btn" data-group="year" data-val="2023" onclick="togSegTag(this)">2023</button>
+              </div>
+            </div>
+            <!-- 區域 -->
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-size:12px;color:var(--t2);min-width:56px">國內區域</span>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <button class="seg-tag-btn" data-group="region" data-val="台北" onclick="togSegTag(this)">台北</button>
+                <button class="seg-tag-btn" data-group="region" data-val="新竹" onclick="togSegTag(this)">新竹</button>
+                <button class="seg-tag-btn" data-group="region" data-val="台中" onclick="togSegTag(this)">台中</button>
+                <button class="seg-tag-btn" data-group="region" data-val="高雄" onclick="togSegTag(this)">高雄</button>
+                <button class="seg-tag-btn" data-group="region" data-val="海外" onclick="togSegTag(this)">海外</button>
+              </div>
+            </div>
+            <!-- 發送管道 -->
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-size:12px;color:var(--t2);min-width:56px">發送管道</span>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <button class="seg-tag-btn" data-group="channel" data-val="LINE" onclick="togSegTag(this)">LINE</button>
+                <button class="seg-tag-btn" data-group="channel" data-val="LINE群組" onclick="togSegTag(this)">LINE 群組</button>
+                <button class="seg-tag-btn" data-group="channel" data-val="封鎖" onclick="togSegTag(this)">封鎖</button>
+                <button class="seg-tag-btn" data-group="channel" data-val="未加入" onclick="togSegTag(this)">未加入</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GENERAL TAGS with include/exclude -->
+        <div style="margin-bottom:12px">
+          <div style="font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">一般標籤（可設定包含／排除）</div>
+          <div style="display:flex;flex-direction:column;gap:6px" id="seg-tag-rows"></div>
+          <div style="font-size:11px;color:var(--t3);margin-top:4px">未設定的標籤不影響篩選結果</div>
+        </div>
+
+        <!-- ACTIVITY filter -->
+        <div style="margin-bottom:12px">
+          <div style="font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">參與活動</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <button class="seg-tag-btn" data-group="event" data-val="2026 論壇" onclick="togSegTag(this)">2026 論壇</button>
+            <button class="seg-tag-btn" data-group="event" data-val="香港考察" onclick="togSegTag(this)">香港考察</button>
+            <button class="seg-tag-btn" data-group="event" data-val="Q3 聚會" onclick="togSegTag(this)">Q3 聚會</button>
+          </div>
+        </div>
+
+        <!-- RESULT PREVIEW -->
+        <div style="padding:10px 12px;background:var(--gold-bg);border:1px solid var(--gold-bd);border-radius:var(--r1);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:12px">符合條件：<strong style="color:var(--nav)" id="seg-match-count">— 人</strong>，含有效 UID <strong style="color:var(--nav)" id="seg-uid-count">—</strong></span>
+          <button class="btn bs" onclick="calcSegCount()"><i class="ti ti-refresh"></i> 計算</button>
+        </div>
+        <div class="btns">
+          <button class="btn bp" onclick="saveSegGroup()"><i class="ti ti-device-floppy"></i> 儲存群組</button>
+          <button class="btn" onclick="alert('立即群發此條件')"><i class="ti ti-send"></i> 立即群發</button>
+        </div>
+      </div>
+
+      <!-- GROUP LIST -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:10px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between">
+          <div class="st" style="margin-bottom:0">已儲存群組</div>
+        </div>
+        <div id="seg-list"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: stats -->
+    <div class="ss">
+      <div class="card">
+        <div class="st">快速統計</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">個人會員</span><span>87</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">企業會員</span><span>25</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">潛在會員</span><span>31</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">男</span><span>98</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">女</span><span>70</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">有效 UID</span><span style="color:var(--nav);font-weight:500">143</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0"><span style="color:var(--t3)">未綁定/封鎖</span><span style="color:#c0392b">25</span></div>
+        </div>
+      </div>
+      <div class="card" style="background:var(--bg-sub)">
+        <div class="st" style="margin-bottom:8px">篩選說明</div>
+        <div style="font-size:11px;color:var(--t3);line-height:1.8">
+          <div style="margin-bottom:6px">• 同一分組內多選 → <strong style="color:var(--t2)">OR</strong>（任一符合即計入）</div>
+          <div style="margin-bottom:6px">• 不同分組之間 → <strong style="color:var(--t2)">AND</strong>（所有條件同時符合）</div>
+          <div>• 一般標籤可個別設定「包含」或「排除」</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 標籤管理 ===== -->
+<div id="page-tags" class="page">
+  <div class="ph"><div><div class="ph-title">標籤管理</div><div class="ph-sub">管理會員標籤，可用於分眾篩選</div></div><button class="btn bp" onclick="showTagEd()"><i class="ti ti-plus"></i> 新增標籤</button></div>
+  <div class="card" id="tag-editor" style="display:none;margin-bottom:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div class="st" style="margin-bottom:0" id="tag-ed-title">新增標籤</div><button class="btn bs" onclick="document.getElementById('tag-editor').style.display='none'"><i class="ti ti-x"></i></button></div>
+    <div class="row">
+      <div class="col"><label>標籤名稱</label><input id="tag-name-inp" placeholder="例：2026年加入"></div>
+      <div class="col"><label>分類</label><select><option>年齡世代</option><option>地區</option><option>投資興趣</option><option>性別</option><option>其他</option></select></div>
+      <div class="col"><label>顏色</label><select id="tag-color-sel"><option value="b-navy">深藍</option><option value="b-teal">翠綠</option><option value="b-gold">金色</option><option value="b-purple">紫</option><option value="b-gray">灰</option></select></div>
+    </div>
+    <div class="btns"><button class="btn bp" onclick="saveTag()"><i class="ti ti-device-floppy"></i> 儲存</button></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px" id="tag-grid"></div>
+</div>
+
+<!-- ===== 訊息範本庫 ===== -->
+<div id="page-tpl" class="page">
+  <div class="ph"><div><div class="ph-title">訊息範本庫</div><div class="ph-sub">管理可重複使用的訊息範本</div></div><button class="btn bp" onclick="showNewTpl()"><i class="ti ti-plus"></i> 新增範本</button></div>
+  <div class="card" id="tpl-editor" style="display:none;margin-bottom:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div class="st" style="margin-bottom:0">新增範本</div><button class="btn bs" onclick="document.getElementById('tpl-editor').style.display='none'"><i class="ti ti-x"></i></button></div>
+    <div class="row" style="margin-bottom:10px"><div class="col"><label>範本名稱</label><input id="tpl-name" placeholder="例：6/24 論壇邀請卡"></div><div class="col"><label>類型</label><select id="tpl-type" onchange="switchTE()"><option value="text">文字</option><option value="image">圖片</option><option value="flex">Flex JSON</option><option value="giga">Giga</option></select></div></div>
+    <div id="te-text"><label>訊息內容</label><textarea id="tpl-tc" style="min-height:80px" placeholder="輸入文字..."></textarea></div>
+    <div id="te-image" style="display:none"><label>圖片 URL</label><input placeholder="https://..."><label style="margin-top:7px">預覽圖 URL</label><input placeholder="https://...preview.jpg"></div>
+    <div id="te-giga" style="display:none"><label>Giga 圖片 URL</label><input placeholder="https://..."><label style="margin-top:7px">點擊連結</label><input placeholder="https://..."></div>
+    <div id="te-flex" style="display:none">
+      <div style="display:flex;gap:6px;margin-bottom:8px"><button class="btn bs" onclick="showAI()"><i class="ti ti-sparkles"></i> AI 生成</button><button class="btn bs" onclick="document.getElementById('te-ai').style.display='none';document.getElementById('te-json').style.display='block'">貼入 JSON</button></div>
+      <div id="te-ai" style="display:none;background:var(--gold-bg);border:1px solid var(--gold-bd);border-radius:var(--r1);padding:10px;margin-bottom:8px">
+        <textarea id="ai-prompt" style="min-height:60px" placeholder="描述需求..."></textarea>
+        <div class="btns" style="margin-top:8px"><button class="btn bg bs" onclick="runAI()"><i class="ti ti-sparkles"></i> 生成</button><span id="ai-spn" style="display:none;align-items:center;gap:6px"><span class="spn"></span><span style="font-size:11px;color:var(--t3)">生成中...</span></span></div>
+        <div id="ai-res" style="display:none;margin-top:8px"><div class="jout" id="ai-res-box" contenteditable="true"></div><button class="btn bs" style="margin-top:6px" onclick="copyAI()"><i class="ti ti-copy"></i> 複製到 JSON</button></div>
+      </div>
+      <div id="te-json"><label>Flex JSON（bubble / carousel）</label><textarea id="tpl-fj" class="jarea" style="min-height:140px" placeholder='{"type":"bubble",...}' oninput="prevFlex(this.value)"></textarea></div>
+    </div>
+    <div class="btns" style="margin-top:12px"><button class="btn bp" onclick="saveTpl()"><i class="ti ti-device-floppy"></i> 儲存範本</button></div>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden">
+    <div id="tpl-list"></div>
+  </div>
+</div>
+
+<!-- ===== 漸進式訊息 ===== -->
+<div id="page-prog" class="page">
+  <div class="ph"><div><div class="ph-title">漸進式訊息</div><div class="ph-sub">設定時序性的自動發送流程</div></div><button class="btn bp" onclick="alert('新增流程')"><i class="ti ti-plus"></i> 新增流程</button></div>
+  <!-- LIST VIEW -->
+  <div class="card" id="prog-list-view" style="padding:0;overflow:hidden">
+    <div id="prog-list"></div>
+  </div>
+  <!-- DETAIL VIEW -->
+  <div id="prog-detail-view" style="display:none">
+    <div style="margin-bottom:12px"><button class="btn bs" onclick="showProgList()"><i class="ti ti-arrow-left"></i> 返回列表</button></div>
+    <div class="sl" style="align-items:flex-start">
+      <div style="flex:1;min-width:280px">
+        <div class="card">
+          <div class="st">流程步驟</div>
+          <div class="flow-v" id="prog-flow"></div>
+          <button class="flow-add-btn" onclick="addProgStep()" style="margin-top:12px"><i class="ti ti-plus"></i> 新增步驟</button>
+        </div>
+        <div class="card">
+          <div class="st">貼上此流程的會員名單</div>
+          <div class="fr" style="gap:8px"><input placeholder="貼上 UID 或上傳名單..." style="flex:1"><button class="btn bs"><i class="ti ti-upload"></i> 匯入名單</button></div>
+        </div>
+      </div>
+      <div style="width:240px;flex-shrink:0">
+        <div class="card">
+          <div class="st">流程設定</div>
+          <div style="margin-bottom:10px"><label>流程名稱</label><input id="prog-name-inp" value="新客加入好友"></div>
+          <div style="margin-bottom:10px"><label>觸發條件</label><select><option>加入好友</option><option>特定標籤</option><option>手動貼上</option><option>完成報名</option></select></div>
+          <div class="dvd"></div>
+          <div style="margin-bottom:8px">
+            <label style="margin-bottom:6px">日期設定</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--t1);margin-bottom:5px"><input type="radio" name="pd" checked> 無期限</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--t1)"><input type="radio" name="pd"> 活動有效期限</label>
+          </div>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--t1);margin-bottom:6px"><input type="checkbox"> 循環活動</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--t1)"><input type="checkbox"> 發送已過期訊息</label>
+          <div class="btns"><button class="btn bp"><i class="ti ti-player-play"></i> 啟用</button><button class="btn"><i class="ti ti-device-floppy"></i> 儲存</button></div>
+        </div>
+        <div class="card card-gold">
+          <div class="st" style="margin-bottom:6px">統計</div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--gold-bd)"><span style="color:var(--t3)">進行中</span><span style="color:var(--nav);font-weight:500">23</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--gold-bd)"><span style="color:var(--t3)">本月發送</span><span>67</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0"><span style="color:var(--t3)">狀態</span><span class="badge b-green" style="font-size:10px">啟用中</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 自動回應 ===== -->
+<div id="page-autoreply" class="page">
+  <div class="ph"><div><div class="ph-title">自動回應訊息</div><div class="ph-sub">設定 message / postback 觸發的自動回應</div></div><button class="btn bp" onclick="document.getElementById('ar-ed').style.display='block'"><i class="ti ti-plus"></i> 新增規則</button></div>
+  <div class="card" id="ar-ed" style="display:none;margin-bottom:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div class="st" style="margin-bottom:0">新增規則</div><button class="btn bs" onclick="document.getElementById('ar-ed').style.display='none'"><i class="ti ti-x"></i></button></div>
+    <div class="row" style="margin-bottom:10px"><div class="col"><label>規則名稱</label><input id="ar-name" placeholder="例：報名確認"></div><div class="col"><label>觸發類型</label><select id="ar-tt" onchange="updART()"><option value="msg">message（關鍵字）</option><option value="post">postback（按鈕回傳）</option></select></div></div>
+    <div id="ar-msg"><label>觸發關鍵字（逗號分隔）</label><input placeholder="例：報名, 我要報名"></div>
+    <div id="ar-post" style="display:none"><label>Postback Data</label><input placeholder="例：action=register&event=forum_0624"></div>
+    <div class="dvd"></div><div class="st">回應內容</div>
+    <div style="display:flex;gap:6px;margin-bottom:8px"><button class="btn bs" id="ars-cust" onclick="setARS('cust',this)" style="background:var(--gold-bg);border-color:var(--gold-bd);color:#7A5E2A">自行填寫</button><button class="btn bs" id="ars-tpl" onclick="setARS('tpl',this)">選訊息範本</button></div>
+    <div id="ar-cust"><textarea style="min-height:80px" placeholder="感謝報名！"></textarea></div>
+    <div id="ar-tpl-sec" style="display:none"><select id="ar-tpl-sel" onchange="updATP()"><option value="">— 選擇範本 —</option><option>6/24 論壇邀請 Flex 卡</option><option>會員建檔提醒</option></select><div id="ar-tpl-pv" style="display:none;margin-top:6px"><div class="pmk" style="text-align:center;padding:10px"><i class="ti ti-bookmark" style="font-size:18px;color:var(--gold)"></i><div id="ar-tpl-pn" style="font-size:11px;color:var(--nav);margin-top:3px"></div></div></div></div>
+    <div class="btns"><button class="btn bp" onclick="saveAR()"><i class="ti ti-device-floppy"></i> 儲存</button><button class="btn" onclick="document.getElementById('ar-ed').style.display='none'">取消</button></div>
+  </div>
+  <div id="ar-list"></div>
+</div>
+
+<!-- ===== 圖文選單 ===== -->
+<div id="page-richmenu" class="page">
+  <div class="ph"><div><div class="ph-title">圖文選單</div></div></div>
+  <div class="sl">
+    <div class="sm">
+      <div class="card">
+        <div class="st">選單設定</div>
+        <div class="row" style="margin-bottom:10px"><div class="col"><label>選單名稱</label><input value="2026 論壇選單"></div><div class="col"><label>收合文字</label><input value="開啟選單"></div></div>
+        <div style="margin-bottom:10px"><label>版型</label><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px"><button class="btn bs" id="ly-3" onclick="setLy(3,1,this)" style="background:var(--gold-bg);border-color:var(--gold-bd);color:#7A5E2A">3格</button><button class="btn bs" id="ly-4" onclick="setLy(2,2,this)">2×2格</button><button class="btn bs" id="ly-6" onclick="setLy(3,2,this)">3×2格</button><button class="btn bs" id="ly-1" onclick="setLy(1,1,this)">大圖</button></div></div>
+        <div style="margin-bottom:10px"><label>底圖上傳</label><input type="file" accept="image/*" style="font-size:11px"></div>
+        <div class="dvd"></div><div class="st">按鈕動作</div><div id="btn-cfg"></div>
+        <div class="btns"><button class="btn"><i class="ti ti-upload"></i> 上傳</button><button class="btn bp"><i class="ti ti-check"></i> 設為預設</button></div>
+      </div>
+    </div>
+    <div class="ss">
+      <div class="card">
+        <div class="st">版面預覽</div>
+        <div style="background:var(--bg-sub);border:1px dashed var(--bd2);border-radius:var(--r1);padding:10px;text-align:center;min-height:80px;display:flex;align-items:center;justify-content:center" id="rm-prev"><div style="font-size:11px;color:var(--t3)">選版型後顯示</div></div>
+        <div class="dvd"></div><div class="st">已上傳選單</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:7px 9px;background:var(--bg-sub);border:1px solid var(--bd);border-radius:var(--r1)"><span>2026 論壇選單 <span class="badge b-green" style="margin-left:4px">預設</span></span><div class="fr" style="gap:4px"><button class="btn bs">編輯</button><button class="btn bs bd2">刪除</button></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:7px 9px;background:var(--bg-sub);border:1px solid var(--bd);border-radius:var(--r1)"><span>2025 年會選單</span><div class="fr" style="gap:4px"><button class="btn bs">編輯</button><button class="btn bs bd2">刪除</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 選單分眾 ===== -->
+<div id="page-rmseg" class="page">
+  <div class="ph"><div><div class="ph-title">選單分眾</div><div class="ph-sub">指定不同會員顯示不同圖文選單</div></div><button class="btn bp"><i class="ti ti-plus"></i> 新增設定</button></div>
+  <div class="tw"><table>
+    <thead><tr><th>排序</th><th>選單名稱</th><th>縮圖</th><th>套用分眾</th><th>人數</th><th>狀態</th><th>期間</th><th>最後更新</th><th>操作</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><a href="#" style="color:var(--nav);text-decoration:none" onclick="return false">2026 論壇選單</a></td><td><div class="rmth"><i class="ti ti-layout-grid" style="font-size:12px;color:var(--t3)"></i></div></td><td><span class="badge b-gold">VIP 會員</span> <span class="badge b-teal">論壇報名</span></td><td>97</td><td><span class="badge b-green">進行中</span></td><td style="font-size:11px;color:var(--t3)">2025/08 → 2030/01</td><td style="font-size:11px;color:var(--t3)">Ariel Wu</td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-edit"></i></button><button class="btn bs bd2"><i class="ti ti-trash"></i></button></div></td></tr>
+      <tr><td>2</td><td><a href="#" style="color:var(--nav);text-decoration:none" onclick="return false">好友歡迎選單</a></td><td><div class="rmth"><i class="ti ti-layout-grid" style="font-size:12px;color:var(--t3)"></i></div></td><td><span class="badge b-gray">非會員好友</span></td><td>25</td><td><span class="badge b-green">進行中</span></td><td style="font-size:11px;color:var(--t3)">2025/08 → 2030/01</td><td style="font-size:11px;color:var(--t3)">Sunny</td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-edit"></i></button><button class="btn bs bd2"><i class="ti ti-trash"></i></button></div></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ===== 系統設定 ===== -->
+<div id="page-settings" class="page">
+  <div class="ph"><div><div class="ph-title">系統設定</div></div></div>
+  <div class="sl" style="align-items:flex-start">
+    <div class="sm">
+      <div class="card"><div class="st">LINE API 串接</div>
+        <div style="margin-bottom:10px"><label>Channel Access Token</label><div class="fr"><input type="password" id="lt" placeholder="Bearer xxxxx..." style="flex:1"><button class="btn bs" onclick="tv('lt','et')"><i class="ti ti-eye" id="et"></i></button></div></div>
+        <div style="margin-bottom:10px"><label>Channel Secret</label><input type="password" placeholder="Channel Secret"></div>
+        <div style="margin-bottom:10px"><label>Webhook URL</label><div class="fr"><input value="https://script.google.com/macros/s/AKfy.../exec" readonly style="flex:1;background:var(--bg-sub);color:var(--t3)"><button class="btn bs" onclick="alert('已複製')"><i class="ti ti-copy"></i></button></div></div>
+        <div class="fr"><div class="sdot s-ok" id="ld"></div><span style="font-size:11px;color:var(--t3)" id="lt2">已連線</span><button class="btn bs" style="margin-left:auto" onclick="tLine()"><i class="ti ti-plug"></i> 測試</button></div>
+        <div class="btns"><button class="btn bp" onclick="alert('已儲存')"><i class="ti ti-device-floppy"></i> 儲存</button></div>
+      </div>
+      <div class="card"><div class="st">AI 串接設定</div>
+        <div style="margin-bottom:10px"><label>AI 服務商</label><select id="ai-pv" onchange="updAIM()"><option value="claude">Claude（Anthropic）</option><option value="gpt">ChatGPT（OpenAI）</option><option value="gemini">Gemini（Google）</option></select></div>
+        <div style="margin-bottom:10px"><label>API Key</label><div class="fr"><input type="password" id="ak" placeholder="sk-ant-..." style="flex:1"><button class="btn bs" onclick="tv('ak','ea')"><i class="ti ti-eye" id="ea"></i></button></div></div>
+        <div style="margin-bottom:10px"><label>模型</label><select id="aim"><option>claude-sonnet-4-20250514</option></select></div>
+        <div class="fr"><div class="sdot s-idle" id="aid"></div><span style="font-size:11px;color:var(--t3)" id="ait">未驗證</span><button class="btn bs" style="margin-left:auto" onclick="tAI()"><i class="ti ti-plug"></i> 測試</button></div>
+        <div class="btns"><button class="btn bp" onclick="alert('已儲存')"><i class="ti ti-device-floppy"></i> 儲存</button></div>
+      </div>
+      <div class="card"><div class="st">Google Sheets 連結</div>
+        <div style="margin-bottom:10px"><label>發送紀錄 Spreadsheet ID</label><input placeholder="1kbG9yT7KYVv78pLFXnq..."></div>
+        <div style="margin-bottom:10px"><label>會員名單 Spreadsheet ID</label><input placeholder="1kbG9yT7KYVv78pLFXnq..."></div>
+        <div class="btns"><button class="btn bp" onclick="alert('已儲存')"><i class="ti ti-device-floppy"></i> 儲存</button><button class="btn" onclick="alert('測試連線')"><i class="ti ti-plug"></i> 測試</button></div>
+      </div>
+      <div class="card"><div class="st">Airtable 串接（規劃中）</div>
+        <div style="margin-bottom:10px"><label>Airtable Personal Access Token</label><input placeholder="patXXXX..." disabled style="opacity:.5"></div>
+        <div style="font-size:11px;color:var(--t3);padding:8px 10px;background:var(--bg-sub);border-radius:var(--r1)">Airtable 串接設定後，資料補齊任務可自動從 Airtable 同步會員資料並偵測缺漏欄位。</div>
+      </div>
+      <div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div class="st" style="margin-bottom:0">後台管理者帳號</div><button class="btn bs" onclick="addAdm()"><i class="ti ti-plus"></i> 新增</button></div><div id="adm-list"></div><div class="dvd"></div><div class="st" style="margin-bottom:6px">測試發送預設對象</div><div id="def-tests"></div><div class="btns"><button class="btn bp" onclick="alert('已儲存')"><i class="ti ti-device-floppy"></i> 儲存</button></div></div>
+    </div>
+    <div class="ss">
+      <div class="card card-gold">
+        <div class="st">系統狀態</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0;border-bottom:1px solid var(--gold-bd)"><span>LINE OA</span><span class="fr"><div class="sdot s-ok"></div><span style="color:#2d7a3a;font-size:11px">正常</span></span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0;border-bottom:1px solid var(--gold-bd)"><span>AI API</span><span class="fr"><div class="sdot s-idle" id="ai-sd"></div><span style="color:var(--t3);font-size:11px" id="ai-st">未驗證</span></span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0;border-bottom:1px solid var(--gold-bd)"><span>Sheets</span><span class="fr"><div class="sdot s-idle"></div><span style="color:var(--t3);font-size:11px">未設定</span></span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0"><span>管理者</span><span style="color:var(--nav);font-size:11px" id="adm-cnt">3 人</span></div>
+        </div>
+        <div class="dvd"></div>
+        <div class="st" style="margin-bottom:4px">本月使用量</div>
+        <div class="fr" style="margin-bottom:4px"><span style="font-size:22px;font-weight:500;color:var(--nav);font-family:'Cormorant Garamond',serif">1,243</span><span style="font-size:11px;color:var(--t3)">/ 10,000 則</span></div>
+        <div class="pb"><div class="pf" style="width:12%"></div></div>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px">剩餘 8,757 則</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div><!-- /app-body -->
+
+<script>
+// ── DATA ──
+const ADMINS=[{id:1,name:'Ariel Wu',uid:'Ua1b2c3...',defTest:true},{id:2,name:'Chester Chen',uid:'Ub2c3d4...',defTest:false},{id:3,name:'Kate Huang',uid:'Uc3d4e5...',defTest:false}];
+let selT=new Set([1]);
+const SEGS=['VIP 會員（42人）','台北區（78人）','論壇已報名（55人）','2026 新加入（34人）'];
+const MEMBERS=[
+  {id:'M000001',name:'陳志明',dn:'David_Chen',en:'David Chen',call:'志明兄',gender:'男',bday:'1975-03',attr:'個人會員',membership:'有效',region:'台北',invest:['天使投資','科技業'],events:['2026 論壇'],joined:'2021-03',uid:'Ua1b2c3...',channels:['LINE'],tags:['天使投資'],groupid:'—',chatid:'—',gchatid:'—'},
+  {id:'M000002',name:'林美華',dn:'MeiHua_Lin',en:'Mei-Hua Lin',call:'美華',gender:'女',bday:'1968-11',attr:'企業會員',membership:'有效',region:'新竹',invest:['半導體'],events:['2026 論壇','香港考察'],joined:'2020-06',uid:'Ub2c3d4...',channels:['LINE','LINE群組'],tags:['半導體'],groupid:'Ca1b2c3...',chatid:'—',gchatid:'Cd1e2f3...'},
+  {id:'M000003',name:'王大衛',dn:'David_Wang',en:'David Wang',call:'大衛',gender:'男',bday:'1980-07',attr:'個人會員',membership:'失效',region:'台中',invest:['新創'],events:['Q3 聚會'],joined:'2019-11',uid:'Uc3d4e5...',channels:['封鎖'],tags:['新創'],groupid:'—',chatid:'—',gchatid:'—'},
+  {id:'M000004',name:'張淑芬',dn:'Susan_Chang',en:'Susan Chang',call:'淑芬姐',gender:'女',bday:'1985-02',attr:'潛在會員',membership:'無',region:'台北',invest:['金融業'],events:['—'],joined:'2024-01',uid:'—',channels:['未加入'],tags:['金融業'],groupid:'—',chatid:'—',gchatid:'—'},
+  {id:'M000005',name:'李建國',dn:'TomLee_LINE',en:'Tom Lee',call:'建國',gender:'男',bday:'1972-09',attr:'個人會員',membership:'有效',region:'海外',invest:['家族辦公室','PE'],events:['2026 論壇','香港考察'],joined:'2022-04',uid:'Ud4e5f6...',channels:['LINE'],tags:['家族辦公室'],groupid:'—',chatid:'Re1f2g3...',gchatid:'—'},
+];
+const COLS=[
+  {k:'id',l:'會員 ID',show:true},{k:'name',l:'姓名',show:true},{k:'dn',l:'Displayname',show:true},
+  {k:'call',l:'稱呼',show:true},{k:'en',l:'英文名',show:false},{k:'gender',l:'性別',show:false},
+  {k:'bday',l:'生日',show:false},{k:'attr',l:'屬性',show:true},{k:'membership',l:'會籍',show:true},
+  {k:'region',l:'區域',show:true},{k:'channels',l:'發送管道',show:true},
+  {k:'invest',l:'投資標籤',show:false},{k:'events',l:'參與活動',show:false},
+  {k:'joined',l:'加入日期',show:true},{k:'uid',l:'UID',show:true},
+  {k:'groupid',l:'Group ID',show:false},{k:'chatid',l:'Chat ID',show:false},{k:'gchatid',l:'Group Chat ID',show:false},
+];
+const attrC={'個人會員':'b-blue','企業會員':'b-purple','潛在會員':'b-warn'};
+const membC={'有效':'b-green','失效':'b-red','無':'b-gray'};
+const chanC={'LINE':'b-line','LINE群組':'b-grp','封鎖':'b-blocked','未加入':'b-none'};
+let sortKey='',sortDir=1;
+const QT={forum:'親愛的 {{call}}，\n\n感謝您報名參加本次活動，誠摯邀請您蒞臨出席。\n\n期待與您相見！',member:'您好，{{name}}，\n\n會員資料更新期間已開始，請點選連結完成建檔或更新。\n\n感謝您的配合！',event:'親愛的 {{call}}，\n\n活動報名通知：本次活動名額有限，請儘早完成報名。\n\n如有問題請與我們聯繫。'};
+const MBL={text:'b-gray',image:'b-warn',flex:'b-blue',json:'b-purple',template:'b-teal',video:'b-purple'};
+const MLL={text:'文字',image:'圖片',flex:'Flex 卡片',json:'JSON',template:'選範本',video:'影片'};
+const TPLS=[{name:'6/24 論壇邀請 Flex 卡',type:'flex',desc:'深色商務 Bubble，含報名按鈕',updated:'05/09 Ariel'},{name:'會員建檔提醒',type:'text',desc:'純文字，附個人化連結',updated:'05/07 Chester'},{name:'香港考察活動通知',type:'image',desc:'橫幅圖片 + 連結',updated:'04/30 Ariel'},{name:'Giga 全圖邀請',type:'giga',desc:'2500px 全幅圖文訊息',updated:'04/15 Ariel'}];
+const TI={text:'ti-typography',image:'ti-photo',flex:'ti-code',giga:'ti-file-description'};
+const TB={text:'b-gray',image:'b-warn',flex:'b-blue',giga:'b-teal'};
+let blkCnt=0;
+const ARS=[{id:1,name:'報名確認回覆',tt:'post',trigger:'action=register',src:'tpl',content:'6/24 論壇邀請 Flex 卡',on:true},{id:2,name:'會員建檔導引',tt:'msg',trigger:'進行會員建檔或更新',src:'cust',content:'感謝訊息，建檔連結已傳送。',on:true}];
+const PROGS=[
+  {name:'活動通知流程',trigger:'完成報名',status:'啟用中',members:55,steps:[
+    {type:'w',desc:'立即'},
+    {type:'m',desc:'報名後通知（確認報名、活動資訊）'},
+    {type:'w',desc:'至活動前 D-7（7天前）'},
+    {type:'m',desc:'D-7 提醒（7天後倒數提醒）'},
+    {type:'w',desc:'1 天後（D-6）'},
+    {type:'m',desc:'D-6 提醒（再次確認出席）'},
+    {type:'w',desc:'1 天後（D-5）'},
+    {type:'m',desc:'D-5 提醒'},
+    {type:'w',desc:'1 天後（D-4）'},
+    {type:'m',desc:'D-4 提醒（注意事項預告）'},
+    {type:'w',desc:'1 天後（D-3）'},
+    {type:'m',desc:'D-3 提醒'},
+    {type:'w',desc:'1 天後（D-2）'},
+    {type:'m',desc:'D-2 提醒（議程預覽）'},
+    {type:'w',desc:'1 天後（D-Day）'},
+    {type:'m',desc:'D-Day 活動議程（當日完整流程）'},
+    {type:'w',desc:'活動結束後 1 天'},
+    {type:'m',desc:'活動後問卷調查'},
+    {type:'w',desc:'3 天後'},
+    {type:'m',desc:'活動精華回顧（照片、影片連結）'},
+  ]},
+  {name:'企業參訪流程',trigger:'完成報名',status:'啟用中',members:28,steps:[
+    {type:'w',desc:'立即'},
+    {type:'m',desc:'報名後通知（參訪確認、集合地點）'},
+    {type:'w',desc:'至活動前 D-7'},
+    {type:'m',desc:'D-7 提醒（行程預覽、注意事項）'},
+    {type:'w',desc:'1 天後（D-6）'},
+    {type:'m',desc:'D-6 提醒'},
+    {type:'w',desc:'1 天後（D-5）'},
+    {type:'m',desc:'D-5 提醒（交通資訊）'},
+    {type:'w',desc:'1 天後（D-4）'},
+    {type:'m',desc:'D-4 提醒'},
+    {type:'w',desc:'1 天後（D-3）'},
+    {type:'m',desc:'D-3 提醒（裝備建議）'},
+    {type:'w',desc:'1 天後（D-2）'},
+    {type:'m',desc:'D-2 提醒（最終確認）'},
+    {type:'w',desc:'至 Day 1'},
+    {type:'m',desc:'Day 1 議程（第一天完整行程）'},
+    {type:'w',desc:'1 天後（Day 2）'},
+    {type:'m',desc:'Day 2 議程（第二天行程）'},
+    {type:'w',desc:'1 天後（Day 3）'},
+    {type:'m',desc:'Day 3 議程（第三天行程、回程資訊）'},
+    {type:'w',desc:'活動結束後 1 天'},
+    {type:'m',desc:'活動後問卷調查'},
+    {type:'w',desc:'3 天後'},
+    {type:'m',desc:'活動精華回顧（精選照片、心得彙整）'},
+  ]},
+];
+const TAGS=[{id:1,name:'20-25歲',cat:'年齡世代',color:'b-blue',count:12},{id:2,name:'一代創業',cat:'年齡世代',color:'b-navy',count:45},{id:3,name:'二代接班',cat:'年齡世代',color:'b-purple',count:28},{id:4,name:'房地產',cat:'投資興趣',color:'b-teal',count:19},{id:5,name:'美國',cat:'地區',color:'b-blue',count:8},{id:6,name:'海外',cat:'地區',color:'b-warn',count:14},{id:7,name:'天使投資',cat:'投資興趣',color:'b-gold',count:67},{id:8,name:'男',cat:'性別',color:'b-gray',count:98},{id:9,name:'女',cat:'性別',color:'b-gray',count:70}];
+
+// ── NAVIGATION ──
+function nav(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
+  const page=document.getElementById('page-'+id);
+  if(page)page.classList.add('active');
+  const sb=document.getElementById('sb-'+id);
+  if(sb)sb.classList.add('active');
+}
+
+// ── DRAWER ──
+function openDr(m){
+  const chanHtml=m.channels.map(c=>`<span class="badge ${chanC[c]||'b-gray'}" style="margin-right:4px">${c}</span>`).join('');
+  document.getElementById('dr-name').textContent=m.name+' · '+m.id;
+  document.getElementById('dr-body').innerHTML=`
+    <div class="dr-sec"><div class="dr-sec-t">基本資料</div>
+      ${ir('會員 ID',m.id)+ir('姓名',m.name)+ir('Displayname',`<span class="mono">${m.dn}</span>`)+ir('英文名',m.en)+ir('稱呼',m.call)+ir('性別',m.gender)+ir('生日',m.bday)+ir('加入日期',m.joined)}
+    </div>
+    <div class="dr-sec"><div class="dr-sec-t">LINE 資訊</div>
+      ${ir('UID',`<span class="mono">${m.uid}</span>`)+ir('發送管道',chanHtml)}
+    </div>
+    <div class="dr-sec"><div class="dr-sec-t">會員狀態</div>
+      ${ir('屬性',`<span class="badge ${attrC[m.attr]}">${m.attr}</span>`)+ir('會籍',`<span class="badge ${membC[m.membership]}">${m.membership}</span>`)+ir('區域',m.region)}
+    </div>
+    <div class="dr-sec"><div class="dr-sec-t">標籤與活動</div>
+      ${ir('投資標籤',m.invest.map(t=>`<span class="tag">${t}</span>`).join(''))+ir('參與活動',(Array.isArray(m.events)?m.events:[m.events]).map(t=>`<span class="tag">${t}</span>`).join(''))}
+    </div>
+    <div class="btns" style="padding-bottom:16px">
+      <button class="btn bp" onclick="alert('編輯 ${m.name}')"><i class="ti ti-edit"></i> 編輯</button>
+      <button class="btn" onclick="alert('發送訊息')"><i class="ti ti-send"></i> 發送訊息</button>
+    </div>`;
+  document.getElementById('dr-ov').classList.add('open');
+  document.getElementById('member-drawer').classList.add('open');
+}
+function ir(l,v){return`<div class="ir"><span class="il">${l}</span><span class="iv">${v}</span></div>`;}
+function closeDr(){document.getElementById('dr-ov').classList.remove('open');document.getElementById('member-drawer').classList.remove('open');}
+
+// ── MODAL ──
+function openAudModal(){
+  const tbody=document.getElementById('aud-tbody');
+  let show=MEMBERS.filter(m=>!m.channels.includes('封鎖')&&!m.channels.includes('未加入'));
+  document.getElementById('aud-count').textContent=show.length;
+  tbody.innerHTML=show.map(m=>`<tr><td><input type="checkbox" checked></td><td class="mono" style="color:var(--nav)">${m.id}</td><td>${m.name}</td><td>${m.channels.map(c=>`<span class="badge ${chanC[c]||'b-gray'}" style="font-size:10px">${c}</span>`).join(' ')}</td></tr>`).join('');
+  document.getElementById('aud-modal').classList.add('open');
+}
+function toggleAllAud(cb){document.querySelectorAll('#aud-tbody input[type=checkbox]').forEach(c=>c.checked=cb.checked);}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+// ── AUDIENCE CONDITIONS ──
+let condCnt=0;
+function addAudCond(){
+  condCnt++;
+  const div=document.createElement('div');div.className='aud-cond';div.id='cond'+condCnt;
+  div.innerHTML=`<div class="aud-cond-hdr">
+    <div class="inc-exc-toggle">
+      <button class="iet sel-inc" onclick="setIE(this,'inc')">包含</button>
+      <button class="iet" onclick="setIE(this,'exc')">排除</button>
+    </div>
+    <select style="flex:1;margin-left:8px;width:auto"><option>— 類別 —</option><option>分眾群組</option><option>標籤</option><option>屬性</option><option>區域</option></select>
+    <button class="btn bs bd2" onclick="document.getElementById('cond${condCnt}').remove();updTcNum()" style="margin-left:6px"><i class="ti ti-x"></i></button>
+  </div>
+  <select style="width:100%;margin-top:6px" onchange="updTcNum()"><option value="">— 選擇分眾 —</option>${SEGS.map(s=>`<option>${s}</option>`).join('')}</select>`;
+  document.getElementById('aud-conds').appendChild(div);
+  updTcNum();
+}
+function setIE(btn,type){const p=btn.closest('.inc-exc-toggle');p.querySelectorAll('.iet').forEach(b=>{b.classList.remove('sel-inc','sel-exc');});btn.classList.add(type==='inc'?'sel-inc':'sel-exc');}
+function updTcNum(){
+  const v=document.querySelector('input[name="bc-type"]:checked')?.value||'all';
+  if(v==='all')document.getElementById('tc-num').textContent='168 人';
+  else if(v==='seg'){const conds=document.querySelectorAll('#aud-conds .aud-cond');document.getElementById('tc-num').textContent=(conds.length?42*conds.length:'0')+' 人（估算）';}
+  else document.getElementById('tc-num').textContent='依清單而定';
+}
+function updBcTarget(radio){
+  const v=radio.value;
+  document.getElementById('seg-area').style.display=v==='seg'?'block':'none';
+  document.getElementById('uid-area').style.display=v==='uid'?'block':'none';
+  updTcNum();
+}
+
+// ── BLOCKS ──
+function addBlk(){
+  if(blkCnt>=5){alert('最多 5 個元件');return;}blkCnt++;
+  const id='b'+blkCnt;const d=document.createElement('div');d.className='mblk';d.id=id;
+  d.innerHTML=`<div class="mhdr"><div class="fr"><span class="badge b-gray" style="font-size:10px">${blkCnt}</span><span id="${id}l" style="font-size:12px;color:var(--t3)">選擇類型</span></div><button class="btn bs bd2" onclick="rmBlk('${id}')"><i class="ti ti-trash"></i></button></div>
+  <div class="mtr"><button class="mtb" onclick="sBT('${id}','text',this)"><i class="ti ti-typography"></i> 文字</button><button class="mtb" onclick="sBT('${id}','image',this)"><i class="ti ti-photo"></i> 圖片</button><button class="mtb" onclick="sBT('${id}','video',this)"><i class="ti ti-video"></i> 影片</button><button class="mtb" onclick="sBT('${id}','template',this)"><i class="ti ti-bookmark"></i> 選範本</button><button class="mtb" onclick="sBT('${id}','json',this)"><i class="ti ti-braces"></i> JSON</button></div>
+  <div class="mbdy" id="${id}bd" style="display:none"></div>`;
+  document.getElementById('blks').appendChild(d);
+  if(blkCnt>=5)document.getElementById('add-blk-btn').disabled=true;
+  updNums();
+}
+function rmBlk(id){document.getElementById(id).remove();blkCnt=document.querySelectorAll('.mblk').length;document.getElementById('add-blk-btn').disabled=false;updNums();updPrev();}
+function updNums(){document.querySelectorAll('.mblk').forEach((b,i)=>{const bj=b.querySelector('.badge');if(bj)bj.textContent=i+1;});}
+function sBT(id,type,btn){
+  btn.closest('.mtr').querySelectorAll('.mtb').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');
+  const lbl=document.getElementById(id+'l');if(lbl)lbl.innerHTML=`<span class="badge ${MBL[type]}" style="font-size:10px">${MLL[type]}</span>`;
+  const bd=document.getElementById(id+'bd');bd.style.display='block';
+  const params=`<div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><button class="pbtn" onclick="insP(this,'{{name}}')">＋ 姓名</button><button class="pbtn" onclick="insP(this,'{{call}}')">＋ 稱呼</button></div>`;
+  if(type==='text')bd.innerHTML=`<label>訊息文字</label><textarea id="${id}ta" style="min-height:64px" oninput="updPrev()" placeholder="輸入文字..."></textarea>${params}`;
+  else if(type==='image')bd.innerHTML=`<label>圖片 URL</label><input placeholder="https://..."><label style="margin-top:6px">預覽圖 URL</label><input placeholder="https://...">`;
+  else if(type==='video')bd.innerHTML=`<label>影片 URL（MP4）</label><input placeholder="https://..."><label style="margin-top:6px">預覽圖 URL</label><input placeholder="https://...">`;
+  else if(type==='template')bd.innerHTML=`<label>選擇訊息範本</label><select onchange="updPrev()"><option value="">— 選擇 —</option>${TPLS.map(t=>`<option>${t.name}</option>`).join('')}</select>`;
+  else if(type==='json')bd.innerHTML=`<label>貼入 Flex JSON</label><textarea class="jarea" style="min-height:100px" placeholder='{"type":"bubble",...}'></textarea>`;
+  updPrev();
+}
+function insP(btn,p){const bd=btn.closest('.mbdy');const ta=bd.querySelector('textarea');if(ta){const s=ta.selectionStart||ta.value.length;ta.value=ta.value.slice(0,s)+p+ta.value.slice(s);updPrev();}}
+function updPrev(){
+  const area=document.getElementById('bc-prev');
+  const blocks=document.querySelectorAll('.mblk');
+  if(!blocks.length){area.innerHTML='<div class="pmk" style="text-align:center;padding:20px;color:var(--t3)">新增元件後顯示</div>';return;}
+  let html='';
+  blocks.forEach((b,i)=>{
+    const bd=b.querySelector('[id$="bd"]');if(!bd||bd.style.display==='none')return;
+    const ta=bd.querySelector('textarea');const sel=bd.querySelector('select');const lbl=b.querySelector('.badge');const t=lbl?lbl.textContent:'';
+    html+=`<div class="pmk" style="margin-bottom:6px">`;
+    if(t==='文字'&&ta&&ta.value)html+=`<div style="white-space:pre-wrap;font-size:12px">${ta.value.replace(/\{\{name\}\}/g,'<strong style="color:var(--gold)">陳志明</strong>').replace(/\{\{call\}\}/g,'<strong style="color:var(--gold)">志明兄</strong>')}</div>`;
+    else if(t==='選範本'&&sel&&sel.value)html+=`<div style="font-size:12px;color:var(--nav)">[範本] ${sel.value}</div>`;
+    else if(['JSON','Flex 卡片'].includes(t))html+=`<div style="font-size:11px;color:var(--t3);text-align:center;padding:8px"><i class="ti ti-code" style="font-size:18px;color:var(--gold)"></i><br>Flex</div>`;
+    else if(t==='圖片')html+=`<div style="text-align:center;padding:8px"><i class="ti ti-photo" style="font-size:18px;color:var(--gold)"></i></div>`;
+    else html+=`<div style="font-size:11px;color:var(--t3);text-align:center;padding:6px">元件 ${i+1}</div>`;
+    html+='</div>';
+  });
+  area.innerHTML=html||'<div class="pmk" style="color:var(--t3);text-align:center;padding:16px">填入後顯示</div>';
+}
+function loadQ(k){if(!blkCnt)addBlk();const last=document.querySelector('.mblk:last-child');if(!last)return;const tb=last.querySelector('.mtb');if(tb)sBT(last.id,'text',tb);const ta=last.querySelector('textarea');if(ta){ta.value=QT[k];updPrev();}}
+function showTP(){document.getElementById('tp-btns').innerHTML=ADMINS.map(a=>`<button class="tpbtn ${selT.has(a.id)?'sel':''}" onclick="togT(${a.id},this)">${a.name}</button>`).join('');document.getElementById('tp-pick').style.display='block';}
+function togT(id,btn){if(selT.has(id)){selT.delete(id);btn.classList.remove('sel');}else{selT.add(id);btn.classList.add('sel');}}
+function doTest(){const n=[...selT].map(id=>ADMINS.find(a=>a.id===id)?.name).filter(Boolean).join('、');if(!n)return alert('請選擇對象');alert('已發送給：'+n);document.getElementById('tp-pick').style.display='none';}
+addBlk();
+
+// ── MEMBERS TABLE ──
+function renderToggles(){document.getElementById('col-toggles').innerHTML=COLS.map((c,i)=>`<span class="ctog ${c.show?'on':''}" onclick="togCol(${i})">${c.l}</span>`).join('');}
+function togCol(i){COLS[i].show=!COLS[i].show;renderToggles();renderMembers();}
+function renderMembers(){
+  const vis=COLS.filter(c=>c.show);
+  const th=document.getElementById('m-thead');
+  th.innerHTML=vis.map(c=>`<th class="${sortKey===c.k?(sortDir===1?'sa':'sd'):''}" onclick="sortBy('${c.k}')">${c.l}<span class="si"></span></th>`).join('')+'<th>操作</th>';
+  let data=[...MEMBERS];
+  if(sortKey)data.sort((a,b)=>{let av=a[sortKey]||'',bv=b[sortKey]||'';if(Array.isArray(av))av=av.join('');if(Array.isArray(bv))bv=bv.join('');return av.localeCompare(bv,'zh-TW')*sortDir;});
+  document.getElementById('m-tbody').innerHTML=data.map(m=>`<tr>${vis.map(c=>{
+    if(c.k==='id')return`<td class="mono" style="color:var(--nav);font-weight:500;min-width:80px">${m.id}</td>`;
+    if(c.k==='name')return`<td><strong style="font-size:12px">${m.name}</strong></td>`;
+    if(c.k==='dn')return`<td class="mono" style="font-size:11px">${m.dn}</td>`;
+    if(c.k==='attr')return`<td><span class="badge ${attrC[m.attr]||'b-gray'}">${m.attr}</span></td>`;
+    if(c.k==='membership')return`<td><span class="badge ${membC[m.membership]||'b-gray'}">${m.membership}</span></td>`;
+    if(c.k==='channels')return`<td>${m.channels.map(c=>`<span class="badge ${chanC[c]||'b-gray'}" style="font-size:10px;margin-right:2px">${c}</span>`).join('')}</td>`;
+    if(c.k==='invest'||c.k==='events'){const v=m[c.k];return`<td>${(Array.isArray(v)?v:[v]).map(t=>`<span class="tag">${t}</span>`).join('')}</td>`;}
+    if(['uid','groupid','chatid','gchatid'].includes(c.k))return`<td class="mono" style="font-size:10px;color:var(--t3)">${m[c.k]||'—'}</td>`;
+    const v=m[c.k]||'—';return`<td style="color:${v==='—'?'var(--t3)':'var(--t2)'}">${v}</td>`;
+  }).join('')}<td><button class="btn bs" onclick="openDr(MEMBERS[${MEMBERS.indexOf(m)}])"><i class="ti ti-eye"></i> 查看</button></td></tr>`).join('');
+}
+function sortBy(k){if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}renderMembers();}
+renderToggles();renderMembers();
+
+// ── TAGS ──
+function renderTags(){
+  const g=document.getElementById('tag-grid');if(!g)return;
+  g.innerHTML=TAGS.map((t,i)=>`<div class="card" style="padding:12px">
+    <div class="fr" style="margin-bottom:4px"><span class="badge ${t.color}" style="font-size:11px">${t.name}</span><div style="margin-left:auto;display:flex;gap:4px"><button class="btn bs"><i class="ti ti-edit"></i></button><button class="btn bs bd2" onclick="if(confirm('刪除？')){TAGS.splice(${i},1);renderTags()}"><i class="ti ti-trash"></i></button></div></div>
+    <div style="font-size:11px;color:var(--t3)">${t.cat} · ${t.count} 位會員</div>
+  </div>`).join('');
+}
+renderTags();
+function showTagEd(){document.getElementById('tag-editor').style.display='block';}
+function saveTag(){const name=document.getElementById('tag-name-inp').value.trim();const color=document.getElementById('tag-color-sel').value;if(!name)return alert('請填入名稱');TAGS.unshift({id:Date.now(),name,cat:'其他',color,count:0});renderTags();document.getElementById('tag-editor').style.display='none';document.getElementById('tag-name-inp').value='';}
+
+// ── TEMPLATES (list view) ──
+function renderTpls(){
+  const el=document.getElementById('tpl-list');if(!el)return;
+  el.innerHTML=TPLS.map((t,i)=>`<div class="tpl-list-item" onclick="alert('查看範本：${t.name}')">
+    <div class="tpl-li-icon" style="background:var(--${t.type==='flex'?'gold-bg':t.type==='image'?'bg-sub':'bg-sub'});color:var(--${t.type==='flex'?'gold':'t3'})"><i class="ti ${TI[t.type]||'ti-file'}"></i></div>
+    <div class="tpl-li-text">
+      <div class="tpl-li-name">${t.name}</div>
+      <div class="tpl-li-desc">${t.desc} · 更新：${t.updated}</div>
+    </div>
+    <span class="badge ${TB[t.type]}" style="flex-shrink:0">${t.type}</span>
+    <div class="fr" style="gap:4px;margin-left:8px" onclick="event.stopPropagation()">
+      <button class="btn bs"><i class="ti ti-edit"></i></button>
+      <button class="btn bs" onclick="alert('加入群發')"><i class="ti ti-send"></i></button>
+      <button class="btn bs bd2" onclick="if(confirm('刪除？')){TPLS.splice(${i},1);renderTpls()}"><i class="ti ti-trash"></i></button>
+    </div>
+  </div>`).join('');
+}
+renderTpls();
+function showNewTpl(){document.getElementById('tpl-editor').style.display='block';document.getElementById('tpl-name').value='';document.getElementById('tpl-type').value='text';switchTE();}
+function switchTE(){const t=document.getElementById('tpl-type').value;['text','image','giga','flex'].forEach(x=>{const el=document.getElementById('te-'+x);if(el)el.style.display=x===t?'block':'none';});}
+function showAI(){document.getElementById('te-ai').style.display='block';document.getElementById('te-json').style.display='none';}
+async function runAI(){const p=document.getElementById('ai-prompt').value.trim();if(!p){alert('請輸入描述');return;}document.getElementById('ai-spn').style.display='inline-flex';document.getElementById('ai-res').style.display='none';try{const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:`你是 LINE Flex Message 專家。根據描述生成完整 bubble JSON。只回傳 JSON，不含說明文字或 markdown。\n\n描述：${p}`}]})});const d=await r.json();document.getElementById('ai-res-box').textContent=(d.content?.[0]?.text||'{}').replace(/```json|```/g,'').trim();document.getElementById('ai-res').style.display='block';}catch(e){alert('失敗：'+e.message);}document.getElementById('ai-spn').style.display='none';}
+function copyAI(){const v=document.getElementById('ai-res-box').textContent;document.getElementById('te-json').style.display='block';document.getElementById('tpl-fj').value=v;prevFlex(v);}
+function prevFlex(v){if(!v.trim())return;try{JSON.parse(v);}catch(e){}}
+function saveTpl(){const name=document.getElementById('tpl-name').value.trim();const type=document.getElementById('tpl-type').value;if(!name){alert('請填入名稱');return;}TPLS.unshift({name,type,desc:'自訂範本',updated:'剛才'});renderTpls();document.getElementById('tpl-editor').style.display='none';alert('已儲存');}
+
+// ── PROG (list + detail) ──
+function renderProgList(){
+  const el=document.getElementById('prog-list');if(!el)return;
+  el.innerHTML=PROGS.map((p,i)=>`<div class="tpl-list-item" onclick="openProgDetail(${i})">
+    <div class="tpl-li-icon" style="background:#e8ecf5;color:var(--nav)"><i class="ti ti-player-track-next"></i></div>
+    <div class="tpl-li-text">
+      <div class="tpl-li-name">${p.name}</div>
+      <div class="tpl-li-desc">觸發：${p.trigger} · 進行中 ${p.members} 人 · ${p.steps.length/2} 個步驟</div>
+    </div>
+    <span class="badge b-green" style="flex-shrink:0">${p.status}</span>
+    <div class="fr" style="gap:4px;margin-left:8px" onclick="event.stopPropagation()">
+      <button class="btn bs"><i class="ti ti-edit"></i></button>
+      <button class="btn bs bd2"><i class="ti ti-trash"></i></button>
+    </div>
+  </div>`).join('');
+}
+renderProgList();
+function openProgDetail(i){
+  const p=PROGS[i];
+  document.getElementById('prog-name-inp').value=p.name;
+  renderProgFlow(p.steps);
+  document.getElementById('prog-list-view').style.display='none';
+  document.getElementById('prog-detail-view').style.display='block';
+}
+function showProgList(){document.getElementById('prog-list-view').style.display='block';document.getElementById('prog-detail-view').style.display='none';}
+function renderProgFlow(steps){
+  const fc=document.getElementById('prog-flow');
+  let html='';
+  for(let i=0;i<steps.length;i+=2){
+    const w=steps[i];const m=steps[i+1];
+    if(i>0)html+=`<div class="flow-arr"><i class="ti ti-arrow-down"></i></div>`;
+    html+=`<div class="flow-node">
+      <div class="fn-hdr"><i class="ti ti-clock" style="color:var(--nav);font-size:15px"></i><span class="badge nt-w">等待時間</span><span style="font-size:11px;color:var(--t3);margin-left:6px">${w?.desc||''}</span><button class="btn bs" style="margin-left:auto">設定</button></div>
+      ${m?`<div class="fn-body"><div class="fr" style="margin-bottom:6px"><i class="ti ti-send" style="color:var(--gold);font-size:14px"></i><span class="badge nt-m" style="margin-left:4px">發送訊息</span><span style="font-size:11px;color:var(--t3);margin-left:6px">${m.desc}</span><button class="btn bs" style="margin-left:auto">編輯</button></div><div style="font-size:11px;color:var(--t3)">傳送時段：10:00 – 20:00</div></div>`:''}
+    </div>`;
+  }
+  fc.innerHTML=html;
+}
+function addProgStep(){alert('新增等待時間或發送訊息步驟');}
+
+// ── AUTO REPLY ──
+function renderARs(){const el=document.getElementById('ar-list');if(!el)return;el.innerHTML=ARS.map((r,i)=>`<div class="card" style="margin-bottom:8px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div class="fr"><span class="badge ${r.tt==='post'?'b-purple':'b-teal'}" style="font-size:10px">${r.tt}</span><strong style="font-size:13px;margin-left:4px">${r.name}</strong><span class="badge ${r.on?'b-green':'b-gray'}" style="font-size:10px;margin-left:4px">${r.on?'啟用':'停用'}</span></div><div class="fr" style="gap:4px"><button class="btn bs" onclick="ARS[${i}].on=!ARS[${i}].on;renderARs()"><i class="ti ti-${r.on?'player-pause':'player-play'}"></i></button><button class="btn bs bd2" onclick="if(confirm('刪除？')){ARS.splice(${i},1);renderARs()}"><i class="ti ti-trash"></i></button></div></div><div style="font-size:11px;color:var(--t3);margin-bottom:2px">觸發：<code style="background:var(--bg-sub);padding:1px 5px;border-radius:3px">${r.trigger}</code></div><div style="font-size:11px;color:var(--t3)">回應：${r.src==='tpl'?`[範本] ${r.content}`:r.content}</div></div>`).join('');}
+renderARs();
+function updART(){const t=document.getElementById('ar-tt').value;document.getElementById('ar-msg').style.display=t==='msg'?'block':'none';document.getElementById('ar-post').style.display=t==='post'?'block':'none';}
+function setARS(src,btn){document.querySelectorAll('[id^="ars-"]').forEach(b=>{b.style.background='';b.style.borderColor='';b.style.color='';});btn.style.background='var(--gold-bg)';btn.style.borderColor='var(--gold-bd)';btn.style.color='#7A5E2A';document.getElementById('ar-cust').style.display=src==='cust'?'block':'none';document.getElementById('ar-tpl-sec').style.display=src==='tpl'?'block':'none';}
+function updATP(){const v=document.getElementById('ar-tpl-sel').value;const pv=document.getElementById('ar-tpl-pv');const pn=document.getElementById('ar-tpl-pn');if(v){pv.style.display='block';pn.textContent=v;}else pv.style.display='none';}
+function saveAR(){const n=document.getElementById('ar-name').value.trim();if(!n){alert('請填入名稱');return;}ARS.push({id:Date.now(),name:n,tt:'msg',trigger:'',src:'cust',content:'',on:true});renderARs();document.getElementById('ar-ed').style.display='none';}
+
+// ── RICH MENU ──
+function setLy(c,r,btn){document.querySelectorAll('[id^="ly-"]').forEach(b=>{b.style.background='';b.style.borderColor='';b.style.color='';});btn.style.background='var(--gold-bg)';btn.style.borderColor='var(--gold-bd)';btn.style.color='#7A5E2A';const n=c*r;document.getElementById('rm-prev').innerHTML=`<div style="display:grid;grid-template-columns:repeat(${c},1fr);gap:3px;width:100%">${Array.from({length:n},(_,i)=>`<div style="padding:7px 4px;background:var(--bg-card);border-radius:3px;border:1px solid var(--bd);text-align:center;font-size:11px;color:var(--t3)">按鈕${i+1}</div>`).join('')}</div>`;const labs=['論壇報名','會員建檔','聯絡我們','最新活動','更多資訊','回到首頁'];document.getElementById('btn-cfg').innerHTML=Array.from({length:n},(_,i)=>`<div style="padding:7px 0;border-bottom:1px solid var(--bd)"><div style="font-size:11px;font-weight:500;margin-bottom:4px">按鈕 ${i+1}</div><div class="row"><div class="col"><label>標籤</label><input value="${labs[i]||''}"></div><div class="col"><label>類型</label><select><option>message</option><option>postback</option><option>uri</option></select></div></div><div><label>內容</label><input placeholder="訊息 / data / URL"></div></div>`).join('');}
+setLy(3,1,document.getElementById('ly-3'));
+
+// ── SETTINGS ──
+function renderAdmins(){const el=document.getElementById('adm-list');if(!el)return;el.innerHTML=ADMINS.map((a,i)=>`<div class="adm-item"><div style="flex:1"><div style="font-size:12px;font-weight:500">${a.name}</div><div class="mono" style="color:var(--t3)">${a.uid}</div></div><button class="btn bs bd2" onclick="if(confirm('移除？')){ADMINS.splice(${i},1);renderAdmins()}"><i class="ti ti-trash"></i></button></div>`).join('');const dt=document.getElementById('def-tests');if(dt)dt.innerHTML=ADMINS.map(a=>`<label style="display:inline-flex;align-items:center;gap:6px;font-size:12px;margin-right:12px;cursor:pointer"><input type="checkbox" ${a.defTest?'checked':''} onchange="ADMINS.find(x=>x.id===${a.id}).defTest=this.checked"> ${a.name}</label>`).join('');const cnt=document.getElementById('adm-cnt');if(cnt)cnt.textContent=ADMINS.length+' 人';}
+renderAdmins();
+function addAdm(){const n=prompt('管理者姓名：');if(!n)return;const u=prompt('LINE UID：');if(!u)return;ADMINS.push({id:Date.now(),name:n,uid:u,defTest:false});renderAdmins();}
+function tv(inp,eye){const el=document.getElementById(inp);const e=document.getElementById(eye);el.type=el.type==='password'?'text':'password';e.className=el.type==='password'?'ti ti-eye':'ti ti-eye-off';}
+function tLine(){document.getElementById('ld').className='sdot s-idle';document.getElementById('lt2').textContent='測試中...';setTimeout(()=>{document.getElementById('ld').className='sdot s-ok';document.getElementById('lt2').textContent='已連線・'+new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});},1200);}
+function tAI(){document.getElementById('aid').className='sdot s-idle';document.getElementById('ait').textContent='測試中...';setTimeout(()=>{const k=document.getElementById('ak').value;const ok=!!k;document.getElementById('aid').className='sdot '+(ok?'s-ok':'s-err');document.getElementById('ait').textContent=ok?'連線正常':'請先填入 Key';document.getElementById('ai-sd').className='sdot '+(ok?'s-ok':'s-err');document.getElementById('ai-st').textContent=ok?'正常':'未設定';},1000);}
+function updAIM(){const p=document.getElementById('ai-pv').value;const s=document.getElementById('aim');const m={claude:['claude-sonnet-4-20250514','claude-opus-4'],gpt:['gpt-4o','gpt-4o-mini'],gemini:['gemini-2.5-pro','gemini-2.0-flash']};s.innerHTML=m[p].map(x=>`<option>${x}</option>`).join('');}
+
+// ── PARAMETRIC BROADCAST ──
+let pbData=[];
+let pbFields=[];
+
+function showNewPB(){
+  document.getElementById('pb-editor').style.display='block';
+  syncPBParamBtns();
+  updPBPreview();
+}
+
+function addPBField(){
+  const row=document.createElement('div');
+  row.className='pb-field-row';
+  row.style.cssText='display:flex;gap:6px;align-items:center';
+  row.innerHTML=`<input placeholder="欄位名稱" style="width:120px;flex-shrink:0" oninput="syncPBParamBtns()"><input placeholder="說明（選填）" style="flex:1"><span class="badge b-gold" style="font-size:10px;white-space:nowrap">{{...}}</span><button class="btn bs bd2" onclick="rmPBField(this)"><i class="ti ti-trash"></i></button>`;
+  document.getElementById('pb-fields').appendChild(row);
+  row.querySelector('input').addEventListener('input',function(){
+    const badge=row.querySelector('.badge');badge.textContent='{{'+this.value+'}}';syncPBParamBtns();
+  });
+}
+
+function rmPBField(btn){btn.closest('.pb-field-row').remove();syncPBParamBtns();}
+
+function syncPBParamBtns(){
+  const rows=document.querySelectorAll('#pb-fields .pb-field-row');
+  const container=document.getElementById('pb-param-btns');
+  if(!container)return;
+  pbFields=[];
+  rows.forEach(r=>{const v=r.querySelector('input').value.trim();if(v)pbFields.push(v);});
+  container.innerHTML=pbFields.map(f=>`<button class="pbtn" onclick="insParamPB('{{${f}}}')">${f}</button>`).join('');
+}
+
+function insParamPB(param){
+  const ta=document.getElementById('pb-msg');
+  if(!ta)return;
+  const s=ta.selectionStart||ta.value.length;
+  ta.value=ta.value.slice(0,s)+param+ta.value.slice(s);
+  updPBPreview();
+}
+
+function loadPBDemo(){
+  pbData=[
+    {uid:'Ua1b2c3...',name:'陳志明',call:'志明兄',seat:'A-12',ticket_no:'T001',hotel:'艾麗希爾頓',checkin_date:'06/23',missing_fields:'英文姓名、投資標籤'},
+    {uid:'Ub2c3d4...',name:'林美華',call:'美華',seat:'B-05',ticket_no:'T002',hotel:'艾麗希爾頓',checkin_date:'06/23',missing_fields:'生日'},
+    {uid:'Ud4e5f6...',name:'李建國',call:'建國',seat:'A-08',ticket_no:'T003',hotel:'艾麗希爾頓',checkin_date:'06/24',missing_fields:''},
+  ];
+  renderPBTable();
+  updPBPreview();
+}
+
+function renderPBTable(){
+  if(!pbData.length)return;
+  const thead=document.getElementById('pb-data-thead');
+  const tbody=document.getElementById('pb-data-tbody');
+  const keys=Object.keys(pbData[0]);
+  thead.innerHTML=`<th><input type="checkbox" checked></th>`+keys.map(k=>`<th>${k}</th>`).join('');
+  tbody.innerHTML=pbData.map((row,i)=>`<tr><td><input type="checkbox" checked></td>${keys.map(k=>`<td style="font-size:11px">${row[k]||'—'}</td>`).join('')}</tr>`).join('');
+  document.getElementById('pb-preview-table').style.display='block';
+  document.getElementById('pb-data-count').textContent=`共 ${pbData.length} 筆資料`;
+  updPBPreview();
+}
+
+function updPBPreview(){
+  const ta=document.getElementById('pb-msg');
+  const pv=document.getElementById('pb-msg-preview');
+  if(!ta||!pv)return;
+  let msg=ta.value;
+  if(!msg.trim()){pv.textContent='填入訊息後顯示預覽';return;}
+  // Use first row of pbData, or demo values
+  const sample=pbData[0]||{name:'陳志明',call:'志明兄',seat:'A-12',ticket_no:'T001',hotel:'艾麗希爾頓',checkin_date:'06/23',missing_fields:'英文姓名'};
+  let rendered=msg;
+  Object.entries(sample).forEach(([k,v])=>{rendered=rendered.replace(new RegExp('\\{\\{'+k+'\\}\\}','g'),`<strong style="color:var(--gold)">${v}</strong>`);});
+  // Remove any remaining unresolved params
+  rendered=rendered.replace(/\{\{[^}]+\}\}/g,s=>`<span style="color:#c0392b;font-style:italic">${s}</span>`);
+  pv.innerHTML=rendered.replace(/\n/g,'<br>');
+}
+
+function execPB(){
+  const name=document.getElementById('pb-name').value.trim();
+  if(!name)return alert('請填入任務名稱');
+  if(!pbData.length)return alert('請先上傳名單或載入示範資料');
+  const msg=document.getElementById('pb-msg').value.trim();
+  if(!msg)return alert('請填入訊息內容');
+  const confirmed=confirm(`確定要發送給 ${pbData.length} 人？\n\n每個人將收到個人化訊息，此動作不可撤回。`);
+  if(confirmed){alert(`已成功發送 ${pbData.length} 則個人化訊息！`);document.getElementById('pb-editor').style.display='none';}
+}
+
+// ── SEGMENT BUILDER ──
+let segGroups=[
+  {name:'VIP 台北有效',note:'',conds:{attr:['個人會員','企業會員'],membership:['有效'],region:['台北'],gender:[],year:[],channel:[],event:[],tagInc:['天使投資'],tagExc:[]},count:38,uid:35},
+  {name:'2026 新加入',note:'',conds:{attr:[],membership:['有效'],region:[],gender:[],year:['2026'],channel:[],event:[],tagInc:[],tagExc:[]},count:34,uid:31},
+  {name:'論壇已報名',note:'',conds:{attr:[],membership:[],region:[],gender:[],year:[],channel:['LINE'],event:['2026 論壇'],tagInc:[],tagExc:[]},count:55,uid:49},
+];
+
+function initSegTagRows(){
+  const el=document.getElementById('seg-tag-rows');if(!el)return;
+  el.innerHTML=TAGS.filter(t=>t.cat!=='性別').map((t,i)=>`
+    <div class="tag-ie-row" id="seg-tag-${t.id}">
+      <span class="badge ${t.color}" style="font-size:11px;min-width:70px;text-align:center">${t.name}</span>
+      <span style="font-size:11px;color:var(--t3);flex:1">${t.cat} · ${t.count} 人</span>
+      <div class="ie-toggle">
+        <button class="iet" id="seg-inc-${t.id}" onclick="setTagIE(${t.id},'inc')">包含</button>
+        <button class="iet" id="seg-exc-${t.id}" onclick="setTagIE(${t.id},'exc')">排除</button>
+        <button class="iet" id="seg-nil-${t.id}" onclick="setTagIE(${t.id},'nil')" style="background:var(--bg-sub);color:var(--t3)">不設定</button>
+      </div>
+    </div>`).join('');
+}
+initSegTagRows();
+
+function setTagIE(id,mode){
+  const inc=document.getElementById('seg-inc-'+id);
+  const exc=document.getElementById('seg-exc-'+id);
+  const nil=document.getElementById('seg-nil-'+id);
+  if(!inc)return;
+  inc.className='iet'+(mode==='inc'?' on-inc':'');
+  exc.className='iet'+(mode==='exc'?' on-exc':'');
+  nil.className='iet'+(mode==='nil'?'':'')+' '+(mode==='nil'?'':'');
+  if(mode==='nil'){nil.style.background='var(--bg-sub)';nil.style.color='var(--t3)';}
+  else{nil.style.background='';nil.style.color='';}
+}
+
+function togSegTag(btn){
+  // Cycle: off → inc (green) → exc (red) → off
+  if(btn.classList.contains('inc')){btn.className='seg-tag-btn exc';}
+  else if(btn.classList.contains('exc')){btn.className='seg-tag-btn';}
+  else{btn.className='seg-tag-btn inc';}
+}
+
+function calcSegCount(){
+  // Demo calculation
+  const inc=document.querySelectorAll('.seg-tag-btn.inc').length;
+  const exc=document.querySelectorAll('.seg-tag-btn.exc').length;
+  const base=Math.max(10,80-exc*15+inc*5);
+  document.getElementById('seg-match-count').textContent=base+' 人';
+  document.getElementById('seg-uid-count').textContent=Math.round(base*.88)+' 人';
+}
+
+function saveSegGroup(){
+  const name=document.getElementById('seg-name').value.trim();
+  if(!name)return alert('請填入群組名稱');
+  segGroups.unshift({name,note:'',conds:{},count:42,uid:38});
+  renderSegList();
+  resetSegBuilder();
+  alert('群組已儲存：'+name);
+}
+
+function resetSegBuilder(){
+  document.getElementById('seg-name').value='';
+  document.getElementById('seg-note').value='';
+  document.querySelectorAll('.seg-tag-btn').forEach(b=>b.className='seg-tag-btn');
+  document.querySelectorAll('.iet').forEach(b=>{b.className='iet';b.style.background='';b.style.color='';});
+  document.getElementById('seg-match-count').textContent='— 人';
+  document.getElementById('seg-uid-count').textContent='—';
+  document.getElementById('seg-builder-title').textContent='建立分眾群組';
+  document.getElementById('seg-cancel-btn').style.display='none';
+}
+
+function editSegGroup(i){
+  const g=segGroups[i];
+  document.getElementById('seg-name').value=g.name;
+  document.getElementById('seg-note').value=g.note||'';
+  document.getElementById('seg-match-count').textContent=g.count+' 人';
+  document.getElementById('seg-uid-count').textContent=g.uid+' 人';
+  document.getElementById('seg-builder-title').textContent='編輯群組';
+  document.getElementById('seg-cancel-btn').style.display='inline-flex';
+  document.getElementById('seg-builder').scrollIntoView({behavior:'smooth'});
+}
+
+function renderSegList(){
+  const el=document.getElementById('seg-list');if(!el)return;
+  el.innerHTML=segGroups.map((g,i)=>`<div class="tpl-list-item">
+    <div class="tpl-li-icon" style="background:#e8ecf5;color:var(--nav)"><i class="ti ti-users-group"></i></div>
+    <div class="tpl-li-text">
+      <div class="tpl-li-name">${g.name}</div>
+      <div class="tpl-li-desc">${g.count} 人 · 有效 UID ${g.uid} 人${g.note?' · '+g.note:''}</div>
+    </div>
+    <div class="fr" style="gap:4px" onclick="event.stopPropagation()">
+      <button class="btn bs" onclick="alert('群發：${g.name}')"><i class="ti ti-send"></i></button>
+      <button class="btn bs" onclick="editSegGroup(${i})"><i class="ti ti-edit"></i></button>
+      <button class="btn bs bd2" onclick="if(confirm('刪除？')){segGroups.splice(${i},1);renderSegList()}"><i class="ti ti-trash"></i></button>
+    </div>
+  </div>`).join('');
+}
+renderSegList();
+
+
+</script>
+</body>
+</html>
