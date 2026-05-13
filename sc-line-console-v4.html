@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Capital · LINE Console</title>
+<title>LINE 管理後台</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
@@ -202,6 +202,17 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg-sub)}
 
 /* ── ADMINISTER ── */
 .adm-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-sub);border-radius:var(--r2);border:1px solid var(--bd);margin-bottom:6px}
+/* SEG TAG BUTTONS */
+.seg-tag-btn{padding:4px 11px;border-radius:20px;border:1px solid var(--bd);background:var(--bg-sub);font-size:11px;cursor:pointer;color:var(--t2);font-family:inherit;transition:all .15s}
+.seg-tag-btn:hover{border-color:var(--bd2);color:var(--t1)}
+.seg-tag-btn.inc{background:#edf6ee;color:#2d7a3a;border-color:#a5d8b8;font-weight:500}
+.seg-tag-btn.exc{background:#fdf0ee;color:#c0392b;border-color:#f4b8b0;font-weight:500}
+/* TAG INC/EXC ROW */
+.tag-ie-row{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--bg-sub);border-radius:var(--r1);border:1px solid var(--bd)}
+.ie-toggle{display:flex;border-radius:var(--r1);overflow:hidden;border:1px solid var(--bd);flex-shrink:0}
+.iet{padding:3px 9px;font-size:11px;cursor:pointer;border:none;background:var(--bg-inp);color:var(--t3);font-family:inherit;transition:all .15s}
+.iet.on-inc{background:#edf6ee;color:#2d7a3a;font-weight:500}
+.iet.on-exc{background:#fdf0ee;color:#c0392b;font-weight:500}
 .rmth{width:46px;height:22px;background:var(--bg-sub);border-radius:3px;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center}
 .tpbtn{padding:4px 12px;border-radius:20px;border:1px solid var(--bd);background:var(--bg-card);font-size:11px;cursor:pointer;color:var(--t2);font-family:inherit;transition:all .15s}
 .tpbtn:hover{background:var(--bg-sub)}.tpbtn.sel{background:var(--gold-bg);color:#7A5E2A;border-color:var(--gold-bd);font-weight:500}
@@ -231,7 +242,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg-sub)}
 <!-- TOPBAR -->
 <div class="topbar">
   <i class="ti ti-brand-line" style="font-size:20px;color:var(--grn)"></i>
-  <div><div class="tb-brand">Smart Capital · LINE Console</div><div class="tb-sub">識富天使會 · 管理後台</div></div>
+  <div><div class="tb-brand">LINE 管理後台</div><div class="tb-sub">OA Console</div></div>
   <div class="tb-right">
     <div class="dot-on"></div><div class="tb-st">OA 已連線</div>
     <button class="btn-tb" onclick="nav('settings')"><i class="ti ti-settings"></i> 設定</button>
@@ -246,7 +257,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg-sub)}
     <button class="sb-item active" id="sb-broadcast" onclick="nav('broadcast')"><i class="ti ti-send"></i> 新增群發</button>
     <button class="sb-item" id="sb-broadcast-list" onclick="nav('broadcast-list')"><i class="ti ti-list"></i> 群發管理</button>
     <button class="sb-item" id="sb-log" onclick="nav('log')"><i class="ti ti-history"></i> 發送紀錄</button>
-    <button class="sb-item" id="sb-datafix" onclick="nav('datafix')"><i class="ti ti-database-import"></i> 資料補齊任務</button>
+    <button class="sb-item" id="sb-datafix" onclick="nav('datafix')"><i class="ti ti-variable"></i> 參數化群發</button>
   </div>
   <div class="sb-divider"></div>
   <div class="sb-section">
@@ -365,7 +376,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg-sub)}
       <thead><tr><th>時間</th><th>類型</th><th>對象</th><th>訊息摘要</th><th>人數</th><th>狀態</th><th>操作</th></tr></thead>
       <tbody>
         <tr><td>05/09 14:32</td><td><span class="badge b-blue">Flex</span></td><td>VIP 會員</td><td>6/24 論壇邀請</td><td>42</td><td><span class="badge b-green">成功</span></td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-send"></i> 再次發送</button><button class="btn bs"><i class="ti ti-eye"></i> 查看</button></div></td></tr>
-        <tr><td>05/07 10:15</td><td><span class="badge b-gray">文字</span></td><td>全體好友</td><td>親愛的識富會員...</td><td>168</td><td><span class="badge b-green">成功</span></td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-send"></i> 再次發送</button><button class="btn bs"><i class="ti ti-eye"></i> 查看</button></div></td></tr>
+        <tr><td>05/07 10:15</td><td><span class="badge b-gray">文字</span></td><td>全體好友</td><td>親愛的會員...</td><td>168</td><td><span class="badge b-green">成功</span></td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-send"></i> 再次發送</button><button class="btn bs"><i class="ti ti-eye"></i> 查看</button></div></td></tr>
         <tr><td>05/05 16:48</td><td><span class="badge b-warn">圖片</span></td><td>台北區</td><td>[圖片訊息]</td><td>78</td><td><span class="badge b-green">成功</span></td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-send"></i> 再次發送</button><button class="btn bs"><i class="ti ti-eye"></i> 查看</button></div></td></tr>
         <tr><td>05/03 09:22</td><td><span class="badge b-purple">影片</span></td><td>指定 UID</td><td>[影片訊息]</td><td>12</td><td><span class="badge b-red">部分失敗</span></td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-send"></i> 再次發送</button><button class="btn bs"><i class="ti ti-eye"></i> 查看</button></div></td></tr>
       </tbody>
@@ -373,45 +384,174 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg-sub)}
   </div>
 </div>
 
-<!-- ===== 資料補齊任務 ===== -->
+<!-- ===== 參數化群發 ===== -->
 <div id="page-datafix" class="page">
-  <div class="ph"><div><div class="ph-title">資料補齊任務</div><div class="ph-sub">偵測缺漏欄位，半自動發送補填通知</div></div><button class="btn bp" onclick="alert('新增任務')"><i class="ti ti-plus"></i> 新增任務</button></div>
+  <div class="ph">
+    <div><div class="ph-title">參數化群發</div><div class="ph-sub">匯入名單 + 自定欄位，每個人收到個人化訊息</div></div>
+    <button class="btn bp" onclick="showNewPB()"><i class="ti ti-plus"></i> 新增任務</button>
+  </div>
+
+  <!-- CONCEPT BANNER -->
   <div class="card card-gold" style="margin-bottom:16px">
-    <div class="st" style="margin-bottom:8px">運作邏輯</div>
-    <div style="display:flex;flex-direction:column;gap:0">
-      <div class="dc-step"><div class="dc-num">1</div><div class="dc-content"><div class="dc-title">連接資料來源</div><div class="dc-desc">從 Airtable、Google Sheets 或手動上傳，匯入會員主要資料表</div></div></div>
-      <div class="dc-step"><div class="dc-num">2</div><div class="dc-content"><div class="dc-title">設定必填欄位</div><div class="dc-desc">指定哪些欄位必須有值（例如：英文名、生日、投資標籤、UID），系統自動偵測空白</div></div></div>
-      <div class="dc-step"><div class="dc-num">3</div><div class="dc-content"><div class="dc-title">設定補填訊息</div><div class="dc-desc">選擇訊息範本，或自行撰寫。訊息可帶入 <code style="background:var(--bg-sub);padding:1px 5px;border-radius:3px">{{name}}</code>、<code style="background:var(--bg-sub);padding:1px 5px;border-radius:3px">{{missing_fields}}</code> 等參數，自動顯示該會員缺少哪些欄位</div></div></div>
-      <div class="dc-step"><div class="dc-num">4</div><div class="dc-content"><div class="dc-title">執行發送</div><div class="dc-desc">系統過濾出有缺漏欄位的會員，確認名單後發送個人化補填連結。可設定多次提醒間隔</div></div></div>
+    <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px">
+        <div style="font-size:13px;font-weight:500;margin-bottom:6px;color:var(--nav)">適用情境</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:12px;color:var(--t2)"><i class="ti ti-check" style="color:var(--gold)"></i> 活動入場通知（帶入姓名、座位、票號）</div>
+          <div style="font-size:12px;color:var(--t2)"><i class="ti ti-check" style="color:var(--gold)"></i> 簽到確認（帶入報名項目、餐飲選擇）</div>
+          <div style="font-size:12px;color:var(--t2)"><i class="ti ti-check" style="color:var(--gold)"></i> 個人化提醒（帶入任何欄位）</div>
+          <div style="font-size:12px;color:var(--t2)"><i class="ti ti-check" style="color:var(--gold)"></i> 會員資料補填通知（帶入缺漏欄位清單）</div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:200px">
+        <div style="font-size:13px;font-weight:500;margin-bottom:6px;color:var(--nav)">運作方式</div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--t2)">
+          <span style="background:var(--bg-card);padding:4px 10px;border-radius:20px;border:1px solid var(--gold-bd)">① 定義欄位</span>
+          <i class="ti ti-arrow-right" style="color:var(--gold)"></i>
+          <span style="background:var(--bg-card);padding:4px 10px;border-radius:20px;border:1px solid var(--gold-bd)">② 上傳名單</span>
+          <i class="ti ti-arrow-right" style="color:var(--gold)"></i>
+          <span style="background:var(--bg-card);padding:4px 10px;border-radius:20px;border:1px solid var(--gold-bd)">③ 撰寫訊息</span>
+          <i class="ti ti-arrow-right" style="color:var(--gold)"></i>
+          <span style="background:var(--bg-card);padding:4px 10px;border-radius:20px;border:1px solid var(--gold-bd)">④ 預覽確認</span>
+          <i class="ti ti-arrow-right" style="color:var(--gold)"></i>
+          <span style="background:var(--nav);color:#fff;padding:4px 10px;border-radius:20px">⑤ 發送</span>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="card" style="margin-bottom:12px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div class="st" style="margin-bottom:0">進行中任務</div>
+
+  <!-- NEW TASK FORM -->
+  <div class="card" id="pb-editor" style="display:none;margin-bottom:14px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div class="st" style="margin-bottom:0">新增參數化群發任務</div>
+      <button class="btn bs" onclick="document.getElementById('pb-editor').style.display='none'"><i class="ti ti-x"></i></button>
     </div>
-    <div class="tw"><table>
-      <thead><tr><th>任務名稱</th><th>資料來源</th><th>目標欄位</th><th>待補人數</th><th>狀態</th><th>操作</th></tr></thead>
-      <tbody>
-        <tr><td><strong>2026 建檔更新</strong></td><td>Google Sheets</td><td><span class="tag">英文名</span><span class="tag">UID</span><span class="tag">生日</span></td><td style="color:#c0392b;font-weight:500">23</td><td><span class="badge b-warn">等待發送</span></td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-eye"></i> 查看名單</button><button class="btn bs bp"><i class="ti ti-send"></i> 執行</button></div></td></tr>
-        <tr><td><strong>投資標籤補充</strong></td><td>Airtable（規劃中）</td><td><span class="tag">投資標籤</span><span class="tag">興趣標籤</span></td><td>41</td><td><span class="badge b-gray">未設定訊息</span></td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-edit"></i> 設定</button></div></td></tr>
-      </tbody>
-    </table></div>
-    <div style="margin-top:12px;padding:10px 12px;background:var(--bg-sub);border-radius:var(--r1);font-size:11px;color:var(--t3)">
-      <i class="ti ti-info-circle" style="color:var(--gold)"></i> Airtable API 串接尚未設定，請先至「系統設定 → Airtable Token」完成配置。
+    <!-- STEP 1: 基本設定 -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:12px;font-weight:500;color:var(--nav);margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="background:var(--nav);color:#fff;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">1</span> 基本設定</div>
+      <div class="row">
+        <div class="col"><label>任務名稱</label><input id="pb-name" placeholder="例：6/24 論壇入場通知"></div>
+        <div class="col"><label>UID 欄位名稱（CSV 中哪欄是 LINE UID）</label><input id="pb-uid-col" value="uid" placeholder="uid"></div>
+      </div>
+    </div>
+
+    <!-- STEP 2: 欄位定義 -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:12px;font-weight:500;color:var(--nav);margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="background:var(--nav);color:#fff;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">2</span> 自定欄位變數 <span style="font-size:11px;font-weight:400;color:var(--t3)">（可在訊息中用 <code style="background:var(--bg-sub);padding:1px 5px;border-radius:3px">{{欄位名}}</code> 帶入）</span></div>
+      <div id="pb-fields" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px">
+        <div class="pb-field-row" style="display:flex;gap:6px;align-items:center">
+          <input value="name" placeholder="欄位名稱" style="width:120px;flex-shrink:0">
+          <input value="姓名" placeholder="說明（選填）" style="flex:1">
+          <span class="badge b-gold" style="font-size:10px;white-space:nowrap">{{name}}</span>
+          <button class="btn bs bd2" onclick="rmPBField(this)"><i class="ti ti-trash"></i></button>
+        </div>
+        <div class="pb-field-row" style="display:flex;gap:6px;align-items:center">
+          <input value="call" placeholder="欄位名稱" style="width:120px;flex-shrink:0">
+          <input value="稱呼" placeholder="說明（選填）" style="flex:1">
+          <span class="badge b-gold" style="font-size:10px;white-space:nowrap">{{call}}</span>
+          <button class="btn bs bd2" onclick="rmPBField(this)"><i class="ti ti-trash"></i></button>
+        </div>
+        <div class="pb-field-row" style="display:flex;gap:6px;align-items:center">
+          <input value="seat" placeholder="欄位名稱" style="width:120px;flex-shrink:0">
+          <input value="座位號碼" placeholder="說明（選填）" style="flex:1">
+          <span class="badge b-gold" style="font-size:10px;white-space:nowrap">{{seat}}</span>
+          <button class="btn bs bd2" onclick="rmPBField(this)"><i class="ti ti-trash"></i></button>
+        </div>
+      </div>
+      <button class="btn bs" onclick="addPBField()"><i class="ti ti-plus"></i> 新增欄位</button>
+    </div>
+
+    <!-- STEP 3: 上傳名單 -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:12px;font-weight:500;color:var(--nav);margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="background:var(--nav);color:#fff;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">3</span> 上傳名單</div>
+      <div style="margin-bottom:8px">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <input type="file" accept=".csv" style="font-size:11px;flex:1;max-width:260px">
+          <span style="font-size:11px;color:var(--t3)">或</span>
+          <button class="btn bs" onclick="loadPBDemo()"><i class="ti ti-table-import"></i> 載入示範資料</button>
+        </div>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px">CSV 第一行為欄位名稱，需包含上方定義的欄位與 UID 欄</div>
+      </div>
+      <div id="pb-preview-table" style="display:none">
+        <div class="tw"><table id="pb-data-table">
+          <thead><tr id="pb-data-thead"></tr></thead>
+          <tbody id="pb-data-tbody"></tbody>
+        </table></div>
+        <div style="font-size:11px;color:var(--t3);margin-top:6px" id="pb-data-count"></div>
+      </div>
+    </div>
+
+    <!-- STEP 4: 訊息撰寫 -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:12px;font-weight:500;color:var(--nav);margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="background:var(--nav);color:#fff;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">4</span> 訊息內容</div>
+      <div class="row" style="margin-bottom:8px;align-items:flex-start">
+        <div class="col">
+          <label>訊息文字</label>
+          <textarea id="pb-msg" style="min-height:120px" oninput="updPBPreview()" placeholder="輸入訊息...">親愛的 {{call}}，
+
+感謝您報名參加本次活動！
+
+您的座位為：{{seat}}
+
+活動當日請憑此訊息入場，期待見到您！</textarea>
+          <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap" id="pb-param-btns"></div>
+        </div>
+        <div class="col">
+          <label>預覽（第 1 筆資料）</label>
+          <div class="pmk" id="pb-msg-preview" style="min-height:120px;white-space:pre-wrap;font-size:12px">填入資料後顯示預覽</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btns">
+      <button class="btn" onclick="document.getElementById('pb-editor').style.display='none'"><i class="ti ti-device-floppy"></i> 儲存草稿</button>
+      <button class="btn bp" onclick="execPB()"><i class="ti ti-send"></i> 確認並發送</button>
     </div>
   </div>
-  <div class="card">
-    <div class="st" style="margin-bottom:8px">補填訊息範本預覽</div>
-    <div class="pmk" style="white-space:pre-wrap;font-size:12px">親愛的 <span style="color:var(--gold);font-weight:500">陳志明</span>，
 
-識富天使會會員資料更新期間，我們發現您的資料尚有以下欄位未填寫：
-
-　• <span style="color:#c0392b">英文姓名</span>
-　• <span style="color:#c0392b">投資標籤</span>
-
-點選下方連結完成補充，讓我們為您提供更精準的服務。
-
-感謝您的配合！</div>
+  <!-- TASK LIST -->
+  <div class="card" style="padding:0;overflow:hidden">
+    <div style="padding:12px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between">
+      <div class="st" style="margin-bottom:0">任務列表</div>
+      <select style="width:auto;font-size:11px"><option>所有狀態</option><option>草稿</option><option>等待發送</option><option>已發送</option></select>
+    </div>
+    <div class="tpl-list-item">
+      <div class="tpl-li-icon" style="background:#e8ecf5;color:var(--nav)"><i class="ti ti-ticket"></i></div>
+      <div class="tpl-li-text">
+        <div class="tpl-li-name">6/24 論壇入場通知</div>
+        <div class="tpl-li-desc">欄位：name、seat、ticket_no · 97 人 · 更新：05/10 Ariel</div>
+      </div>
+      <span class="badge b-warn" style="flex-shrink:0">等待發送</span>
+      <div class="fr" style="gap:4px;margin-left:8px">
+        <button class="btn bs"><i class="ti ti-eye"></i> 預覽</button>
+        <button class="btn bs bp"><i class="ti ti-send"></i> 發送</button>
+        <button class="btn bs bd2"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>
+    <div class="tpl-list-item">
+      <div class="tpl-li-icon" style="background:#edf6ee;color:#2d7a3a"><i class="ti ti-user-check"></i></div>
+      <div class="tpl-li-text">
+        <div class="tpl-li-name">會員資料補填通知</div>
+        <div class="tpl-li-desc">欄位：name、call、missing_fields · 23 人 · 更新：05/08 Chester</div>
+      </div>
+      <span class="badge b-green" style="flex-shrink:0">已發送</span>
+      <div class="fr" style="gap:4px;margin-left:8px">
+        <button class="btn bs"><i class="ti ti-eye"></i> 查看</button>
+        <button class="btn bs"><i class="ti ti-send"></i> 再次發送</button>
+      </div>
+    </div>
+    <div class="tpl-list-item">
+      <div class="tpl-li-icon" style="background:var(--bg-sub);color:var(--t3)"><i class="ti ti-file-text"></i></div>
+      <div class="tpl-li-text">
+        <div class="tpl-li-name">香港考察報到通知</div>
+        <div class="tpl-li-desc">欄位：name、hotel、checkin_date · 草稿未完成</div>
+      </div>
+      <span class="badge b-gray" style="flex-shrink:0">草稿</span>
+      <div class="fr" style="gap:4px;margin-left:8px">
+        <button class="btn bs"><i class="ti ti-edit"></i> 編輯</button>
+        <button class="btn bs bd2"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -440,33 +580,122 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg-sub)}
 <!-- ===== 分眾管理 ===== -->
 <div id="page-segment" class="page">
   <div class="ph"><div><div class="ph-title">分眾管理</div><div class="ph-sub">建立與管理發送群組</div></div></div>
-  <div class="card" style="margin-bottom:12px">
-    <div class="fb" style="margin-bottom:0">
-      <select style="width:auto"><option>所有屬性</option><option>個人會員</option><option>企業會員</option></select>
-      <select style="width:auto"><option>所有會籍</option><option>有效</option><option>失效</option></select>
-      <select style="width:auto"><option>所有區域</option><option>台北</option><option>新竹</option></select>
-      <select style="width:auto"><option>加入年份：全部</option><option>2026</option><option>2025</option><option>2024</option></select>
-      <select style="width:auto"><option>所有活動</option><option>2026 論壇</option></select>
-      <div style="font-size:11px;color:var(--t3);align-self:center">符合：<strong style="color:var(--nav)">55 人</strong></div>
-    </div>
-  </div>
-  <div class="sl">
+  <div class="sl" style="align-items:flex-start">
+    <!-- LEFT: builder + list -->
     <div class="sm">
-      <div class="card">
-        <div class="st">建立分眾群組</div>
-        <div class="row" style="margin-bottom:10px"><div class="col"><label>群組名稱</label><input value="2026 新加入會員"></div><div class="col"><label>備註</label><input placeholder="選填"></div></div>
-        <div style="font-size:12px;padding:8px 10px;background:var(--gold-bg);border:1px solid var(--gold-bd);border-radius:var(--r1);margin:8px 0">符合 <strong>42 人</strong>，含有效 UID <strong>38 人</strong><div class="pb"><div class="pf" style="width:90%"></div></div></div>
-        <div class="btns"><button class="btn bp" onclick="alert('已儲存')"><i class="ti ti-device-floppy"></i> 儲存群組</button><button class="btn" onclick="alert('立即群發')"><i class="ti ti-send"></i> 立即群發</button></div>
+      <!-- BUILDER CARD -->
+      <div class="card" id="seg-builder">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div class="st" style="margin-bottom:0" id="seg-builder-title">建立分眾群組</div>
+          <button class="btn bs" id="seg-cancel-btn" style="display:none" onclick="resetSegBuilder()"><i class="ti ti-x"></i> 取消</button>
+        </div>
+        <div class="row" style="margin-bottom:12px">
+          <div class="col"><label>群組名稱</label><input id="seg-name" placeholder="例：2026 VIP 台北區"></div>
+          <div class="col"><label>備註</label><input id="seg-note" placeholder="選填"></div>
+        </div>
+
+        <!-- SYSTEM TAGS: 屬性 / 性別 -->
+        <div style="margin-bottom:12px">
+          <div style="font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">屬性條件（系統欄位）</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <!-- 屬性 -->
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-size:12px;color:var(--t2);min-width:56px">屬性</span>
+              <div style="display:flex;flex-wrap:wrap;gap:6px" id="seg-attr-btns">
+                <button class="seg-tag-btn" data-group="attr" data-val="個人會員" onclick="togSegTag(this)">個人會員</button>
+                <button class="seg-tag-btn" data-group="attr" data-val="企業會員" onclick="togSegTag(this)">企業會員</button>
+                <button class="seg-tag-btn" data-group="attr" data-val="潛在會員" onclick="togSegTag(this)">潛在會員</button>
+              </div>
+            </div>
+            <!-- 會籍 -->
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-size:12px;color:var(--t2);min-width:56px">會籍</span>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <button class="seg-tag-btn" data-group="membership" data-val="有效" onclick="togSegTag(this)">有效</button>
+                <button class="seg-tag-btn" data-group="membership" data-val="失效" onclick="togSegTag(this)">失效</button>
+                <button class="seg-tag-btn" data-group="membership" data-val="無" onclick="togSegTag(this)">無</button>
+              </div>
+            </div>
+            <!-- 性別 -->
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-size:12px;color:var(--t2);min-width:56px">性別</span>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <button class="seg-tag-btn" data-group="gender" data-val="男" onclick="togSegTag(this)">男</button>
+                <button class="seg-tag-btn" data-group="gender" data-val="女" onclick="togSegTag(this)">女</button>
+              </div>
+            </div>
+            <!-- 加入年份 -->
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-size:12px;color:var(--t2);min-width:56px">加入年份</span>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <button class="seg-tag-btn" data-group="year" data-val="2026" onclick="togSegTag(this)">2026</button>
+                <button class="seg-tag-btn" data-group="year" data-val="2025" onclick="togSegTag(this)">2025</button>
+                <button class="seg-tag-btn" data-group="year" data-val="2024" onclick="togSegTag(this)">2024</button>
+                <button class="seg-tag-btn" data-group="year" data-val="2023" onclick="togSegTag(this)">2023</button>
+              </div>
+            </div>
+            <!-- 區域 -->
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-size:12px;color:var(--t2);min-width:56px">國內區域</span>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <button class="seg-tag-btn" data-group="region" data-val="台北" onclick="togSegTag(this)">台北</button>
+                <button class="seg-tag-btn" data-group="region" data-val="新竹" onclick="togSegTag(this)">新竹</button>
+                <button class="seg-tag-btn" data-group="region" data-val="台中" onclick="togSegTag(this)">台中</button>
+                <button class="seg-tag-btn" data-group="region" data-val="高雄" onclick="togSegTag(this)">高雄</button>
+                <button class="seg-tag-btn" data-group="region" data-val="海外" onclick="togSegTag(this)">海外</button>
+              </div>
+            </div>
+            <!-- 發送管道 -->
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-size:12px;color:var(--t2);min-width:56px">發送管道</span>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <button class="seg-tag-btn" data-group="channel" data-val="LINE" onclick="togSegTag(this)">LINE</button>
+                <button class="seg-tag-btn" data-group="channel" data-val="LINE群組" onclick="togSegTag(this)">LINE 群組</button>
+                <button class="seg-tag-btn" data-group="channel" data-val="封鎖" onclick="togSegTag(this)">封鎖</button>
+                <button class="seg-tag-btn" data-group="channel" data-val="未加入" onclick="togSegTag(this)">未加入</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GENERAL TAGS with include/exclude -->
+        <div style="margin-bottom:12px">
+          <div style="font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">一般標籤（可設定包含／排除）</div>
+          <div style="display:flex;flex-direction:column;gap:6px" id="seg-tag-rows"></div>
+          <div style="font-size:11px;color:var(--t3);margin-top:4px">未設定的標籤不影響篩選結果</div>
+        </div>
+
+        <!-- ACTIVITY filter -->
+        <div style="margin-bottom:12px">
+          <div style="font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">參與活動</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <button class="seg-tag-btn" data-group="event" data-val="2026 論壇" onclick="togSegTag(this)">2026 論壇</button>
+            <button class="seg-tag-btn" data-group="event" data-val="香港考察" onclick="togSegTag(this)">香港考察</button>
+            <button class="seg-tag-btn" data-group="event" data-val="Q3 聚會" onclick="togSegTag(this)">Q3 聚會</button>
+          </div>
+        </div>
+
+        <!-- RESULT PREVIEW -->
+        <div style="padding:10px 12px;background:var(--gold-bg);border:1px solid var(--gold-bd);border-radius:var(--r1);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:12px">符合條件：<strong style="color:var(--nav)" id="seg-match-count">— 人</strong>，含有效 UID <strong style="color:var(--nav)" id="seg-uid-count">—</strong></span>
+          <button class="btn bs" onclick="calcSegCount()"><i class="ti ti-refresh"></i> 計算</button>
+        </div>
+        <div class="btns">
+          <button class="btn bp" onclick="saveSegGroup()"><i class="ti ti-device-floppy"></i> 儲存群組</button>
+          <button class="btn" onclick="alert('立即群發此條件')"><i class="ti ti-send"></i> 立即群發</button>
+        </div>
       </div>
-      <div class="tw"><table>
-        <thead><tr><th>排序</th><th>群組名稱</th><th>條件</th><th>人數</th><th>最後更新</th><th>操作</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td><strong>VIP 會員</strong></td><td><span class="tag">有效</span></td><td>42</td><td>05/08 Ariel</td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-send"></i></button><button class="btn bs"><i class="ti ti-edit"></i></button><button class="btn bs bd2"><i class="ti ti-trash"></i></button></div></td></tr>
-          <tr><td>2</td><td><strong>台北區</strong></td><td><span class="tag">台北</span></td><td>78</td><td>05/06 Chester</td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-send"></i></button><button class="btn bs"><i class="ti ti-edit"></i></button><button class="btn bs bd2"><i class="ti ti-trash"></i></button></div></td></tr>
-          <tr><td>3</td><td><strong>2026 新加入</strong></td><td><span class="tag">加入年份:2026</span></td><td>34</td><td>05/11 Ariel</td><td><div class="fr" style="gap:4px"><button class="btn bs"><i class="ti ti-send"></i></button><button class="btn bs"><i class="ti ti-edit"></i></button><button class="btn bs bd2"><i class="ti ti-trash"></i></button></div></td></tr>
-        </tbody>
-      </table></div>
+
+      <!-- GROUP LIST -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:10px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between">
+          <div class="st" style="margin-bottom:0">已儲存群組</div>
+        </div>
+        <div id="seg-list"></div>
+      </div>
     </div>
+
+    <!-- RIGHT: stats -->
     <div class="ss">
       <div class="card">
         <div class="st">快速統計</div>
@@ -474,8 +703,18 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg-sub)}
           <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">個人會員</span><span>87</span></div>
           <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">企業會員</span><span>25</span></div>
           <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">潛在會員</span><span>31</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">男</span><span>98</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">女</span><span>70</span></div>
           <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--t3)">有效 UID</span><span style="color:var(--nav);font-weight:500">143</span></div>
           <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0"><span style="color:var(--t3)">未綁定/封鎖</span><span style="color:#c0392b">25</span></div>
+        </div>
+      </div>
+      <div class="card" style="background:var(--bg-sub)">
+        <div class="st" style="margin-bottom:8px">篩選說明</div>
+        <div style="font-size:11px;color:var(--t3);line-height:1.8">
+          <div style="margin-bottom:6px">• 同一分組內多選 → <strong style="color:var(--t2)">OR</strong>（任一符合即計入）</div>
+          <div style="margin-bottom:6px">• 不同分組之間 → <strong style="color:var(--t2)">AND</strong>（所有條件同時符合）</div>
+          <div>• 一般標籤可個別設定「包含」或「排除」</div>
         </div>
       </div>
     </div>
@@ -687,11 +926,11 @@ const ADMINS=[{id:1,name:'Ariel Wu',uid:'Ua1b2c3...',defTest:true},{id:2,name:'C
 let selT=new Set([1]);
 const SEGS=['VIP 會員（42人）','台北區（78人）','論壇已報名（55人）','2026 新加入（34人）'];
 const MEMBERS=[
-  {id:'M000001',name:'陳志明',dn:'David_Chen',en:'David Chen',call:'志明兄',gender:'男',bday:'1975-03',attr:'個人會員',membership:'有效',region:'台北',invest:['天使投資','科技業'],events:['2026 論壇'],joined:'2021-03',uid:'Ua1b2c3...',channels:['LINE'],tags:['天使投資']},
-  {id:'M000002',name:'林美華',dn:'MeiHua_Lin',en:'Mei-Hua Lin',call:'美華',gender:'女',bday:'1968-11',attr:'企業會員',membership:'有效',region:'新竹',invest:['半導體'],events:['2026 論壇','香港考察'],joined:'2020-06',uid:'Ub2c3d4...',channels:['LINE','LINE群組'],tags:['半導體']},
-  {id:'M000003',name:'王大衛',dn:'David_Wang',en:'David Wang',call:'大衛',gender:'男',bday:'1980-07',attr:'個人會員',membership:'失效',region:'台中',invest:['新創'],events:['Q3 聚會'],joined:'2019-11',uid:'Uc3d4e5...',channels:['封鎖'],tags:['新創']},
-  {id:'M000004',name:'張淑芬',dn:'Susan_Chang',en:'Susan Chang',call:'淑芬姐',gender:'女',bday:'1985-02',attr:'潛在會員',membership:'無',region:'台北',invest:['金融業'],events:['—'],joined:'2024-01',uid:'—',channels:['未加入'],tags:['金融業']},
-  {id:'M000005',name:'李建國',dn:'TomLee_LINE',en:'Tom Lee',call:'建國',gender:'男',bday:'1972-09',attr:'個人會員',membership:'有效',region:'海外',invest:['家族辦公室','PE'],events:['2026 論壇','香港考察'],joined:'2022-04',uid:'Ud4e5f6...',channels:['LINE'],tags:['家族辦公室']},
+  {id:'M000001',name:'陳志明',dn:'David_Chen',en:'David Chen',call:'志明兄',gender:'男',bday:'1975-03',attr:'個人會員',membership:'有效',region:'台北',invest:['天使投資','科技業'],events:['2026 論壇'],joined:'2021-03',uid:'Ua1b2c3...',channels:['LINE'],tags:['天使投資'],groupid:'—',chatid:'—',gchatid:'—'},
+  {id:'M000002',name:'林美華',dn:'MeiHua_Lin',en:'Mei-Hua Lin',call:'美華',gender:'女',bday:'1968-11',attr:'企業會員',membership:'有效',region:'新竹',invest:['半導體'],events:['2026 論壇','香港考察'],joined:'2020-06',uid:'Ub2c3d4...',channels:['LINE','LINE群組'],tags:['半導體'],groupid:'Ca1b2c3...',chatid:'—',gchatid:'Cd1e2f3...'},
+  {id:'M000003',name:'王大衛',dn:'David_Wang',en:'David Wang',call:'大衛',gender:'男',bday:'1980-07',attr:'個人會員',membership:'失效',region:'台中',invest:['新創'],events:['Q3 聚會'],joined:'2019-11',uid:'Uc3d4e5...',channels:['封鎖'],tags:['新創'],groupid:'—',chatid:'—',gchatid:'—'},
+  {id:'M000004',name:'張淑芬',dn:'Susan_Chang',en:'Susan Chang',call:'淑芬姐',gender:'女',bday:'1985-02',attr:'潛在會員',membership:'無',region:'台北',invest:['金融業'],events:['—'],joined:'2024-01',uid:'—',channels:['未加入'],tags:['金融業'],groupid:'—',chatid:'—',gchatid:'—'},
+  {id:'M000005',name:'李建國',dn:'TomLee_LINE',en:'Tom Lee',call:'建國',gender:'男',bday:'1972-09',attr:'個人會員',membership:'有效',region:'海外',invest:['家族辦公室','PE'],events:['2026 論壇','香港考察'],joined:'2022-04',uid:'Ud4e5f6...',channels:['LINE'],tags:['家族辦公室'],groupid:'—',chatid:'Re1f2g3...',gchatid:'—'},
 ];
 const COLS=[
   {k:'id',l:'會員 ID',show:true},{k:'name',l:'姓名',show:true},{k:'dn',l:'Displayname',show:true},
@@ -700,12 +939,13 @@ const COLS=[
   {k:'region',l:'區域',show:true},{k:'channels',l:'發送管道',show:true},
   {k:'invest',l:'投資標籤',show:false},{k:'events',l:'參與活動',show:false},
   {k:'joined',l:'加入日期',show:true},{k:'uid',l:'UID',show:true},
+  {k:'groupid',l:'Group ID',show:false},{k:'chatid',l:'Chat ID',show:false},{k:'gchatid',l:'Group Chat ID',show:false},
 ];
 const attrC={'個人會員':'b-blue','企業會員':'b-purple','潛在會員':'b-warn'};
 const membC={'有效':'b-green','失效':'b-red','無':'b-gray'};
 const chanC={'LINE':'b-line','LINE群組':'b-grp','封鎖':'b-blocked','未加入':'b-none'};
 let sortKey='',sortDir=1;
-const QT={forum:'親愛的識富會員，\n\n2026 國際投資論壇將於 6/24 於台北艾麗希爾頓格芮精選酒店舉行，誠摯邀請您蒞臨出席。',member:'您好，\n\n識富會員資料更新期間已開始，請點選連結完成建檔或更新。',event:'親愛的識富夥伴，\n\n活動報名通知：本次活動名額有限，請儘早完成報名。'};
+const QT={forum:'親愛的 {{call}}，\n\n感謝您報名參加本次活動，誠摯邀請您蒞臨出席。\n\n期待與您相見！',member:'您好，{{name}}，\n\n會員資料更新期間已開始，請點選連結完成建檔或更新。\n\n感謝您的配合！',event:'親愛的 {{call}}，\n\n活動報名通知：本次活動名額有限，請儘早完成報名。\n\n如有問題請與我們聯繫。'};
 const MBL={text:'b-gray',image:'b-warn',flex:'b-blue',json:'b-purple',template:'b-teal',video:'b-purple'};
 const MLL={text:'文字',image:'圖片',flex:'Flex 卡片',json:'JSON',template:'選範本',video:'影片'};
 const TPLS=[{name:'6/24 論壇邀請 Flex 卡',type:'flex',desc:'深色商務 Bubble，含報名按鈕',updated:'05/09 Ariel'},{name:'會員建檔提醒',type:'text',desc:'純文字，附個人化連結',updated:'05/07 Chester'},{name:'香港考察活動通知',type:'image',desc:'橫幅圖片 + 連結',updated:'04/30 Ariel'},{name:'Giga 全圖邀請',type:'giga',desc:'2500px 全幅圖文訊息',updated:'04/15 Ariel'}];
@@ -713,7 +953,56 @@ const TI={text:'ti-typography',image:'ti-photo',flex:'ti-code',giga:'ti-file-des
 const TB={text:'b-gray',image:'b-warn',flex:'b-blue',giga:'b-teal'};
 let blkCnt=0;
 const ARS=[{id:1,name:'報名確認回覆',tt:'post',trigger:'action=register',src:'tpl',content:'6/24 論壇邀請 Flex 卡',on:true},{id:2,name:'會員建檔導引',tt:'msg',trigger:'進行會員建檔或更新',src:'cust',content:'感謝訊息，建檔連結已傳送。',on:true}];
-const PROGS=[{name:'新客加入好友',trigger:'加入好友',status:'啟用中',members:23,steps:[{type:'w',desc:'延遲 1 天'},{type:'m',desc:'歡迎新好友'},{type:'w',desc:'延遲 3 天'},{type:'m',desc:'3 天後追蹤'},{type:'w',desc:'延遲 2 天'},{type:'m',desc:'引導建檔'}]},{name:'論壇報名後追蹤',trigger:'完成報名',status:'啟用中',members:15,steps:[{type:'w',desc:'延遲 1 小時'},{type:'m',desc:'報名確認通知'},{type:'w',desc:'延遲 7 天'},{type:'m',desc:'活動前提醒'}]}];
+const PROGS=[
+  {name:'活動通知流程',trigger:'完成報名',status:'啟用中',members:55,steps:[
+    {type:'w',desc:'立即'},
+    {type:'m',desc:'報名後通知（確認報名、活動資訊）'},
+    {type:'w',desc:'至活動前 D-7（7天前）'},
+    {type:'m',desc:'D-7 提醒（7天後倒數提醒）'},
+    {type:'w',desc:'1 天後（D-6）'},
+    {type:'m',desc:'D-6 提醒（再次確認出席）'},
+    {type:'w',desc:'1 天後（D-5）'},
+    {type:'m',desc:'D-5 提醒'},
+    {type:'w',desc:'1 天後（D-4）'},
+    {type:'m',desc:'D-4 提醒（注意事項預告）'},
+    {type:'w',desc:'1 天後（D-3）'},
+    {type:'m',desc:'D-3 提醒'},
+    {type:'w',desc:'1 天後（D-2）'},
+    {type:'m',desc:'D-2 提醒（議程預覽）'},
+    {type:'w',desc:'1 天後（D-Day）'},
+    {type:'m',desc:'D-Day 活動議程（當日完整流程）'},
+    {type:'w',desc:'活動結束後 1 天'},
+    {type:'m',desc:'活動後問卷調查'},
+    {type:'w',desc:'3 天後'},
+    {type:'m',desc:'活動精華回顧（照片、影片連結）'},
+  ]},
+  {name:'企業參訪流程',trigger:'完成報名',status:'啟用中',members:28,steps:[
+    {type:'w',desc:'立即'},
+    {type:'m',desc:'報名後通知（參訪確認、集合地點）'},
+    {type:'w',desc:'至活動前 D-7'},
+    {type:'m',desc:'D-7 提醒（行程預覽、注意事項）'},
+    {type:'w',desc:'1 天後（D-6）'},
+    {type:'m',desc:'D-6 提醒'},
+    {type:'w',desc:'1 天後（D-5）'},
+    {type:'m',desc:'D-5 提醒（交通資訊）'},
+    {type:'w',desc:'1 天後（D-4）'},
+    {type:'m',desc:'D-4 提醒'},
+    {type:'w',desc:'1 天後（D-3）'},
+    {type:'m',desc:'D-3 提醒（裝備建議）'},
+    {type:'w',desc:'1 天後（D-2）'},
+    {type:'m',desc:'D-2 提醒（最終確認）'},
+    {type:'w',desc:'至 Day 1'},
+    {type:'m',desc:'Day 1 議程（第一天完整行程）'},
+    {type:'w',desc:'1 天後（Day 2）'},
+    {type:'m',desc:'Day 2 議程（第二天行程）'},
+    {type:'w',desc:'1 天後（Day 3）'},
+    {type:'m',desc:'Day 3 議程（第三天行程、回程資訊）'},
+    {type:'w',desc:'活動結束後 1 天'},
+    {type:'m',desc:'活動後問卷調查'},
+    {type:'w',desc:'3 天後'},
+    {type:'m',desc:'活動精華回顧（精選照片、心得彙整）'},
+  ]},
+];
 const TAGS=[{id:1,name:'20-25歲',cat:'年齡世代',color:'b-blue',count:12},{id:2,name:'一代創業',cat:'年齡世代',color:'b-navy',count:45},{id:3,name:'二代接班',cat:'年齡世代',color:'b-purple',count:28},{id:4,name:'房地產',cat:'投資興趣',color:'b-teal',count:19},{id:5,name:'美國',cat:'地區',color:'b-blue',count:8},{id:6,name:'海外',cat:'地區',color:'b-warn',count:14},{id:7,name:'天使投資',cat:'投資興趣',color:'b-gold',count:67},{id:8,name:'男',cat:'性別',color:'b-gray',count:98},{id:9,name:'女',cat:'性別',color:'b-gray',count:70}];
 
 // ── NAVIGATION ──
@@ -862,7 +1151,7 @@ function renderMembers(){
     if(c.k==='membership')return`<td><span class="badge ${membC[m.membership]||'b-gray'}">${m.membership}</span></td>`;
     if(c.k==='channels')return`<td>${m.channels.map(c=>`<span class="badge ${chanC[c]||'b-gray'}" style="font-size:10px;margin-right:2px">${c}</span>`).join('')}</td>`;
     if(c.k==='invest'||c.k==='events'){const v=m[c.k];return`<td>${(Array.isArray(v)?v:[v]).map(t=>`<span class="tag">${t}</span>`).join('')}</td>`;}
-    if(c.k==='uid')return`<td class="mono" style="font-size:10px;color:var(--t3)">${m[c.k]||'—'}</td>`;
+    if(['uid','groupid','chatid','gchatid'].includes(c.k))return`<td class="mono" style="font-size:10px;color:var(--t3)">${m[c.k]||'—'}</td>`;
     const v=m[c.k]||'—';return`<td style="color:${v==='—'?'var(--t3)':'var(--t2)'}">${v}</td>`;
   }).join('')}<td><button class="btn bs" onclick="openDr(MEMBERS[${MEMBERS.indexOf(m)}])"><i class="ti ti-eye"></i> 查看</button></td></tr>`).join('');
 }
@@ -967,6 +1256,193 @@ function tv(inp,eye){const el=document.getElementById(inp);const e=document.getE
 function tLine(){document.getElementById('ld').className='sdot s-idle';document.getElementById('lt2').textContent='測試中...';setTimeout(()=>{document.getElementById('ld').className='sdot s-ok';document.getElementById('lt2').textContent='已連線・'+new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});},1200);}
 function tAI(){document.getElementById('aid').className='sdot s-idle';document.getElementById('ait').textContent='測試中...';setTimeout(()=>{const k=document.getElementById('ak').value;const ok=!!k;document.getElementById('aid').className='sdot '+(ok?'s-ok':'s-err');document.getElementById('ait').textContent=ok?'連線正常':'請先填入 Key';document.getElementById('ai-sd').className='sdot '+(ok?'s-ok':'s-err');document.getElementById('ai-st').textContent=ok?'正常':'未設定';},1000);}
 function updAIM(){const p=document.getElementById('ai-pv').value;const s=document.getElementById('aim');const m={claude:['claude-sonnet-4-20250514','claude-opus-4'],gpt:['gpt-4o','gpt-4o-mini'],gemini:['gemini-2.5-pro','gemini-2.0-flash']};s.innerHTML=m[p].map(x=>`<option>${x}</option>`).join('');}
+
+// ── PARAMETRIC BROADCAST ──
+let pbData=[];
+let pbFields=[];
+
+function showNewPB(){
+  document.getElementById('pb-editor').style.display='block';
+  syncPBParamBtns();
+  updPBPreview();
+}
+
+function addPBField(){
+  const row=document.createElement('div');
+  row.className='pb-field-row';
+  row.style.cssText='display:flex;gap:6px;align-items:center';
+  row.innerHTML=`<input placeholder="欄位名稱" style="width:120px;flex-shrink:0" oninput="syncPBParamBtns()"><input placeholder="說明（選填）" style="flex:1"><span class="badge b-gold" style="font-size:10px;white-space:nowrap">{{...}}</span><button class="btn bs bd2" onclick="rmPBField(this)"><i class="ti ti-trash"></i></button>`;
+  document.getElementById('pb-fields').appendChild(row);
+  row.querySelector('input').addEventListener('input',function(){
+    const badge=row.querySelector('.badge');badge.textContent='{{'+this.value+'}}';syncPBParamBtns();
+  });
+}
+
+function rmPBField(btn){btn.closest('.pb-field-row').remove();syncPBParamBtns();}
+
+function syncPBParamBtns(){
+  const rows=document.querySelectorAll('#pb-fields .pb-field-row');
+  const container=document.getElementById('pb-param-btns');
+  if(!container)return;
+  pbFields=[];
+  rows.forEach(r=>{const v=r.querySelector('input').value.trim();if(v)pbFields.push(v);});
+  container.innerHTML=pbFields.map(f=>`<button class="pbtn" onclick="insParamPB('{{${f}}}')">${f}</button>`).join('');
+}
+
+function insParamPB(param){
+  const ta=document.getElementById('pb-msg');
+  if(!ta)return;
+  const s=ta.selectionStart||ta.value.length;
+  ta.value=ta.value.slice(0,s)+param+ta.value.slice(s);
+  updPBPreview();
+}
+
+function loadPBDemo(){
+  pbData=[
+    {uid:'Ua1b2c3...',name:'陳志明',call:'志明兄',seat:'A-12',ticket_no:'T001',hotel:'艾麗希爾頓',checkin_date:'06/23',missing_fields:'英文姓名、投資標籤'},
+    {uid:'Ub2c3d4...',name:'林美華',call:'美華',seat:'B-05',ticket_no:'T002',hotel:'艾麗希爾頓',checkin_date:'06/23',missing_fields:'生日'},
+    {uid:'Ud4e5f6...',name:'李建國',call:'建國',seat:'A-08',ticket_no:'T003',hotel:'艾麗希爾頓',checkin_date:'06/24',missing_fields:''},
+  ];
+  renderPBTable();
+  updPBPreview();
+}
+
+function renderPBTable(){
+  if(!pbData.length)return;
+  const thead=document.getElementById('pb-data-thead');
+  const tbody=document.getElementById('pb-data-tbody');
+  const keys=Object.keys(pbData[0]);
+  thead.innerHTML=`<th><input type="checkbox" checked></th>`+keys.map(k=>`<th>${k}</th>`).join('');
+  tbody.innerHTML=pbData.map((row,i)=>`<tr><td><input type="checkbox" checked></td>${keys.map(k=>`<td style="font-size:11px">${row[k]||'—'}</td>`).join('')}</tr>`).join('');
+  document.getElementById('pb-preview-table').style.display='block';
+  document.getElementById('pb-data-count').textContent=`共 ${pbData.length} 筆資料`;
+  updPBPreview();
+}
+
+function updPBPreview(){
+  const ta=document.getElementById('pb-msg');
+  const pv=document.getElementById('pb-msg-preview');
+  if(!ta||!pv)return;
+  let msg=ta.value;
+  if(!msg.trim()){pv.textContent='填入訊息後顯示預覽';return;}
+  // Use first row of pbData, or demo values
+  const sample=pbData[0]||{name:'陳志明',call:'志明兄',seat:'A-12',ticket_no:'T001',hotel:'艾麗希爾頓',checkin_date:'06/23',missing_fields:'英文姓名'};
+  let rendered=msg;
+  Object.entries(sample).forEach(([k,v])=>{rendered=rendered.replace(new RegExp('\\{\\{'+k+'\\}\\}','g'),`<strong style="color:var(--gold)">${v}</strong>`);});
+  // Remove any remaining unresolved params
+  rendered=rendered.replace(/\{\{[^}]+\}\}/g,s=>`<span style="color:#c0392b;font-style:italic">${s}</span>`);
+  pv.innerHTML=rendered.replace(/\n/g,'<br>');
+}
+
+function execPB(){
+  const name=document.getElementById('pb-name').value.trim();
+  if(!name)return alert('請填入任務名稱');
+  if(!pbData.length)return alert('請先上傳名單或載入示範資料');
+  const msg=document.getElementById('pb-msg').value.trim();
+  if(!msg)return alert('請填入訊息內容');
+  const confirmed=confirm(`確定要發送給 ${pbData.length} 人？\n\n每個人將收到個人化訊息，此動作不可撤回。`);
+  if(confirmed){alert(`已成功發送 ${pbData.length} 則個人化訊息！`);document.getElementById('pb-editor').style.display='none';}
+}
+
+// ── SEGMENT BUILDER ──
+let segGroups=[
+  {name:'VIP 台北有效',note:'',conds:{attr:['個人會員','企業會員'],membership:['有效'],region:['台北'],gender:[],year:[],channel:[],event:[],tagInc:['天使投資'],tagExc:[]},count:38,uid:35},
+  {name:'2026 新加入',note:'',conds:{attr:[],membership:['有效'],region:[],gender:[],year:['2026'],channel:[],event:[],tagInc:[],tagExc:[]},count:34,uid:31},
+  {name:'論壇已報名',note:'',conds:{attr:[],membership:[],region:[],gender:[],year:[],channel:['LINE'],event:['2026 論壇'],tagInc:[],tagExc:[]},count:55,uid:49},
+];
+
+function initSegTagRows(){
+  const el=document.getElementById('seg-tag-rows');if(!el)return;
+  el.innerHTML=TAGS.filter(t=>t.cat!=='性別').map((t,i)=>`
+    <div class="tag-ie-row" id="seg-tag-${t.id}">
+      <span class="badge ${t.color}" style="font-size:11px;min-width:70px;text-align:center">${t.name}</span>
+      <span style="font-size:11px;color:var(--t3);flex:1">${t.cat} · ${t.count} 人</span>
+      <div class="ie-toggle">
+        <button class="iet" id="seg-inc-${t.id}" onclick="setTagIE(${t.id},'inc')">包含</button>
+        <button class="iet" id="seg-exc-${t.id}" onclick="setTagIE(${t.id},'exc')">排除</button>
+        <button class="iet" id="seg-nil-${t.id}" onclick="setTagIE(${t.id},'nil')" style="background:var(--bg-sub);color:var(--t3)">不設定</button>
+      </div>
+    </div>`).join('');
+}
+initSegTagRows();
+
+function setTagIE(id,mode){
+  const inc=document.getElementById('seg-inc-'+id);
+  const exc=document.getElementById('seg-exc-'+id);
+  const nil=document.getElementById('seg-nil-'+id);
+  if(!inc)return;
+  inc.className='iet'+(mode==='inc'?' on-inc':'');
+  exc.className='iet'+(mode==='exc'?' on-exc':'');
+  nil.className='iet'+(mode==='nil'?'':'')+' '+(mode==='nil'?'':'');
+  if(mode==='nil'){nil.style.background='var(--bg-sub)';nil.style.color='var(--t3)';}
+  else{nil.style.background='';nil.style.color='';}
+}
+
+function togSegTag(btn){
+  // Cycle: off → inc (green) → exc (red) → off
+  if(btn.classList.contains('inc')){btn.className='seg-tag-btn exc';}
+  else if(btn.classList.contains('exc')){btn.className='seg-tag-btn';}
+  else{btn.className='seg-tag-btn inc';}
+}
+
+function calcSegCount(){
+  // Demo calculation
+  const inc=document.querySelectorAll('.seg-tag-btn.inc').length;
+  const exc=document.querySelectorAll('.seg-tag-btn.exc').length;
+  const base=Math.max(10,80-exc*15+inc*5);
+  document.getElementById('seg-match-count').textContent=base+' 人';
+  document.getElementById('seg-uid-count').textContent=Math.round(base*.88)+' 人';
+}
+
+function saveSegGroup(){
+  const name=document.getElementById('seg-name').value.trim();
+  if(!name)return alert('請填入群組名稱');
+  segGroups.unshift({name,note:'',conds:{},count:42,uid:38});
+  renderSegList();
+  resetSegBuilder();
+  alert('群組已儲存：'+name);
+}
+
+function resetSegBuilder(){
+  document.getElementById('seg-name').value='';
+  document.getElementById('seg-note').value='';
+  document.querySelectorAll('.seg-tag-btn').forEach(b=>b.className='seg-tag-btn');
+  document.querySelectorAll('.iet').forEach(b=>{b.className='iet';b.style.background='';b.style.color='';});
+  document.getElementById('seg-match-count').textContent='— 人';
+  document.getElementById('seg-uid-count').textContent='—';
+  document.getElementById('seg-builder-title').textContent='建立分眾群組';
+  document.getElementById('seg-cancel-btn').style.display='none';
+}
+
+function editSegGroup(i){
+  const g=segGroups[i];
+  document.getElementById('seg-name').value=g.name;
+  document.getElementById('seg-note').value=g.note||'';
+  document.getElementById('seg-match-count').textContent=g.count+' 人';
+  document.getElementById('seg-uid-count').textContent=g.uid+' 人';
+  document.getElementById('seg-builder-title').textContent='編輯群組';
+  document.getElementById('seg-cancel-btn').style.display='inline-flex';
+  document.getElementById('seg-builder').scrollIntoView({behavior:'smooth'});
+}
+
+function renderSegList(){
+  const el=document.getElementById('seg-list');if(!el)return;
+  el.innerHTML=segGroups.map((g,i)=>`<div class="tpl-list-item">
+    <div class="tpl-li-icon" style="background:#e8ecf5;color:var(--nav)"><i class="ti ti-users-group"></i></div>
+    <div class="tpl-li-text">
+      <div class="tpl-li-name">${g.name}</div>
+      <div class="tpl-li-desc">${g.count} 人 · 有效 UID ${g.uid} 人${g.note?' · '+g.note:''}</div>
+    </div>
+    <div class="fr" style="gap:4px" onclick="event.stopPropagation()">
+      <button class="btn bs" onclick="alert('群發：${g.name}')"><i class="ti ti-send"></i></button>
+      <button class="btn bs" onclick="editSegGroup(${i})"><i class="ti ti-edit"></i></button>
+      <button class="btn bs bd2" onclick="if(confirm('刪除？')){segGroups.splice(${i},1);renderSegList()}"><i class="ti ti-trash"></i></button>
+    </div>
+  </div>`).join('');
+}
+renderSegList();
+
+
 </script>
 </body>
 </html>
