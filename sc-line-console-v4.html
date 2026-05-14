@@ -202,6 +202,15 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg-sub)}
 
 /* ── ADMINISTER ── */
 .adm-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-sub);border-radius:var(--r2);border:1px solid var(--bd);margin-bottom:6px}
+/* BC MODE BUTTONS */
+.bc-mode-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:var(--r1);border:1px solid var(--bd);background:var(--bg-sub);font-size:12px;cursor:pointer;color:var(--t2);font-family:inherit;transition:all .15s}
+.bc-mode-btn:hover{border-color:var(--bd2);color:var(--t1)}
+.bc-mode-btn.sel{background:var(--nav);border-color:var(--nav);color:#fff;font-weight:500}
+/* MENTION ROWS */
+.mention-row{display:flex;align-items:center;gap:6px;padding:8px 10px;background:var(--bg-sub);border-radius:var(--r1);border:1px solid var(--bd);margin-bottom:4px}
+.mention-type-sel{display:flex;border-radius:var(--r1);overflow:hidden;border:1px solid var(--bd);flex-shrink:0}
+.mts{padding:4px 9px;font-size:11px;cursor:pointer;border:none;background:var(--bg-inp);color:var(--t3);font-family:inherit;transition:all .15s}
+.mts.on{background:var(--nav);color:#fff;font-weight:500}
 /* SEG TAG BUTTONS */
 .seg-tag-btn{padding:4px 11px;border-radius:20px;border:1px solid var(--bd);background:var(--bg-sub);font-size:11px;cursor:pointer;color:var(--t2);font-family:inherit;transition:all .15s}
 .seg-tag-btn:hover{border-color:var(--bd2);color:var(--t1)}
@@ -290,36 +299,69 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg-sub)}
   <div class="sl">
     <div class="sm">
       <div class="card">
+
+        <!-- 發送對象 -->
         <div class="st">發送對象</div>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
-          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t1);cursor:pointer"><input type="radio" name="bc-type" value="all" checked onchange="updBcTarget(this)"> 全部好友（廣播）</label>
-          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t1);cursor:pointer"><input type="radio" name="bc-type" value="seg" onchange="updBcTarget(this)"> 選擇分眾</label>
-          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t1);cursor:pointer"><input type="radio" name="bc-type" value="uid" onchange="updBcTarget(this)"> 指定 UID 清單</label>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t1);cursor:pointer">
+            <input type="radio" name="bc-target" value="all" checked onchange="updBcTarget(this)"> 全部好友
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t1);cursor:pointer">
+            <input type="radio" name="bc-target" value="seg" onchange="updBcTarget(this)"> 篩選目標分眾
+          </label>
         </div>
-        <!-- 分眾條件區塊 -->
-        <div id="seg-area" style="display:none">
+        <div id="seg-area" style="display:none;margin-bottom:10px">
           <div id="aud-conds"></div>
           <button class="btn bs" style="margin-top:4px" onclick="addAudCond()"><i class="ti ti-plus"></i> 新增分眾條件</button>
-          <div style="font-size:11px;color:var(--t3);margin-top:6px">多個條件之間為「聯集」（OR），每個條件可設定包含或排除</div>
         </div>
-        <!-- UID 清單 -->
-        <div id="uid-area" style="display:none"><label>UID 清單（每行一個）</label><textarea style="min-height:60px" placeholder="Uxxxxxxxx"></textarea></div>
+
+        <div class="dvd"></div>
+
+        <!-- 發送管道 -->
+        <div class="st">發送管道</div>
+        <div style="display:flex;gap:16px;margin-bottom:10px;flex-wrap:wrap">
+          <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--t1);cursor:pointer">
+            <input type="radio" name="bc-channel" value="personal" checked onchange="updBcChannel(this)"> 個人
+          </label>
+          <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--t1);cursor:pointer">
+            <input type="radio" name="bc-channel" value="group" onchange="updBcChannel(this)"> 群組
+          </label>
+          <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--t1);cursor:pointer">
+            <input type="radio" name="bc-channel" value="both" onchange="updBcChannel(this)"> 兩者都發
+          </label>
+        </div>
+
         <!-- 預計人數 -->
-        <div id="tc-wrap" style="margin-top:10px;padding:8px 12px;background:var(--bg-sub);border-radius:var(--r1);display:flex;align-items:center;justify-content:space-between">
+        <div style="padding:8px 12px;background:var(--bg-sub);border-radius:var(--r1);display:flex;align-items:center;justify-content:space-between;margin-bottom:0">
           <span style="font-size:12px">預計發送：<strong style="color:var(--nav)" id="tc-num">168 人</strong></span>
           <button class="btn bs" onclick="openAudModal()"><i class="ti ti-list"></i> 查看名單</button>
         </div>
+
         <div class="dvd"></div>
+
+        <!-- 訊息元件 -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-          <div class="st" style="margin-bottom:0">訊息元件 <span style="font-weight:400;font-size:10px;color:var(--t3)">最多 5 個</span></div>
+          <div class="st" style="margin-bottom:0">訊息內容 <span style="font-weight:400;font-size:10px;color:var(--t3)">最多 5 個元件</span></div>
           <button class="btn bs" onclick="addBlk()" id="add-blk-btn"><i class="ti ti-plus"></i> 新增元件</button>
         </div>
+
+        <!-- Mention @all 開關（群組模式才顯示） -->
+        <div id="mention-all-wrap" style="display:none;margin-bottom:10px">
+          <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#e8ecf5;border-radius:var(--r1);cursor:pointer;font-size:12px;color:var(--nav)">
+            <input type="checkbox" id="mention-all-toggle" onchange="updMentionAll(this.checked)">
+            <i class="ti ti-at" style="color:var(--gold)"></i>
+            傳送至群組時，同時提及全體成員（@all）
+          </label>
+        </div>
+
         <div id="blks"></div>
+
         <div class="btns">
           <button class="btn" onclick="showTP()"><i class="ti ti-flask"></i> 測試發送</button>
           <button class="btn" onclick="alert('儲存草稿')"><i class="ti ti-device-floppy"></i> 儲存草稿</button>
           <button class="btn bp" onclick="if(confirm('確定正式發送？'))alert('發送成功！')"><i class="ti ti-send"></i> 正式發送</button>
         </div>
+
         <div id="tp-pick" style="display:none;margin-top:10px;padding:10px 12px;background:var(--gold-bg);border:1px solid var(--gold-bd);border-radius:var(--r2)">
           <div style="font-size:11px;color:var(--t3);margin-bottom:6px">選擇測試對象</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap" id="tp-btns"></div>
@@ -330,6 +372,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg-sub)}
         </div>
       </div>
     </div>
+
     <div class="ss">
       <div class="card">
         <div class="st">訊息預覽</div>
@@ -337,9 +380,10 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg-sub)}
         <div class="dvd"></div>
         <div class="st">快捷範本</div>
         <div style="display:flex;flex-direction:column;gap:5px">
-          <button class="btn" style="font-size:11px;justify-content:flex-start" onclick="loadQ('forum')"><i class="ti ti-calendar-event"></i> 6/24 論壇邀請</button>
+          <button class="btn" style="font-size:11px;justify-content:flex-start" onclick="loadQ('forum')"><i class="ti ti-calendar-event"></i> 活動報名確認</button>
           <button class="btn" style="font-size:11px;justify-content:flex-start" onclick="loadQ('member')"><i class="ti ti-user"></i> 會員建檔提醒</button>
           <button class="btn" style="font-size:11px;justify-content:flex-start" onclick="loadQ('event')"><i class="ti ti-news"></i> 活動報名通知</button>
+          <button class="btn" style="font-size:11px;justify-content:flex-start" onclick="loadQ('group_mention')"><i class="ti ti-at"></i> 群組 @all 通知</button>
         </div>
       </div>
     </div>
@@ -945,13 +989,213 @@ const attrC={'個人會員':'b-blue','企業會員':'b-purple','潛在會員':'b
 const membC={'有效':'b-green','失效':'b-red','無':'b-gray'};
 const chanC={'LINE':'b-line','LINE群組':'b-grp','封鎖':'b-blocked','未加入':'b-none'};
 let sortKey='',sortDir=1;
-const QT={forum:'親愛的 {{call}}，\n\n感謝您報名參加本次活動，誠摯邀請您蒞臨出席。\n\n期待與您相見！',member:'您好，{{name}}，\n\n會員資料更新期間已開始，請點選連結完成建檔或更新。\n\n感謝您的配合！',event:'親愛的 {{call}}，\n\n活動報名通知：本次活動名額有限，請儘早完成報名。\n\n如有問題請與我們聯繫。'};
+const QT={
+  forum:'親愛的 {{call}}，\n\n感謝您報名參加本次活動，誠摯邀請您蒞臨出席。\n\n期待與您相見！',
+  member:'您好，{{name}}，\n\n會員資料更新期間已開始，請點選連結完成建檔或更新。\n\n感謝您的配合！',
+  event:'親愛的 {{call}}，\n\n活動報名通知：本次活動名額有限，請儘早完成報名。\n\n如有問題請與我們聯繫。',
+  group_mention:'提醒大家，活動即將開始，請準時蒞臨！',
+};
+let bcChannel='personal'; // 'personal' | 'group' | 'both'
+
+function updBcTarget(radio){
+  const v=radio.value;
+  document.getElementById('seg-area').style.display=v==='seg'?'block':'none';
+  updTcNum();
+}
+function updBcChannel(radio){
+  bcChannel=radio.value;
+  const showGroup=bcChannel==='group'||bcChannel==='both';
+  const showMention=document.getElementById('mention-all-toggle')?.checked;
+  document.getElementById('mention-all-wrap').style.display=showGroup?'block':'none';
+  if(!showGroup){
+    const tog=document.getElementById('mention-all-toggle');
+    if(tog)tog.checked=false;
+  }
+  // re-render all text blocks to show/hide group pane
+  document.querySelectorAll('.mblk').forEach(b=>{
+    const lbl=b.querySelector('.badge');
+    if(lbl&&lbl.textContent==='文字') rerenderTextBlock(b.id);
+  });
+  updPrev();
+}
+function updMentionAll(on){
+  document.querySelectorAll('.btn-mention-all').forEach(b=>{
+    b.style.background=on?'#1B2A4A':'';
+    b.style.color=on?'#fff':'';
+    b.style.borderColor=on?'#1B2A4A':'';
+  });
+}
+
+// ── BLOCKS ──
+let blkCnt=0;
+function addBlk(){
+  if(blkCnt>=5){alert('最多 5 個元件');return;}blkCnt++;
+  const id='b'+blkCnt;
+  const d=document.createElement('div');d.className='mblk';d.id=id;
+  d.innerHTML=`<div class="mhdr"><div class="fr"><span class="badge b-gray" style="font-size:10px">${blkCnt}</span><span id="${id}l" style="font-size:12px;color:var(--t3)">選擇類型</span></div><button class="btn bs bd2" onclick="rmBlk('${id}')"><i class="ti ti-trash"></i></button></div>
+  <div class="mtr"><button class="mtb" onclick="sBT('${id}','text',this)"><i class="ti ti-typography"></i> 文字</button><button class="mtb" onclick="sBT('${id}','image',this)"><i class="ti ti-photo"></i> 圖片</button><button class="mtb" onclick="sBT('${id}','video',this)"><i class="ti ti-video"></i> 影片</button><button class="mtb" onclick="sBT('${id}','template',this)"><i class="ti ti-bookmark"></i> 選範本</button><button class="mtb" onclick="sBT('${id}','json',this)"><i class="ti ti-braces"></i> JSON</button></div>
+  <div class="mbdy" id="${id}bd" style="display:none"></div>`;
+  document.getElementById('blks').appendChild(d);
+  if(blkCnt>=5)document.getElementById('add-blk-btn').disabled=true;
+  updNums();
+}
+function rmBlk(id){document.getElementById(id).remove();blkCnt=document.querySelectorAll('.mblk').length;document.getElementById('add-blk-btn').disabled=false;updNums();updPrev();}
+function updNums(){document.querySelectorAll('.mblk').forEach((b,i)=>{const bj=b.querySelector('.badge');if(bj)bj.textContent=i+1;});}
+
+function sBT(id,type,btn){
+  btn.closest('.mtr').querySelectorAll('.mtb').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');
+  const lbl=document.getElementById(id+'l');
+  if(lbl)lbl.innerHTML=`<span class="badge ${MBL[type]}" style="font-size:10px">${MLL[type]}</span>`;
+  const bd=document.getElementById(id+'bd');bd.style.display='block';
+  if(type==='text'){
+    renderTextBlock(id,bd);
+  } else if(type==='image'){
+    bd.innerHTML=`<label>圖片 URL</label><input placeholder="https://..."><label style="margin-top:6px">預覽圖 URL</label><input placeholder="https://...">`;
+  } else if(type==='video'){
+    bd.innerHTML=`<label>影片 URL（MP4）</label><input placeholder="https://..."><label style="margin-top:6px">預覽圖 URL</label><input placeholder="https://...">`;
+  } else if(type==='template'){
+    bd.innerHTML=`<label>選擇訊息範本</label><select onchange="updPrev()"><option value="">— 選擇 —</option>${TPLS.map(t=>`<option>${t.name}</option>`).join('')}</select>`;
+  } else if(type==='json'){
+    bd.innerHTML=`<label>貼入 Flex JSON</label><textarea class="jarea" style="min-height:100px" placeholder='{"type":"bubble",...}'></textarea>`;
+  }
+  updPrev();
+}
+
+function renderTextBlock(id,bd){
+  const showGroup=bcChannel==='group'||bcChannel==='both';
+  // 個人欄位的參數按鈕
+  const personalParams=`<div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap">
+    <button class="pbtn" onclick="insP(this,'{{name}}')">＋ 姓名</button>
+    <button class="pbtn" onclick="insP(this,'{{call}}')">＋ 稱呼</button>
+  </div>`;
+  // 群組欄位的參數按鈕（多了 @all 和 @會員）
+  const groupParams=`<div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap">
+    <button class="pbtn" onclick="insP(this,'{{name}}')">＋ 姓名</button>
+    <button class="pbtn" onclick="insP(this,'{{call}}')">＋ 稱呼</button>
+    <button class="pbtn btn-mention-all" style="background:var(--nav);color:#fff;border-color:var(--nav)" onclick="insP(this,'{{@all}}')"><i class="ti ti-at"></i> @all</button>
+    <button class="pbtn" onclick="insP(this,'{{@member}}')"><i class="ti ti-at"></i> @會員</button>
+  </div>`;
+
+  if(!showGroup){
+    // 只有個人：單欄
+    bd.innerHTML=`
+      <label>訊息文字</label>
+      <textarea id="${id}ta" style="min-height:72px" oninput="updPrev()" placeholder="輸入訊息..."></textarea>
+      ${personalParams}`;
+  } else if(bcChannel==='group'){
+    // 只有群組：單欄，但有 @all / @會員 按鈕
+    bd.innerHTML=`
+      <label>群組訊息文字</label>
+      <textarea id="${id}ta" style="min-height:72px" oninput="updPrev()" placeholder="輸入訊息..."></textarea>
+      ${groupParams}`;
+  } else {
+    // 兩者都發：左右並排
+    bd.innerHTML=`
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <div style="font-size:10px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">個人</div>
+          <textarea id="${id}ta" style="min-height:80px;width:100%" oninput="updPrev()" placeholder="個人訊息..."></textarea>
+          ${personalParams}
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:500;color:var(--nav);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">群組</div>
+          <textarea id="${id}ta-grp" style="min-height:80px;width:100%;border-color:#c5cfe0" placeholder="群組訊息（可與個人版不同）..."></textarea>
+          ${groupParams}
+        </div>
+      </div>`;
+  }
+}
+
+function rerenderTextBlock(id){
+  const bd=document.getElementById(id+'bd');
+  if(!bd||bd.style.display==='none')return;
+  const lbl=document.getElementById(id+'l');
+  if(!lbl||!lbl.querySelector('.badge')?.textContent.includes('文字'))return;
+  // 保留現有文字內容
+  const prevPersonal=bd.querySelector(`#${id}ta`)?.value||'';
+  const prevGroup=bd.querySelector(`#${id}ta-grp`)?.value||'';
+  renderTextBlock(id,bd);
+  const newPersonal=bd.querySelector(`#${id}ta`);
+  const newGroup=bd.querySelector(`#${id}ta-grp`);
+  if(newPersonal&&prevPersonal)newPersonal.value=prevPersonal;
+  if(newGroup&&prevGroup)newGroup.value=prevGroup;
+}
+
+function insP(btn,p){
+  // 找到這個按鈕最近的 textarea
+  const container=btn.closest('div');
+  const ta=container?.previousElementSibling;
+  if(ta&&ta.tagName==='TEXTAREA'){
+    const s=ta.selectionStart||ta.value.length;
+    ta.value=ta.value.slice(0,s)+p+ta.value.slice(s);
+    ta.focus();
+    updPrev();
+  }
+}
+
+function updPrev(){
+  const area=document.getElementById('bc-prev');
+  const blocks=document.querySelectorAll('.mblk');
+  if(!blocks.length){area.innerHTML='<div class="pmk" style="text-align:center;padding:20px;color:var(--t3)">新增元件後顯示</div>';return;}
+  let html='';
+  blocks.forEach((b,i)=>{
+    const bd=b.querySelector('[id$="bd"]');if(!bd||bd.style.display==='none')return;
+    const ta=bd.querySelector('textarea');const sel=bd.querySelector('select');
+    const lbl=b.querySelector('.badge');const t=lbl?lbl.textContent:'';
+    html+=`<div class="pmk" style="margin-bottom:6px">`;
+    if(t==='文字'&&ta&&ta.value){
+      let txt=ta.value
+        .replace(/\{\{name\}\}/g,'<strong style="color:var(--gold)">陳志明</strong>')
+        .replace(/\{\{call\}\}/g,'<strong style="color:var(--gold)">志明兄</strong>')
+        .replace(/\{\{@all\}\}/g,'<span style="color:var(--nav);font-weight:500">@全體成員</span>')
+        .replace(/\{\{@member\}\}/g,'<span style="color:var(--nav);font-weight:500">@陳志明</span>');
+      html+=`<div style="white-space:pre-wrap;font-size:12px">${txt}</div>`;
+    }
+    else if(t==='選範本'&&sel&&sel.value)html+=`<div style="font-size:12px;color:var(--nav)">[範本] ${sel.value}</div>`;
+    else if(['JSON','Flex 卡片'].includes(t))html+=`<div style="font-size:11px;color:var(--t3);text-align:center;padding:8px"><i class="ti ti-code" style="font-size:18px;color:var(--gold)"></i><br>Flex</div>`;
+    else if(t==='圖片')html+=`<div style="text-align:center;padding:8px"><i class="ti ti-photo" style="font-size:18px;color:var(--gold)"></i></div>`;
+    else html+=`<div style="font-size:11px;color:var(--t3);text-align:center;padding:6px">元件 ${i+1}</div>`;
+    html+='</div>';
+  });
+  area.innerHTML=html||'<div class="pmk" style="color:var(--t3);text-align:center;padding:16px">填入後顯示</div>';
+}
+
+function loadQ(k){
+  if(k==='group_mention'){
+    // 切換到「兩者都發」，讓群組欄位自動出現
+    const bothRadio=document.querySelector('input[name="bc-channel"][value="both"]');
+    if(bothRadio){bothRadio.checked=true;updBcChannel(bothRadio);}
+  }
+  if(!blkCnt)addBlk();
+  const last=document.querySelector('.mblk:last-child');if(!last)return;
+  const tb=last.querySelector('.mtb');if(tb)sBT(last.id,'text',tb);
+  const ta=last.querySelector(`#${last.id}ta`);
+  if(ta){
+    ta.value=k==='group_mention'?QT.forum:QT[k]||'';
+    updPrev();
+  }
+  // 群組那欄預填 @all 版本
+  if(k==='group_mention'){
+    const taGrp=last.querySelector(`#${last.id}ta-grp`);
+    if(taGrp)taGrp.value='{{@all}} '+QT.forum;
+  }
+}
+
+function showTP(){document.getElementById('tp-btns').innerHTML=ADMINS.map(a=>`<button class="tpbtn ${selT.has(a.id)?'sel':''}" onclick="togT(${a.id},this)">${a.name}</button>`).join('');document.getElementById('tp-pick').style.display='block';}
+function togT(id,btn){if(selT.has(id)){selT.delete(id);btn.classList.remove('sel');}else{selT.add(id);btn.classList.add('sel');}}
+function doTest(){const n=[...selT].map(id=>ADMINS.find(a=>a.id===id)?.name).filter(Boolean).join('、');if(!n)return alert('請選擇對象');alert('已發送給：'+n);document.getElementById('tp-pick').style.display='none';}
+addBlk();
+  {name:'6/24 論壇邀請 Flex 卡',type:'flex',desc:'深色商務 Bubble，含報名按鈕',updated:'05/09 Ariel'},
+  {name:'會員建檔提醒',type:'text',desc:'純文字，附個人化連結',updated:'05/07 Chester'},
+  {name:'香港考察活動通知',type:'image',desc:'橫幅圖片 + 連結',updated:'04/30 Ariel'},
+  {name:'Giga 全圖邀請',type:'giga',desc:'2500px 全幅圖文訊息',updated:'04/15 Ariel'},
+  {name:'群組 @all 活動通知',type:'textV2',desc:'textV2 mention all，適合群組群發',updated:'05/14 Ariel'},
+  {name:'群組 @指定人 確認',type:'textV2',desc:'textV2 mention 指定 UID，群組專用',updated:'05/14 Ariel'},
+];
+const TI={text:'ti-typography',image:'ti-photo',flex:'ti-code',giga:'ti-file-description',textV2:'ti-at'};
+const TB={text:'b-gray',image:'b-warn',flex:'b-blue',giga:'b-teal',textV2:'b-navy'};
 const MBL={text:'b-gray',image:'b-warn',flex:'b-blue',json:'b-purple',template:'b-teal',video:'b-purple'};
 const MLL={text:'文字',image:'圖片',flex:'Flex 卡片',json:'JSON',template:'選範本',video:'影片'};
-const TPLS=[{name:'6/24 論壇邀請 Flex 卡',type:'flex',desc:'深色商務 Bubble，含報名按鈕',updated:'05/09 Ariel'},{name:'會員建檔提醒',type:'text',desc:'純文字，附個人化連結',updated:'05/07 Chester'},{name:'香港考察活動通知',type:'image',desc:'橫幅圖片 + 連結',updated:'04/30 Ariel'},{name:'Giga 全圖邀請',type:'giga',desc:'2500px 全幅圖文訊息',updated:'04/15 Ariel'}];
-const TI={text:'ti-typography',image:'ti-photo',flex:'ti-code',giga:'ti-file-description'};
-const TB={text:'b-gray',image:'b-warn',flex:'b-blue',giga:'b-teal'};
-let blkCnt=0;
 const ARS=[{id:1,name:'報名確認回覆',tt:'post',trigger:'action=register',src:'tpl',content:'6/24 論壇邀請 Flex 卡',on:true},{id:2,name:'會員建檔導引',tt:'msg',trigger:'進行會員建檔或更新',src:'cust',content:'感謝訊息，建檔連結已傳送。',on:true}];
 const PROGS=[
   {name:'活動通知流程',trigger:'完成報名',status:'啟用中',members:55,steps:[
@@ -1072,67 +1316,16 @@ function addAudCond(){
 }
 function setIE(btn,type){const p=btn.closest('.inc-exc-toggle');p.querySelectorAll('.iet').forEach(b=>{b.classList.remove('sel-inc','sel-exc');});btn.classList.add(type==='inc'?'sel-inc':'sel-exc');}
 function updTcNum(){
-  const v=document.querySelector('input[name="bc-type"]:checked')?.value||'all';
+  const v=document.querySelector('input[name="bc-target"]:checked')?.value||'all';
   if(v==='all')document.getElementById('tc-num').textContent='168 人';
-  else if(v==='seg'){const conds=document.querySelectorAll('#aud-conds .aud-cond');document.getElementById('tc-num').textContent=(conds.length?42*conds.length:'0')+' 人（估算）';}
-  else document.getElementById('tc-num').textContent='依清單而定';
+  else if(v==='seg'){const conds=document.querySelectorAll('#aud-conds .aud-cond');document.getElementById('tc-num').textContent=(conds.length?'約 '+(42*conds.length):'0')+' 人';}
+  else document.getElementById('tc-num').textContent='依名單而定';
 }
 function updBcTarget(radio){
   const v=radio.value;
   document.getElementById('seg-area').style.display=v==='seg'?'block':'none';
-  document.getElementById('uid-area').style.display=v==='uid'?'block':'none';
   updTcNum();
 }
-
-// ── BLOCKS ──
-function addBlk(){
-  if(blkCnt>=5){alert('最多 5 個元件');return;}blkCnt++;
-  const id='b'+blkCnt;const d=document.createElement('div');d.className='mblk';d.id=id;
-  d.innerHTML=`<div class="mhdr"><div class="fr"><span class="badge b-gray" style="font-size:10px">${blkCnt}</span><span id="${id}l" style="font-size:12px;color:var(--t3)">選擇類型</span></div><button class="btn bs bd2" onclick="rmBlk('${id}')"><i class="ti ti-trash"></i></button></div>
-  <div class="mtr"><button class="mtb" onclick="sBT('${id}','text',this)"><i class="ti ti-typography"></i> 文字</button><button class="mtb" onclick="sBT('${id}','image',this)"><i class="ti ti-photo"></i> 圖片</button><button class="mtb" onclick="sBT('${id}','video',this)"><i class="ti ti-video"></i> 影片</button><button class="mtb" onclick="sBT('${id}','template',this)"><i class="ti ti-bookmark"></i> 選範本</button><button class="mtb" onclick="sBT('${id}','json',this)"><i class="ti ti-braces"></i> JSON</button></div>
-  <div class="mbdy" id="${id}bd" style="display:none"></div>`;
-  document.getElementById('blks').appendChild(d);
-  if(blkCnt>=5)document.getElementById('add-blk-btn').disabled=true;
-  updNums();
-}
-function rmBlk(id){document.getElementById(id).remove();blkCnt=document.querySelectorAll('.mblk').length;document.getElementById('add-blk-btn').disabled=false;updNums();updPrev();}
-function updNums(){document.querySelectorAll('.mblk').forEach((b,i)=>{const bj=b.querySelector('.badge');if(bj)bj.textContent=i+1;});}
-function sBT(id,type,btn){
-  btn.closest('.mtr').querySelectorAll('.mtb').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');
-  const lbl=document.getElementById(id+'l');if(lbl)lbl.innerHTML=`<span class="badge ${MBL[type]}" style="font-size:10px">${MLL[type]}</span>`;
-  const bd=document.getElementById(id+'bd');bd.style.display='block';
-  const params=`<div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><button class="pbtn" onclick="insP(this,'{{name}}')">＋ 姓名</button><button class="pbtn" onclick="insP(this,'{{call}}')">＋ 稱呼</button></div>`;
-  if(type==='text')bd.innerHTML=`<label>訊息文字</label><textarea id="${id}ta" style="min-height:64px" oninput="updPrev()" placeholder="輸入文字..."></textarea>${params}`;
-  else if(type==='image')bd.innerHTML=`<label>圖片 URL</label><input placeholder="https://..."><label style="margin-top:6px">預覽圖 URL</label><input placeholder="https://...">`;
-  else if(type==='video')bd.innerHTML=`<label>影片 URL（MP4）</label><input placeholder="https://..."><label style="margin-top:6px">預覽圖 URL</label><input placeholder="https://...">`;
-  else if(type==='template')bd.innerHTML=`<label>選擇訊息範本</label><select onchange="updPrev()"><option value="">— 選擇 —</option>${TPLS.map(t=>`<option>${t.name}</option>`).join('')}</select>`;
-  else if(type==='json')bd.innerHTML=`<label>貼入 Flex JSON</label><textarea class="jarea" style="min-height:100px" placeholder='{"type":"bubble",...}'></textarea>`;
-  updPrev();
-}
-function insP(btn,p){const bd=btn.closest('.mbdy');const ta=bd.querySelector('textarea');if(ta){const s=ta.selectionStart||ta.value.length;ta.value=ta.value.slice(0,s)+p+ta.value.slice(s);updPrev();}}
-function updPrev(){
-  const area=document.getElementById('bc-prev');
-  const blocks=document.querySelectorAll('.mblk');
-  if(!blocks.length){area.innerHTML='<div class="pmk" style="text-align:center;padding:20px;color:var(--t3)">新增元件後顯示</div>';return;}
-  let html='';
-  blocks.forEach((b,i)=>{
-    const bd=b.querySelector('[id$="bd"]');if(!bd||bd.style.display==='none')return;
-    const ta=bd.querySelector('textarea');const sel=bd.querySelector('select');const lbl=b.querySelector('.badge');const t=lbl?lbl.textContent:'';
-    html+=`<div class="pmk" style="margin-bottom:6px">`;
-    if(t==='文字'&&ta&&ta.value)html+=`<div style="white-space:pre-wrap;font-size:12px">${ta.value.replace(/\{\{name\}\}/g,'<strong style="color:var(--gold)">陳志明</strong>').replace(/\{\{call\}\}/g,'<strong style="color:var(--gold)">志明兄</strong>')}</div>`;
-    else if(t==='選範本'&&sel&&sel.value)html+=`<div style="font-size:12px;color:var(--nav)">[範本] ${sel.value}</div>`;
-    else if(['JSON','Flex 卡片'].includes(t))html+=`<div style="font-size:11px;color:var(--t3);text-align:center;padding:8px"><i class="ti ti-code" style="font-size:18px;color:var(--gold)"></i><br>Flex</div>`;
-    else if(t==='圖片')html+=`<div style="text-align:center;padding:8px"><i class="ti ti-photo" style="font-size:18px;color:var(--gold)"></i></div>`;
-    else html+=`<div style="font-size:11px;color:var(--t3);text-align:center;padding:6px">元件 ${i+1}</div>`;
-    html+='</div>';
-  });
-  area.innerHTML=html||'<div class="pmk" style="color:var(--t3);text-align:center;padding:16px">填入後顯示</div>';
-}
-function loadQ(k){if(!blkCnt)addBlk();const last=document.querySelector('.mblk:last-child');if(!last)return;const tb=last.querySelector('.mtb');if(tb)sBT(last.id,'text',tb);const ta=last.querySelector('textarea');if(ta){ta.value=QT[k];updPrev();}}
-function showTP(){document.getElementById('tp-btns').innerHTML=ADMINS.map(a=>`<button class="tpbtn ${selT.has(a.id)?'sel':''}" onclick="togT(${a.id},this)">${a.name}</button>`).join('');document.getElementById('tp-pick').style.display='block';}
-function togT(id,btn){if(selT.has(id)){selT.delete(id);btn.classList.remove('sel');}else{selT.add(id);btn.classList.add('sel');}}
-function doTest(){const n=[...selT].map(id=>ADMINS.find(a=>a.id===id)?.name).filter(Boolean).join('、');if(!n)return alert('請選擇對象');alert('已發送給：'+n);document.getElementById('tp-pick').style.display='none';}
-addBlk();
 
 // ── MEMBERS TABLE ──
 function renderToggles(){document.getElementById('col-toggles').innerHTML=COLS.map((c,i)=>`<span class="ctog ${c.show?'on':''}" onclick="togCol(${i})">${c.l}</span>`).join('');}
