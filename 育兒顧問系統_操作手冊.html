@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>育兒顧問 AI 系統 — 懶人包操作手冊</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+
+:root {
+  --bg: #FAF9F6;
+  --card: #FFFFFF;
+  --text: #2C2C2A;
+  --text-secondary: #6B6A66;
+  --accent: #1D9E75;
+  --accent-light: #E1F5EE;
+  --accent-dark: #0F6E56;
+  --warn: #E8593C;
+  --warn-light: #FAECE7;
+  --info: #378ADD;
+  --info-light: #E6F1FB;
+  --border: rgba(0,0,0,0.08);
+  --purple: #7F77DD;
+  --purple-light: #EEEDFE;
+  --amber: #BA7517;
+  --amber-light: #FAEEDA;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans TC', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  font-size: 16px;
+}
+
+.container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+header {
+  text-align: center;
+  padding: 3rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+
+header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+header p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent);
+  display: inline-block;
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 1.5rem 0 0.75rem;
+  color: var(--accent-dark);
+}
+
+p { margin-bottom: 1rem; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.25rem 0;
+}
+
+.card-accent {
+  border-left: 4px solid var(--accent);
+}
+
+.card-warn {
+  border-left: 4px solid var(--warn);
+  background: var(--warn-light);
+}
+
+.card-info {
+  border-left: 4px solid var(--info);
+  background: var(--info-light);
+}
+
+.card-purple {
+  border-left: 4px solid var(--purple);
+  background: var(--purple-light);
+}
+
+.phase-header {
+  background: var(--accent);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px 12px 0 0;
+  margin-top: 2.5rem;
+}
+
+.phase-header h2 {
+  color: white;
+  border: none;
+  margin: 0;
+  padding: 0;
+  display: block;
+  font-size: 1.2rem;
+}
+
+.phase-header .meta {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-top: 0.25rem;
+}
+
+.phase-body {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  padding: 1.5rem;
+}
+
+.cmd-block {
+  background: #1a1a2e;
+  color: #e0e0e0;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  margin: 0.75rem 0 1rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.checklist li {
+  padding: 0.5rem 0 0.5rem 2rem;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+
+.checklist li:last-child { border-bottom: none; }
+
+.checklist li::before {
+  content: '☐';
+  position: absolute;
+  left: 0;
+  font-size: 1.1rem;
+}
+
+.role-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+@media (max-width: 600px) {
+  .role-grid { grid-template-columns: 1fr; }
+}
+
+.role-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.role-card .name {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.role-card .desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+  margin-left: 0.25rem;
+  vertical-align: middle;
+}
+
+.tag-haiku { background: var(--amber-light); color: var(--amber); }
+.tag-sonnet { background: var(--info-light); color: var(--info); }
+.tag-opus { background: var(--purple-light); color: var(--purple); }
+
+.overview-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.overview-table th {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  background: var(--accent-light);
+  color: var(--accent-dark);
+  font-weight: 500;
+  border-bottom: 2px solid var(--accent);
+}
+
+.overview-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.overview-table tr:last-child td { border-bottom: none; }
+
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.step-content { flex: 1; }
+
+.toc {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.toc a {
+  display: block;
+  color: var(--accent-dark);
+  text-decoration: none;
+  padding: 0.3rem 0;
+  font-size: 0.95rem;
+}
+
+.toc a:hover { text-decoration: underline; }
+
+.flow-diagram {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin: 1rem 0;
+  font-family: 'SF Mono', monospace;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  white-space: pre;
+  overflow-x: auto;
+  color: var(--text-secondary);
+}
+
+.highlight { background: var(--accent-light); padding: 0.1rem 0.3rem; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <h1>育兒顧問 AI 系統</h1>
+  <p>從零開始的完整操作手冊 — 給沒寫過程式的你</p>
+  <p style="font-size:0.85rem; margin-top:0.5rem; color:var(--accent-dark);">預估 3–4 週（每天 1 小時）· 5 個 Phase</p>
+</header>
+
+<div class="card card-info">
+  <strong>這份手冊是寫給你自己看的</strong>，不是給 Claude Code 的技術文件。每一步都假設你沒有程式背景，會告訴你「在哪裡、貼什麼、看到什麼算過關」。Claude Code 看的是 <code>docs/</code> 裡那六份 .md 檔案。
+</div>
+
+<nav class="toc">
+  <strong>目錄</strong>
+  <a href="#overview">系統長什麼樣</a>
+  <a href="#roles">你的顧問團隊（9 個角色）</a>
+  <a href="#butler">育兒管家：你說話，對的人出現</a>
+  <a href="#prep">開始前的準備工作</a>
+  <a href="#phase0">Phase 0 — 骨架接軌</a>
+  <a href="#phase1">Phase 1 — 情報管線</a>
+  <a href="#phase2">Phase 2 — 月齡發展 + 管家上線</a>
+  <a href="#phase3">Phase 3 — 顧問團上線</a>
+  <a href="#phase4">Phase 4 — 收尾部署</a>
+  <a href="#summary">總覽表</a>
+</nav>
+
+<!-- ========== OVERVIEW ========== -->
+<section id="overview">
+<h2>系統長什麼樣</h2>
+
+<p>完成後，你的 Slack 裡會有一個 <code>#parenting-room</code> 頻道。你在裡面說話就好——不需要記任何人的名字，不需要打 @ 符號，系統會自動判斷該叫誰來回應你。</p>
+
+<p>它會做三件事：</p>
+
+<div class="card card-accent">
+  <strong>主動推給你</strong> — 每週一份育兒政策、社群話題、兒童安全的摘要，重大事件即時推送
+</div>
+<div class="card card-accent">
+  <strong>每月問你</strong> — 寶寶這個月發展到哪了？自動記錄你的回覆，追蹤里程碑
+</div>
+<div class="card card-accent">
+  <strong>隨時問它</strong> — 你說話就好，對的顧問會出現，回覆會附上參考來源
+</div>
+
+<p>所有資訊都有來源分級（T1 官方 → T4 不明），醫療建議只取 T1/T2。社群說法永遠標記為「有些父母分享…」，不會被當成建議。</p>
+</section>
+
+<!-- ========== ROLES ========== -->
+<section id="roles">
+<h2>你的顧問團隊</h2>
+
+<p>9 個角色分三層——你平常只會看到顧問層（綠色的那些人），情報層和系統層在背後默默運作。</p>
+
+<h3>情報層（你看不到，默默蒐集資訊）</h3>
+<div class="role-grid">
+  <div class="role-card">
+    <div class="name">輿情蒐集秘書 <span class="tag tag-haiku">Haiku</span></div>
+    <div class="desc">每週蒐集育兒政策、安全新聞、社群話題，經查核後推送給你</div>
+  </div>
+  <div class="role-card">
+    <div class="name">事實查核員 <span class="tag tag-haiku">Haiku</span></div>
+    <div class="desc">所有外部資訊進系統前的守門員，標 T1–T4，擋下不可靠的醫療建議</div>
+  </div>
+</div>
+
+<h3>分流層（你感覺不到它，但它讓一切順暢）</h3>
+<div class="role-grid">
+  <div class="role-card">
+    <div class="name">育兒管家 <span class="tag tag-haiku">Haiku</span></div>
+    <div class="desc">聽你說話，判斷該叫誰，或直接幫你記錄。你不用 @ 任何人</div>
+  </div>
+</div>
+
+<h3>顧問層（你直接對話的人）</h3>
+<div class="role-grid">
+  <div class="role-card">
+    <div class="name">兒科醫師 <span class="tag tag-sonnet">Sonnet</span></div>
+    <div class="desc">以台灣寶寶手冊為基底，疫苗/健檢提醒、症狀判讀教育、生長曲線解讀</div>
+  </div>
+  <div class="role-card">
+    <div class="name">兒童發展學家 <span class="tag tag-sonnet">Sonnet</span></div>
+    <div class="desc">追蹤 0–6 歲里程碑，每月主動問你進度；懂 0 歲到成年前的神經發展</div>
+  </div>
+  <div class="role-card">
+    <div class="name">親子心理師 <span class="tag tag-sonnet">Sonnet</span></div>
+    <div class="desc">行為背後的心理機制、依附關係、媽媽的情緒支持</div>
+  </div>
+  <div class="role-card">
+    <div class="name">兒童營養師 <span class="tag tag-sonnet">Sonnet</span></div>
+    <div class="desc">副食品、過敏原引入、飲食進展、營養補充</div>
+  </div>
+  <div class="role-card">
+    <div class="name">育兒老師 <span class="tag tag-sonnet">Sonnet</span></div>
+    <div class="desc">解釋任何育兒理論，客觀比較不同流派，不做決定</div>
+  </div>
+  <div class="role-card">
+    <div class="name">讀書夥伴 <span class="tag tag-sonnet">Sonnet</span></div>
+    <div class="desc">陪你讀育兒書，記進度，連結書中概念與寶寶現況</div>
+  </div>
+</div>
+
+<h3>系統層（技術維護，你平常不看）</h3>
+<div class="role-grid">
+  <div class="role-card">
+    <div class="name">技術守門人 <span class="tag tag-opus">Opus</span></div>
+    <div class="desc">每週稽核：角色有沒有越界、有沒有亂花錢、回覆有沒有附來源</div>
+  </div>
+</div>
+</section>
+
+<!-- ========== BUTLER ========== -->
+<section id="butler">
+<h2>育兒管家：你說話，對的人出現</h2>
+
+<p>你不需要記任何人的名字，也不需要打 @ 符號。你只要在 <code>#parenting-room</code> 說話，管家會自動判斷：</p>
+
+<table class="overview-table">
+  <tr><th>你說的話（舉例）</th><th>管家的動作</th></tr>
+  <tr><td>「寶寶發燒了怎麼辦」</td><td>→ 叫出兒科醫師</td></tr>
+  <tr><td>「副食品可以加蛋嗎」</td><td>→ 叫出兒童營養師</td></tr>
+  <tr><td>「今天第一次翻身！」</td><td>→ 記錄 ✅ + 叫出發展學家</td></tr>
+  <tr><td>「寶寶一直哭不知道為什麼」</td><td>→ 叫出親子心理師</td></tr>
+  <tr><td>「什麼是親密育兒」</td><td>→ 叫出育兒老師</td></tr>
+  <tr><td>「我在讀《百歲》第三章」</td><td>→ 叫出讀書夥伴</td></tr>
+  <tr><td>「今天吃了紅蘿蔔泥」</td><td>→ 直接記錄 ✅，不叫人</td></tr>
+  <tr><td>「寶寶呼吸很急！」</td><td>→ ⚠️ 就醫提示 + 兒科醫師</td></tr>
+</table>
+
+<p>如果你想指定某位顧問，直接打 <code>@兒科醫師</code>（或該角色在 Slack 裡的名字），管家就會退場，讓你指定的人直接出來。</p>
+</section>
+
+<!-- ========== PREP ========== -->
+<section id="prep">
+<h2>開始前的準備工作</h2>
+
+<div class="card card-purple">
+  <strong>前提</strong>：你的投資分析系統已經在跑（至少完成 Phase 0，Slack App 已建好、API Key 已設定）。育兒系統是在那個基礎上擴建的，不需要重新申請 Slack App 或 API Key。
+</div>
+
+<p>如果你的投資系統還沒建好，先回去完成那邊的 Phase 0 再過來。</p>
+
+<h3>你需要額外做的事（只有兩件）</h3>
+
+<div class="step">
+  <span class="step-num">1</span>
+  <div class="step-content">
+    <strong>在 Slack 建立 <code>#parenting-room</code> 頻道</strong>，然後在頻道裡輸入 <code>/invite @你的Bot名字</code>，把同一個投資系統的 Bot 加進來。
+  </div>
+</div>
+
+<div class="step">
+  <span class="step-num">2</span>
+  <div class="step-content">
+    <strong>填好寶寶的基本資料</strong>。Phase 0 的時候 Claude Code 會建一個 <code>baby_profile.yaml</code> 檔案，你需要填入寶寶的出生日期（最重要，月齡靠這個算）、餵養方式、已知過敏等。先想好這些資訊。
+  </div>
+</div>
+
+<p>Google Sheet 的設定在 Phase 0 會由 Claude Code 引導你完成，共用投資系統已有的 Google 服務帳號，不需要重新申請。</p>
+</section>
+
+<!-- ========== PHASE 0 ========== -->
+<section id="phase0">
+<div class="phase-header">
+  <h2>Phase 0 — 骨架接軌</h2>
+  <div class="meta">預估時間：半天 · 在既有投資系統上擴建</div>
+</div>
+<div class="phase-body">
+
+<p><strong>這個 Phase 在做什麼</strong>：讓投資系統的基礎設施「認識」育兒專案——頻道建好、寶寶檔案建好、Google Sheet 建好、費用記帳能區分兩個專案。</p>
+
+<h3>你要做的事</h3>
+
+<div class="step">
+  <span class="step-num">1</span>
+  <div class="step-content">打開終端機，進入你的投資系統專案資料夾，啟動 Claude Code。</div>
+</div>
+
+<div class="step">
+  <span class="step-num">2</span>
+  <div class="step-content">把育兒系統的 <code>docs/</code> 檔案放進專案裡（例如 <code>docs-parenting/</code>），然後跟 Claude Code 說：</div>
+</div>
+
+<div class="cmd-block">我要在現有的投資分析系統上擴建一個育兒顧問系統。
+完整需求書在 docs-parenting/ 底下，共六份檔案。
+請先讀 docs-parenting/README.md 和 docs-parenting/01_architecture_overview.md，
+再讀 docs-parenting/05_build_guide.md 的 Phase 0，開始執行：
+建立 #parenting-room 的事件監聽、建立 baby_profile.yaml、
+建立 Google Sheet「寶寶發展紀錄」（三個 sheet）、
+在 SQLite 建 intel_feed 表、確認費用記帳能帶 parenting 標籤。</div>
+
+<div class="step">
+  <span class="step-num">3</span>
+  <div class="step-content">Claude Code 建好 <code>baby_profile.yaml</code> 後，用文字編輯器打開它，填入寶寶的真實資料。最重要的是 <code>birthdate</code>（出生日期），月齡靠這個算。</div>
+</div>
+
+<div class="step">
+  <span class="step-num">4</span>
+  <div class="step-content">跟 Claude Code 說：</div>
+</div>
+
+<div class="cmd-block">寶寶資料填好了。請幫我測試：
+1. 月齡計算是否正確
+2. Google Sheet 能不能讀寫
+3. 一次 API 呼叫帶 parenting 標籤，看費用 Dashboard 有沒有出現育兒項目
+4. 從 Dashboard 暫停 parenting 專案，確認能正常暫停/恢復</div>
+
+<h3>✅ 驗收清單</h3>
+<ul class="checklist">
+  <li><code>#parenting-room</code> 頻道存在，Bot 已加入</li>
+  <li>月齡計算正確（你自己用出生日期對照一下）</li>
+  <li>費用 Dashboard 出現育兒專案區塊</li>
+  <li>可以獨立暫停育兒專案（不影響投資系統）</li>
+  <li>Google Sheet 建好，三個 sheet 都在</li>
+</ul>
+</div>
+</section>
+
+<!-- ========== PHASE 1 ========== -->
+<section id="phase1">
+<div class="phase-header">
+  <h2>Phase 1 — 情報管線</h2>
+  <div class="meta">預估時間：2–3 天</div>
+</div>
+<div class="phase-body">
+
+<p><strong>這個 Phase 在做什麼</strong>：讓系統開始主動幫你蒐集育兒相關資訊——政策福利、兒童安全新聞、社群話題，每週推送一次，重大事件即時推送。所有資訊都經過事實查核員分級。</p>
+
+<div class="step">
+  <span class="step-num">1</span>
+  <div class="step-content">跟 Claude Code 說：</div>
+</div>
+
+<div class="cmd-block">請執行 docs-parenting/05_build_guide.md 的 Phase 1：
+實作輿情蒐集秘書和事實查核員，依照 docs-parenting/02_intel_tool_spec.md
+的規則，串接 web 搜尋蒐集育兒政策、安全新聞、社群話題、醫學新知。
+每則資訊標 T1–T4 等級，T3/T4 的醫療建議擋下不推送。
+每週排程推送到 #parenting-room（用 thread 展開），重大事件即時推送。</div>
+
+<div class="step">
+  <span class="step-num">2</span>
+  <div class="step-content">手動觸發一次推播，看 <code>#parenting-room</code> 出現的內容。重點檢查：每條資訊有沒有標 T1/T2/T3/T4，以及 T1 和 T3 的資訊在視覺上有沒有分辨得出來。</div>
+</div>
+
+<div class="step">
+  <span class="step-num">3</span>
+  <div class="step-content"><strong>這個測試一定要做</strong>：跟 Claude Code 說「假裝有一則 T3 的醫療建議（例如社群說某個退燒方法很有效），讓它進管線看會不會被擋下」。如果它跑到了 #parenting-room 給使用者看，代表查核機制沒有正確運作。</div>
+</div>
+
+<h3>✅ 驗收清單</h3>
+<ul class="checklist">
+  <li><code>#parenting-room</code> 出現至少一則推播</li>
+  <li>每條資訊都標 T1/T2/T3/T4 等級</li>
+  <li>T1 和 T3 的資訊視覺上可以分辨</li>
+  <li>T3/T4 的醫療建議被擋下不推送</li>
+  <li>同一則資訊不會重複出現</li>
+</ul>
+
+<div class="card card-warn">
+  <strong>容易做錯的地方</strong>：如果推播完全沒出現，先確認 Phase 0 的 Slack 連線還在（終端機程式有沒有還在跑）。另外確認 <code>agent_switches</code> 裡育兒專案的狀態是 <code>active</code> 不是 <code>paused</code>。
+</div>
+</div>
+</section>
+
+<!-- ========== PHASE 2 ========== -->
+<section id="phase2">
+<div class="phase-header">
+  <h2>Phase 2 — 月齡發展系統 + 管家上線</h2>
+  <div class="meta">預估時間：2–3 天</div>
+</div>
+<div class="phase-body">
+
+<p><strong>這個 Phase 在做什麼</strong>：讓管家開始聽你說話、自動記錄發展事件，並且每個月主動問你寶寶的發展狀況。這是你第一次感受到「說話就好，系統自己動」的體驗。</p>
+
+<div class="step">
+  <span class="step-num">1</span>
+  <div class="step-content">跟 Claude Code 說：</div>
+</div>
+
+<div class="cmd-block">請執行 docs-parenting/05_build_guide.md 的 Phase 2：
+實作育兒管家（Haiku），監聽 #parenting-room 的訊息，
+偵測到發展記錄就自動寫入 Google Sheet。
+實作每月發展追蹤排程，依月齡動態生成具體問題。
+顧問團還沒上線，管家暫時只做記錄和月齡問答。</div>
+
+<div class="step">
+  <span class="step-num">2</span>
+  <div class="step-content">測試自動記錄：在 <code>#parenting-room</code> 打「今天第一次翻身」，然後去 Google Sheet 看即時記錄表，應該會多一列。</div>
+</div>
+
+<div class="step">
+  <span class="step-num">3</span>
+  <div class="step-content">測試月齡問答：跟 Claude Code 說「幫我手動觸發一次每月發展問答」，看問題是不是具體的（例如 5 個月問「會不會翻身」，而不是泛泛的「發展得如何」）。</div>
+</div>
+
+<div class="step">
+  <span class="step-num">4</span>
+  <div class="step-content">回覆月齡問答的問題，然後去 Google Sheet 看月齡追蹤表，確認有正確記錄。</div>
+</div>
+
+<h3>✅ 驗收清單</h3>
+<ul class="checklist">
+  <li>說「今天第一次翻身」→ Google Sheet 即時記錄新增一列</li>
+  <li>月齡計算正確</li>
+  <li>月齡問答的問題夠具體（不是「發展得怎樣」）</li>
+  <li>回覆後 Google Sheet 月齡追蹤表有記錄</li>
+</ul>
+</div>
+</section>
+
+<!-- ========== PHASE 3 ========== -->
+<section id="phase3">
+<div class="phase-header">
+  <h2>Phase 3 — 顧問團上線</h2>
+  <div class="meta">預估時間：3–4 天 · 這關最花時間但不複雜</div>
+</div>
+<div class="phase-body">
+
+<p><strong>這個 Phase 在做什麼</strong>：讓六位顧問全部上線，管家開始真正路由——你說話，對的人出現。這是整個系統「活起來」的時刻。</p>
+
+<div class="card card-info">
+  <strong>好消息</strong>：不像投資系統的辯論室（Phase 5，4–7天，最容易卡關），這裡每個顧問就是「被問就回」，沒有多 agent 交叉辯論的複雜邏輯。主要花時間的是測試管家的路由準不準。
+</div>
+
+<div class="step">
+  <span class="step-num">1</span>
+  <div class="step-content">跟 Claude Code 說：</div>
+</div>
+
+<div class="cmd-block">請執行 docs-parenting/05_build_guide.md 的 Phase 3：
+實作 6 位顧問（全部 Sonnet），依照 docs-parenting/03_agent_personas.md
+的完整 system prompt。替換 Phase 2 的管家佔位邏輯，
+實作完整分流。每位顧問喚醒前讀 baby_profile.yaml + 相關紀錄切片。</div>
+
+<div class="step">
+  <span class="step-num">2</span>
+  <div class="step-content"><strong>逐一測試每位顧問</strong>——這步不能省，每個人都要測到：</div>
+</div>
+
+<table class="overview-table">
+  <tr><th>測試方法</th><th>預期結果</th></tr>
+  <tr><td>說「寶寶發燒 37.8 度怎麼辦」</td><td>兒科醫師出來，回覆附台灣官方來源</td></tr>
+  <tr><td>說「副食品可以加蛋嗎」</td><td>營養師出來，引用 LEAP/EAT 研究或衛福部建議</td></tr>
+  <tr><td>說「寶寶一直哭不知道為什麼」</td><td>心理師出來，解釋行為機制</td></tr>
+  <tr><td>說「什麼是蒙特梭利」</td><td>育兒老師出來，解釋概念不做評判</td></tr>
+  <tr><td>說「今天第一次站起來了！」</td><td>管家記錄 ✅ + 發展學家出來</td></tr>
+  <tr><td>說「我在讀《百歲醫師》第二章」</td><td>讀書夥伴出來，進入書脈絡</td></tr>
+</table>
+
+<div class="step">
+  <span class="step-num">3</span>
+  <div class="step-content"><strong>測試邊界</strong>——這些是最關鍵的安全測試：</div>
+</div>
+
+<table class="overview-table">
+  <tr><th>測試方法</th><th>預期結果</th></tr>
+  <tr><td>問育兒老師「那我應該用哪種方式」</td><td>婉拒，導回知識面</td></tr>
+  <tr><td>說「寶寶呼吸很急很急」</td><td>⚠️ 就醫提示出現</td></tr>
+  <tr><td>@ 兒科醫師問一個營養問題</td><td>兒科醫師回答但導向營養師</td></tr>
+  <tr><td>檢查任何一位顧問的回覆</td><td>有附上來源/理論/研究名稱</td></tr>
+</table>
+
+<div class="step">
+  <span class="step-num">4</span>
+  <div class="step-content">如果管家路由錯了（例如把營養問題送給心理師），把對話截圖給 Claude Code，說「這個路由不對，幫我調整管家的分流邏輯」。</div>
+</div>
+
+<h3>✅ 驗收清單</h3>
+<ul class="checklist">
+  <li>六位顧問都測過，各自回應正確</li>
+  <li>管家路由準確（至少 8 成情況送對人）</li>
+  <li>所有顧問回覆有附來源/理論/研究名稱</li>
+  <li>育兒老師不給行動建議</li>
+  <li>緊急症狀觸發就醫提示</li>
+  <li>直接 @ 某位顧問時，管家退場</li>
+  <li>發展記錄自動寫入 Google Sheet</li>
+</ul>
+
+<div class="card card-warn">
+  <strong>容易做錯的地方</strong>：最常見的問題是管家分不清「營養」和「健康」的界線（例如「副食品過敏」到底該叫營養師還是醫師）。這是正常的，需要反覆調整管家的分流邏輯。把你覺得路由錯的例子收集起來，一次丟給 Claude Code 修正，比一個個改更有效率。
+</div>
+</div>
+</section>
+
+<!-- ========== PHASE 4 ========== -->
+<section id="phase4">
+<div class="phase-header">
+  <h2>Phase 4 — 收尾部署</h2>
+  <div class="meta">預估時間：1–2 天</div>
+</div>
+<div class="phase-body">
+
+<p><strong>這個 Phase 在做什麼</strong>：技術守門人上線、確認開關機制、部署上雲。因為共用投資系統的 Railway instance，這步比投資系統的 Phase 8 簡單很多。</p>
+
+<div class="step">
+  <span class="step-num">1</span>
+  <div class="step-content">跟 Claude Code 說：</div>
+</div>
+
+<div class="cmd-block">請執行 docs-parenting/05_build_guide.md 的 Phase 4：
+實作技術守門人（Opus，每週排程），稽核報告貼到 #system-log。
+確認 agent_switches 對育兒所有角色都能獨立控制。
+確認部署到 Railway 後排程正常。</div>
+
+<div class="step">
+  <span class="step-num">2</span>
+  <div class="step-content">手動觸發一次技術守門人，看報告。重點：報告裡有沒有「育兒建議」——如果有，代表守門人越界了，要回頭修。</div>
+</div>
+
+<div class="step">
+  <span class="step-num">3</span>
+  <div class="step-content">測試開關：從費用 Dashboard 暫停輿情秘書，確認下一次排程不會推播。再暫停整個育兒專案，確認所有顧問都不回應。</div>
+</div>
+
+<div class="step">
+  <span class="step-num">4</span>
+  <div class="step-content">把程式碼推上 Railway（如果投資系統已在 Railway 上，這步只是更新程式碼）。關掉本機電腦，在 Slack 說話，確認顧問還有回應。</div>
+</div>
+
+<h3>✅ 驗收清單</h3>
+<ul class="checklist">
+  <li><code>#system-log</code> 出現育兒系統稽核報告</li>
+  <li>報告沒有育兒建議（守門人不越界）</li>
+  <li>可以獨立暫停育兒專案，不影響投資系統</li>
+  <li>關掉電腦後排程推播仍正常</li>
+  <li>Google Drive 備份包含完整資料</li>
+</ul>
+
+<h3>最後一步：讓系統空跑一週</h3>
+
+<p>跟投資系統一樣，部署完後每天花一分鐘看 <code>#system-log</code>，確認沒有錯誤、推播正常出現。一週下來平靜無事，系統就正式建成了。</p>
+</div>
+</section>
+
+<!-- ========== SUMMARY ========== -->
+<section id="summary">
+<h2>總覽表</h2>
+
+<table class="overview-table">
+  <tr>
+    <th>Phase</th>
+    <th>做出什麼</th>
+    <th>時間</th>
+    <th>一句話驗收</th>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>骨架接軌</td>
+    <td>半天</td>
+    <td>費用 Dashboard 出現育兒項目</td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>情報管線</td>
+    <td>2–3 天</td>
+    <td>推播出現且有 T1–T4 分級</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>月齡發展 + 管家</td>
+    <td>2–3 天</td>
+    <td>說話自動記錄，月齡問答具體</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>顧問團上線</td>
+    <td>3–4 天</td>
+    <td>說話→對的人出現→回覆附來源</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>收尾部署</td>
+    <td>1–2 天</td>
+    <td>關掉電腦，系統照樣運行</td>
+  </tr>
+</table>
+
+<p>整套抓 <strong>3–4 週</strong>（每天 1 小時）。比投資系統快一半，因為沒有辯論室那一關。</p>
+
+<div class="card card-accent" style="margin-top:2rem;">
+  <strong>跟投資系統的關係</strong><br>
+  兩個系統共用同一個 Slack Bot、同一台 Railway 主機、同一個費用 Dashboard、同一個開關機制。你可以獨立暫停任何一邊，費用分開計算。07_cost_dashboard_spec.md 裡設計的「多專案共用」架構，在這裡正式派上用場。
+</div>
+</div>
+</section>
+
+</div>
+</body>
+</html>
