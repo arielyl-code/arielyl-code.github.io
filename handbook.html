@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>投資分析系統 — 操作手冊</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --ink:#1c2422;
+    --paper:#f6f4ee;
+    --paper-2:#efece2;
+    --line:#d8d3c4;
+    --accent:#a8431f;
+    --accent-soft:#e8d9cd;
+    --green:#3c6b4f;
+    --green-soft:#dfe9e0;
+    --amber:#8a6a1f;
+    --amber-soft:#f1e7cc;
+    --ph0:#5b6b6a; --ph0-soft:#e2e8e7;
+    --ph1:#a8431f; --ph1-soft:#f1ddd1;
+    --ph2:#a8431f; --ph2-soft:#f1ddd1;
+    --ph3:#7a6a2a; --ph3-soft:#ece5cc;
+    --ph4:#7a6a2a; --ph4-soft:#ece5cc;
+    --ph5:#6b3a8a; --ph5-soft:#e6dcef;
+    --ph6:#3c6b4f; --ph6-soft:#dfe9e0;
+    --ph7:#3c6b4f; --ph7-soft:#dfe9e0;
+    --ph8:#2c5470; --ph8-soft:#d9e4ec;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+    --serif: 'Source Serif 4', serif;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--sans);
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ============ Top progress bar ============ */
+  .progress-shell{
+    position:sticky; top:0; z-index:50;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+  }
+  .progress-track{
+    height:5px;
+    background:var(--paper-2);
+    position:relative;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--accent), var(--ph8));
+    width:0%;
+    transition:width .5s cubic-bezier(.4,0,.2,1);
+  }
+  .progress-meta{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 20px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink);
+    opacity:.75;
+  }
+  .progress-meta .count{font-weight:600; opacity:1;}
+  .reset-btn{
+    font-family:var(--mono);
+    font-size:11px;
+    background:none;
+    border:1px solid var(--line);
+    color:var(--ink);
+    opacity:.6;
+    padding:4px 10px;
+    border-radius:3px;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .reset-btn:hover{opacity:1; border-color:var(--accent); color:var(--accent);}
+
+  /* ============ Hero ============ */
+  .hero{
+    padding:64px 24px 40px;
+    max-width:760px;
+    margin:0 auto;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:24px; height:1px;
+    background:var(--accent);
+  }
+  h1{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(28px, 5vw, 42px);
+    line-height:1.15;
+    margin-bottom:18px;
+    letter-spacing:-.01em;
+  }
+  .hero p{
+    font-size:15px;
+    color:var(--ink);
+    opacity:.78;
+    max-width:54ch;
+    margin-bottom:8px;
+  }
+  .hero .note{
+    font-family:var(--mono);
+    font-size:12.5px;
+    background:var(--paper-2);
+    border-left:2px solid var(--accent);
+    padding:10px 14px;
+    margin-top:20px;
+    opacity:.85;
+  }
+
+  /* ============ Phase nav (jump map) ============ */
+  .navmap{
+    max-width:760px;
+    margin:0 auto;
+    padding:28px 24px 8px;
+  }
+  .navmap-title{
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    opacity:.55;
+    margin-bottom:12px;
+  }
+  .navgrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(108px,1fr));
+    gap:8px;
+  }
+  .navchip{
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:9px 10px;
+    cursor:pointer;
+    background:var(--paper);
+    transition:.15s;
+    text-align:left;
+    position:relative;
+    overflow:hidden;
+  }
+  .navchip:hover{border-color:var(--ink); transform:translateY(-1px);}
+  .navchip .nc-num{
+    font-family:var(--mono);
+    font-size:10px;
+    opacity:.55;
+    display:block;
+  }
+  .navchip .nc-label{
+    font-size:12px;
+    font-weight:600;
+    margin-top:2px;
+    display:block;
+  }
+  .navchip .nc-bar{
+    position:absolute; left:0; bottom:0; height:3px;
+    background:var(--accent);
+    width:0%;
+    transition:width .4s;
+  }
+  .navchip.done .nc-bar{background:var(--green);}
+  .navchip.done{background:var(--green-soft);}
+
+  /* ============ Main container ============ */
+  main{
+    max-width:760px;
+    margin:0 auto;
+    padding:24px 24px 120px;
+  }
+
+  /* ============ Phase block ============ */
+  .phase{
+    border:1px solid var(--line);
+    border-radius:10px;
+    margin-bottom:18px;
+    overflow:hidden;
+    background:var(--paper);
+    scroll-margin-top:70px;
+  }
+  .phase-head{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:18px 20px;
+    cursor:pointer;
+    user-select:none;
+    background:var(--paper);
+    transition:background .15s;
+  }
+  .phase-head:hover{background:var(--paper-2);}
+  .phase-badge{
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:13px;
+    width:38px; height:38px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    border:1.5px solid currentColor;
+  }
+  .phase-headtext{flex:1; min-width:0;}
+  .phase-title{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:17px;
+    margin-bottom:3px;
+  }
+  .phase-sub{
+    font-family:var(--mono);
+    font-size:11.5px;
+    opacity:.6;
+  }
+  .phase-progress{
+    font-family:var(--mono);
+    font-size:11px;
+    opacity:.65;
+    white-space:nowrap;
+    text-align:right;
+    flex-shrink:0;
+  }
+  .phase-progress .pp-frac{font-weight:600; opacity:1;}
+  .chevron{
+    width:18px; height:18px;
+    flex-shrink:0;
+    transition:transform .25s;
+    opacity:.5;
+  }
+  .phase.open .chevron{transform:rotate(180deg);}
+
+  .phase-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .35s cubic-bezier(.4,0,.2,1);
+  }
+  .phase.open .phase-body{max-height:none;}
+  .phase-body-inner{
+    padding:4px 20px 24px;
+    border-top:1px solid var(--line);
+  }
+
+  .ph-meta-row{
+    display:flex; gap:18px; flex-wrap:wrap;
+    padding:16px 0 18px;
+    font-family:var(--mono);
+    font-size:11.5px;
+    opacity:.7;
+  }
+  .ph-meta-row span b{font-weight:600; opacity:1;}
+
+  .section-label{
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    opacity:.55;
+    margin:22px 0 10px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .section-label::after{
+    content:'';
+    flex:1; height:1px;
+    background:var(--line);
+  }
+
+  .step{
+    margin-bottom:16px;
+    padding-left:18px;
+    border-left:2px solid var(--line);
+    position:relative;
+  }
+  .step.warn{border-left-color:var(--amber);}
+  .step-label{
+    font-family:var(--sans);
+    font-weight:600;
+    font-size:13px;
+    margin-bottom:6px;
+  }
+  .step-label .stepnum{
+    font-family:var(--mono);
+    color:var(--accent);
+    margin-right:6px;
+  }
+  .step p{font-size:13.5px; opacity:.85; margin-bottom:8px;}
+  .step p:last-child{margin-bottom:0;}
+
+  pre.codebox{
+    background:#22282a;
+    color:#e9e4d8;
+    font-family:var(--mono);
+    font-size:12.5px;
+    line-height:1.65;
+    padding:14px 16px;
+    border-radius:6px;
+    overflow-x:auto;
+    margin:8px 0 10px;
+    white-space:pre-wrap;
+    word-break:break-word;
+    position:relative;
+  }
+  .codewrap{position:relative;}
+  .copybtn{
+    position:absolute;
+    top:8px; right:8px;
+    font-family:var(--mono);
+    font-size:10.5px;
+    background:rgba(255,255,255,.08);
+    color:#e9e4d8;
+    border:1px solid rgba(255,255,255,.2);
+    padding:4px 9px;
+    border-radius:4px;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .copybtn:hover{background:rgba(255,255,255,.18);}
+  .copybtn.copied{background:var(--green); border-color:var(--green); color:#fff;}
+
+  code.inline{
+    font-family:var(--mono);
+    font-size:.92em;
+    background:var(--paper-2);
+    padding:1px 5px;
+    border-radius:3px;
+  }
+
+  .filetree{
+    font-family:var(--mono);
+    font-size:12px;
+    background:var(--paper-2);
+    padding:12px 16px;
+    border-radius:6px;
+    line-height:1.8;
+    white-space:pre;
+    overflow-x:auto;
+  }
+
+  /* checklist */
+  .checklist{
+    list-style:none;
+    margin:6px 0 4px;
+  }
+  .checklist li{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:8px 10px;
+    border-radius:6px;
+    cursor:pointer;
+    transition:background .15s;
+    font-size:13.5px;
+  }
+  .checklist li:hover{background:var(--paper-2);}
+  .checkbox{
+    width:18px; height:18px;
+    border:1.5px solid var(--ink);
+    opacity:.55;
+    border-radius:4px;
+    flex-shrink:0;
+    margin-top:1px;
+    display:flex; align-items:center; justify-content:center;
+    transition:.15s;
+  }
+  .checkbox svg{width:11px; height:11px; opacity:0; transition:.15s;}
+  .checklist li.checked .checkbox{
+    background:var(--green);
+    border-color:var(--green);
+    opacity:1;
+  }
+  .checklist li.checked .checkbox svg{opacity:1; stroke:#fff;}
+  .checklist li.checked .cl-text{opacity:.5; text-decoration:line-through;}
+  .cl-text{flex:1;}
+
+  .warnbox{
+    background:var(--amber-soft);
+    border-left:3px solid var(--amber);
+    padding:12px 14px;
+    border-radius:0 6px 6px 0;
+    font-size:13px;
+    margin:10px 0;
+  }
+  .warnbox b{color:var(--amber);}
+
+  .pitfall{
+    background:var(--accent-soft);
+    border-left:3px solid var(--accent);
+    padding:12px 14px;
+    border-radius:0 6px 6px 0;
+    font-size:13px;
+    margin:10px 0;
+  }
+  .pitfall b{color:var(--accent);}
+
+  .substep{
+    margin:14px 0;
+    padding:14px;
+    background:var(--paper-2);
+    border-radius:8px;
+    border:1px solid var(--line);
+  }
+  .substep .ss-title{
+    font-weight:600;
+    font-size:13px;
+    margin-bottom:8px;
+    font-family:var(--serif);
+  }
+  .miniverdict{
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--green);
+    margin-top:8px;
+    padding-top:8px;
+    border-top:1px dashed var(--line);
+  }
+
+  /* phase color theming via data-attr */
+  .phase[data-ph="0"] .phase-badge{color:var(--ph0); background:var(--ph0-soft);}
+  .phase[data-ph="1"] .phase-badge{color:var(--ph1); background:var(--ph1-soft);}
+  .phase[data-ph="2"] .phase-badge{color:var(--ph2); background:var(--ph2-soft);}
+  .phase[data-ph="3"] .phase-badge{color:var(--ph3); background:var(--ph3-soft);}
+  .phase[data-ph="4"] .phase-badge{color:var(--ph4); background:var(--ph4-soft);}
+  .phase[data-ph="5"] .phase-badge{color:var(--ph5); background:var(--ph5-soft);}
+  .phase[data-ph="6"] .phase-badge{color:var(--ph6); background:var(--ph6-soft);}
+  .phase[data-ph="7"] .phase-badge{color:var(--ph7); background:var(--ph7-soft);}
+  .phase[data-ph="8"] .phase-badge{color:var(--ph8); background:var(--ph8-soft);}
+
+  /* table overview at bottom */
+  .overview-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12.5px;
+    margin-top:10px;
+  }
+  .overview-table th{
+    font-family:var(--mono);
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    text-align:left;
+    padding:8px 10px;
+    opacity:.55;
+    border-bottom:1px solid var(--line);
+  }
+  .overview-table td{
+    padding:9px 10px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  .overview-table tr:last-child td{border-bottom:none;}
+  .overview-table .otag{
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:11px;
+    padding:2px 7px;
+    border-radius:10px;
+    display:inline-block;
+  }
+
+  footer{
+    max-width:760px;
+    margin:0 auto;
+    padding:40px 24px 80px;
+    font-family:var(--mono);
+    font-size:11.5px;
+    opacity:.45;
+    border-top:1px solid var(--line);
+    text-align:center;
+  }
+
+  @media (max-width:600px){
+    .hero{padding:48px 18px 32px;}
+    main{padding:18px 14px 100px;}
+    .navmap{padding:22px 14px 4px;}
+    .phase-head{padding:15px 14px; gap:12px;}
+    .phase-body-inner{padding:4px 14px 20px;}
+    .ph-meta-row{gap:12px;}
+    .phase-progress{font-size:10px;}
+  }
+
+  ::selection{background:var(--accent); color:#fff;}
+</style>
+</head>
+<body>
+
+<div class="progress-shell">
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-meta">
+    <span>整體進度　<span class="count" id="progressCount">0 / 0</span> 項已完成</span>
+    <button class="reset-btn" id="resetBtn">重置所有勾選</button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">操作手冊 · 給沒寫過程式的你</div>
+  <h1>投資分析系統<br>從零到上線</h1>
+  <p>這份是你自己看的操作地圖，不是給 Claude Code 看的技術文件。每一步都拆到「在哪個視窗、點什麼、貼什麼」的程度。</p>
+  <p>勾選會自動儲存在這台瀏覽器裡，下次打開還在。九個 Phase，抓 6～8 週（每天投入 1～2 小時）。</p>
+  <div class="note">💡 使用方式：先做「開始前的準備工作」，再依序展開每個 Phase。複製貼上給 Claude Code 的指令文字，它做完後務必照「驗收清單」自己動手測一次。</div>
+</div>
+
+<div class="navmap">
+  <div class="navmap-title">快速跳轉</div>
+  <div class="navgrid" id="navGrid"></div>
+</div>
+
+<main id="main"></main>
+
+<footer>投資分析系統操作手冊 · 與 docs/05_build_guide.md 一一對應 · 所有判斷由你自己做出</footer>
+
+<script>
+/* ===================== DATA ===================== */
+const DATA = [
+{
+  id:"prep", ph:"0", badge:"準備", title:"開始前的準備工作", sub:"申請帳號與金鑰 · 只需做一次", time:"半天",
+  meta:[["要做","5 件事"],["難度","純按按鈕，不用懂程式"]],
+  content:[
+    {type:"p", text:"先把這幾個帳號申請好，Claude Code 沒辦法幫你做這幾步，因為都需要你自己登入。建議找一個下午一次做完。"},
+    {type:"substep", title:"準備 1：安裝 Claude Code", body:[
+      {type:"p", text:"去官方說明裝好後，打開終端機輸入："},
+      {type:"code", text:"claude"},
+      {type:"p", text:"出現歡迎畫面就是裝成功了。按 Ctrl+C（Mac 是 Control+C）先關掉它，等一下正式開始才用。"}
+    ]},
+    {type:"substep", title:"準備 2：建立專案資料夾", body:[
+      {type:"p", text:"建一個資料夾，例如「投資分析系統」。把之前拿到的 investment-system-docs 資料夾整個放進去，改名成 docs。"},
+      {type:"filetree", text:"投資分析系統/\n  └── docs/\n        ├── README.md\n        ├── 01_architecture_overview.md\n        ├── 02_data_tool_spec.md\n        ├── 03_agent_personas.md\n        ├── 04_data_schema.md\n        ├── 05_build_guide.md\n        ├── 06_cost_safety_rules.md\n        └── 07_cost_dashboard_spec.md"}
+    ]},
+    {type:"substep", title:"準備 3：申請 Slack App", body:[
+      {type:"p", text:"打開 api.slack.com/apps → Create New App → From scratch。取名、選你的 workspace。"},
+      {type:"p", text:"進設定頁後：左側「Socket Mode」打開（切綠）。「OAuth & Permissions」→ Bot Token Scopes 加入：chat:write、channels:history、channels:read、app_mentions:read、im:history。"},
+      {type:"p", text:"同頁最上面「Install to Workspace」授權，會得到 xoxb- 開頭的 Bot Token，複製存好。"},
+      {type:"p", text:"「Basic Information」→ App-Level Tokens → Generate Token，加 connections:write scope，得到 xapp- 開頭的 App Token。同頁找 Signing Secret 複製存好。"}
+    ]},
+    {type:"substep", title:"準備 4：把 Bot 加進頻道", body:[
+      {type:"p", text:"在 Slack 建立 #market-room 頻道，頻道裡輸入 /invite @你的App名字"}
+    ]},
+    {type:"substep", title:"準備 5：申請 Anthropic API Key", body:[
+      {type:"p", text:"打開 console.anthropic.com 登入，左側 API Keys → Create Key，複製存好（sk-ant- 開頭）。"}
+    ]},
+    {type:"substep", title:"準備 6：FinMind 帳號（Phase 3 才需要，可晚點做）", body:[
+      {type:"p", text:"finmindtrade.com 註冊，會員中心找 API Token 存好。"}
+    ]},
+    {type:"checklist", items:[
+      "docs 資料夾裡有八個 .md 檔案",
+      "手上存了 Bot Token（xoxb-）、App Token（xapp-）、Signing Secret 三段文字",
+      "Bot 已經被邀請進 #market-room",
+      "手上存了 Anthropic API Key（sk-ant-）"
+    ]}
+  ]
+},
+{
+  id:"p0", ph:"0", badge:"0", title:"蓋地基", sub:"專案骨架 · 連 Slack · 建資料庫", time:"半天～1天",
+  meta:[["做出什麼","水電管線，還沒有會講話的分析師"],["驗收","程式啟動沒紅字，能呼叫一次 API"]],
+  content:[
+    {type:"p", text:"讓 Claude Code 建立整個專案最基本的骨架。這階段純粹是把連線都接好。"},
+    {type:"step", num:"1", label:"進入專案資料夾", body:"打開終端機，輸入 cd（後面加一個空格），把專案資料夾拖進視窗，按 Enter。"},
+    {type:"step", num:"2", label:"啟動 Claude Code", body:"輸入 claude，按 Enter。"},
+    {type:"step", num:"3", label:"貼上起手指令", code:"我要建立一個 Slack 多 agent 投資分析系統。完整需求書在這個資料夾的 docs/ 底下，\n共八份檔案（README + 7份規格）。請先讀過 docs/README.md 和 docs/01_architecture_overview.md\n建立全貌，再讀 docs/05_build_guide.md 的 Phase 0 段落，現在開始執行 Phase 0：\n建立專案骨架、Slack 連線（Socket Mode）、SQLite 資料庫初始化（依照 docs/04_data_schema.md\n建表）、APScheduler 排程器骨架、以及一個會把每次 API 呼叫費用記錄下來的 Anthropic API\n呼叫共用函式。請先列出 .env 檔案需要哪些欄位，不要先實作任何 agent 的對話功能。"},
+    {type:"step", num:"4", label:"填寫 .env", body:"它會建立 .env.example，複製一份改名 .env，把準備工作拿到的金鑰一個個貼進去。"},
+    {type:"warn", text:"⚠️ .env 檔案絕對不要貼給 Claude Code 看內容，不要上傳網路或 GitHub。等下確認它有設好 .gitignore 排除這個檔案。"},
+    {type:"step", num:"5", label:"測試連線", code:"我已經把 .env 填好了。請幫我測試：程式能不能正常啟動、能不能連上 Slack、\n能不能成功呼叫一次 Anthropic API 並且在資料庫留下一筆費用紀錄。"},
+    {type:"pitfall", text:"最常見問題：xoxb- 跟 xapp- 兩串複製錯位置。Bot 完全沒反應通常是忘了 /invite 進頻道。"},
+    {type:"checklist", items:[
+      "終端機顯示程式成功啟動，沒有紅字錯誤",
+      "Claude Code 確認成功連上 Slack",
+      "Claude Code 確認成功呼叫一次 Anthropic API",
+      "專案資料夾裡多了一個 .db 結尾的檔案",
+      "確認 .gitignore 裡有寫到 .env"
+    ]}
+  ]
+},
+{
+  id:"p1", ph:"1", badge:"1", title:"第一個會講話的 Agent", sub:"台股早報員", time:"1～2天",
+  meta:[["做出什麼","每天自動發台股早報"],["驗收","Slack 出現早報，數字對得起來"]],
+  content:[
+    {type:"p", text:"第一次親眼看到系統「活起來」的時刻。"},
+    {type:"step", num:"1", label:"下指令", code:"請執行 docs/05_build_guide.md 的 Phase 1：實作台股匯報員。\n串接 TWSE API 抓取大盤指數與我設定的關注清單股票數據，每一筆資料都要附上時間戳記\n與新鮮度標記。依照 docs/03_agent_personas.md 裡「台股匯報員」那一段的 system prompt\n來產出早報內容，設定每天台灣時間 08:00 自動發送到 Slack 的 #market-room 頻道。"},
+    {type:"step", num:"2", label:"告訴它關注清單", body:"它可能會問要放哪些股票，例如「2330 台積電、2454 聯發科」。"},
+    {type:"step", num:"3", label:"測試", body:"等隔天 08:00，或請它「手動觸發一次早報，不要等排程」立刻看結果。"},
+    {type:"step", num:"4", label:"親自核對數字", body:"挑早報裡一個數字，自己上 Yahoo 股市對一下準不準，這步不能省。"},
+    {type:"pitfall", text:"早報完全沒出現？先確認終端機視窗有沒有還開著——本機開發階段你關掉視窗系統就停了，這是正常限制，Phase 8 部署上雲後才會 24 小時運行。"},
+    {type:"checklist", items:[
+      "Slack #market-room 真的出現一則早報",
+      "早報數字自己對照過至少一個，是準確的",
+      "早報有顯示資料時間戳記",
+      "故意問沒資料的東西，會說「無資料」而不是亂編"
+    ]}
+  ]
+},
+{
+  id:"p2", ph:"2", badge:"2", title:"把早報補齊", sub:"美股 + 均量 + 新聞情報", time:"2～3天",
+  meta:[["做出什麼","早報四區塊：台股/美股/均量/情報"],["驗收","新聞有來源分級，不重複入庫"]],
+  content:[
+    {type:"step", num:"1", label:"下指令", code:"請執行 docs/05_build_guide.md 的 Phase 2：加入美股匯報員，串接 yfinance 或 Polygon\n取得美股數據，以及 SEC EDGAR 取得財報資訊。建立新聞掃描員，依照\ndocs/02_data_tool_spec.md 模組四的雙層情報監控設計（KOL 意見型與事件型人物分開處理），\n串接 web 搜尋工具，並把結果依照 docs/04_data_schema.md 的 intel_feed 表結構寫入資料庫。\n同時在早報裡補上 5/10/20/60/120 日均量與當日成交值。"},
+    {type:"step", num:"2", label:"KOL 名單", body:"可以先說「先用文件裡列的名單」，之後再調整。"},
+    {type:"step", num:"3", label:"測試四區塊", body:"手動觸發早報，檢查台股、美股、均量、新聞情報是否都出現。"},
+    {type:"step", num:"4", label:"檢查來源分級", body:"問 Claude Code「這條新聞的來源等級是什麼，可以讓我看資料庫裡這筆記錄嗎」。"},
+    {type:"pitfall", text:"新聞摘要語氣很誇張（像「崩盤前搶短！」）代表沒有還原成中性敘述，要回頭請它依 03 的新聞掃描員規則修正。"},
+    {type:"checklist", items:[
+      "早報有美股區塊，數字合理（可對照 Yahoo Finance）",
+      "早報有均量數據（5/10/20/60/120 日都有）",
+      "新聞情報每條都標示來源等級",
+      "同一則新聞測兩次，確認不會重複存入"
+    ]}
+  ]
+},
+{
+  id:"p3", ph:"3", badge:"3", title:"低估股掃描器", sub:"純算法找便宜股票", time:"1～2天",
+  meta:[["做出什麼","#scanner 頻道每日名單"],["驗收","財務數字真實，value trap 有過濾"]],
+  content:[
+    {type:"step", num:"1", label:"申請 FinMind（若還沒做）", body:"拿到 Token 填進 .env，對照 Claude Code 告訴你的欄位名稱。"},
+    {type:"step", num:"2", label:"下指令", code:"請執行 docs/05_build_guide.md 的 Phase 3：用 FinMind 取得台股財報數據、\n用 Polygon 取得美股財報數據，建立估值評分引擎，純粹用程式計算 P/E、P/B、\nEV/EBITDA、ROE，並加入營收成長率與自由現金流的交叉篩選，過濾掉「便宜但持續\n惡化」的標的（value trap）。請依照 docs/02_data_tool_spec.md 模組二的規則。\n每天台灣時間 08:30 把篩選出的名單，加上一段量化分析師的點評，貼到 #scanner 頻道。"},
+    {type:"step", num:"3", label:"手動觸發測試", body:"看 #scanner 出現的名單。"},
+    {type:"step", num:"4", label:"核對 value trap 過濾", body:"挑名單裡認識的股票，查它最近一季營收是成長還是衰退。若衰退卻還在推薦名單裡，代表過濾沒生效。"},
+    {type:"pitfall", text:"FinMind 免費帳號有呼叫次數限制，出現「呼叫太頻繁」通常是撞到限額，等一段時間會重置，不是程式寫錯。"},
+    {type:"checklist", items:[
+      "#scanner 每天有一份名單出現",
+      "每檔股票都附真實財務指標",
+      "抽查過至少一檔，財報數字是真的",
+      "抽查過至少一檔，惡化中的有被標記或排除"
+    ]}
+  ]
+},
+{
+  id:"p4", ph:"4", badge:"4", title:"持倉觀測", sub:"觀測員 + 風控助理", time:"2～3天",
+  meta:[["做出什麼","盯著你真實持股，異動主動通知"],["驗收","手動異動測試能正確觸發"]],
+  content:[
+    {type:"step", num:"1", label:"建立持倉 Google 試算表", body:"開新試算表「我的持倉」，標題列依序：代號、市場、成本價、部位、策略、異動閾值、備註。"},
+    {type:"filetree", text:"代號     市場    成本價    部位    策略     異動閾值   備註\n2330     tw      580       1000    long     5%\nAAPL     us      180       50      short    3%"},
+    {type:"step", num:"2", label:"設定 Google Service Account", code:"我建了一個 Google 試算表要當作我的持倉清單，需要讓程式能讀寫它。\n請告訴我怎麼設定 Google Cloud 的 Service Account 來連接 Google Sheets API，\n一步一步教我在 Google Cloud Console 要點哪些地方。"},
+    {type:"p", text:"它會引導建立服務帳號、下載 JSON 金鑰。完成後把試算表「共用」給服務帳號的 email（一串很長的 xxx@xxx.iam.gserviceaccount.com）。"},
+    {type:"step", num:"3", label:"建觀測員與風控助理", code:"試算表已經設定好共用權限了。請執行 docs/05_build_guide.md 的 Phase 4：\n建立持倉觀測員，每 30 分鐘讀取一次股價，跟試算表裡的持倉與閾值比對，\n異動超過閾值就在 Slack @ 我，並依照策略欄位（long/short）通知對應的分析室。\n同時實作風控助理，依照 docs/03_agent_personas.md 的規則，在有人提出買賣想法時\n跳出下單前檢查清單（部位比例、停損點、是不是情緒化決定、最大可能損失）。"},
+    {type:"step", num:"4", label:"手動製造異動測試", code:"我想測試異動通知，不想等真的股價波動。可以幫我手動把資料庫裡某一檔股票的價格\n改成一個會觸發異動的數值，然後手動跑一次觀測員，看通知會不會正確出現嗎？"},
+    {type:"pitfall", text:"最常卡住：忘記把試算表共用給服務帳號 email，系統會回報「找不到試算表」或「權限不足」。"},
+    {type:"checklist", items:[
+      "Google 試算表持倉資料系統真的讀得到",
+      "手動製造異動後，Slack 真的跳出通知並 @ 你",
+      "通知附有風控助理的下單前檢查清單",
+      "短線/長線部位異動有正確區分"
+    ]}
+  ]
+},
+{
+  id:"p5", ph:"5", badge:"5", title:"多 Agent 辯論室", sub:"最重要也最容易卡關的一關", time:"4～7天",
+  meta:[["做出什麼","核心功能：分析師真的互相辯論"],["注意","拆五小步做，卡關是正常的"]],
+  content:[
+    {type:"p", text:"不是程式碼難寫，是「多個會講話的角色互相對話、不要吵不停、又能讓你插話」邏輯本身複雜。建議拆成五個小步驟，不要要求一次做完。"},
+    {type:"substep", title:"① 先做兩位分析師各講一次", body:[
+      {type:"code", text:"請先實作一個最簡單的版本：在 #market-room，實作技術分析師和價值分析師\n這兩個角色（依照 docs/03_agent_personas.md 的 system prompt，模型用 Sonnet），\n我輸入一個股票代號後，讓這兩位各自講一次自己的看法，講完就停止，\n不要做完整辯論流程，先讓我看到兩個不同人格真的有不同觀點。"},
+      {type:"p", text:"測試：打股票代號，看兩位是不是真的講不一樣的東西（不是換句話說同一個觀點）。"},
+      {type:"verdict", text:"✓ 小驗收：語氣、關注點明顯不同（技術派講K線均量，價值派講護城河估值）"}
+    ]},
+    {type:"substep", title:"② 加入主持人，開題→表態→收尾", body:[
+      {type:"code", text:"這兩位分析師運作正常了。現在加入主持人角色，流程改成：主持人先讀早報摘要\n開一個討論題目，技術分析師和價值分析師各自表態，主持人最後做三到五句的綜整。"},
+      {type:"p", text:"測試：主持人開的題目是否「具體」（例如「台積電量縮是否為短線警訊」）而非空泛（例如「今天大盤如何」）。"},
+      {type:"verdict", text:"✓ 小驗收：題目夠具體；主持人確實做出綜整"}
+    ]},
+    {type:"substep", title:"③ 補齊剩下分析師，加入交叉辯論", body:[
+      {type:"code", text:"這個流程運作良好。現在補上剩下的分析師：短線室加籌碼分析師、情緒分析師；\n長線室加總經分析師、產業分析師。實作完整的兩輪交叉辯論流程\n（分析師可以互相 @、回應彼此的觀點），最多兩輪，然後主持人收尾。"},
+      {type:"p", text:"測試：用 /debate 台積電 觸發完整辯論，看有沒有互相回應、兩輪後正常結束。"},
+      {type:"verdict", text:"✓ 小驗收：辯論會自然結束；至少一次明確回應另一位的論點"}
+    ]},
+    {type:"substep", title:"④ 加入瓶頸理論分析師（事件驅動）", body:[
+      {type:"code", text:"請加入瓶頸理論分析師（用 Opus 模型），這個角色不參加每天例行辯論，\n只在我手動提到重大消息時（例如某科技巨頭發布財報或新品）被觸發，\n依照 docs/03_agent_personas.md 的規則運作，且每次建議都要附風險警示，\n並且要經過風控助理覆核才能呈現給我。"},
+      {type:"p", text:"測試：「假裝 NVIDIA 剛發布財報，觸發瓶頸分析師看看」，檢查有沒有附「論點失效條件」與「流動性風險」。"},
+      {type:"verdict", text:"✓ 小驗收：每次發言都有風險警示，沒風控覆核不會單獨出現"}
+    ]},
+    {type:"substep", title:"⑤ 加入隨時插話", body:[
+      {type:"code", text:"現在加入插話功能：我在辯論進行中 @ 任何一位分析師，他要能單獨回應我，\n不會驚動其他正在發言的分析師。"},
+      {type:"p", text:"測試：辯論進行到一半 @ 某位分析師問追加問題，看是否只有他回答。"},
+      {type:"verdict", text:"✓ 小驗收：插話只觸發被 @ 的那位，流程沒中斷"}
+    ]},
+    {type:"warn", text:"⚠️ 必做安全測試：「我想確認辯論室不會無限循環燒錢。可以模擬一個情況，讓兩位分析師持續互相回應，看系統會不會在我設定的回合上限正確停下來，而不是一直跑到我手動關掉程式？」這個沒測，可能哪天半夜系統自動排程觸發無限對話，燒一大筆錢才發現。"},
+    {type:"checklist", items:[
+      "短線三位、長線四位分析師都能正確表達各自人格觀點",
+      "主持人開的題目具體、不空泛",
+      "辯論有交叉回應，不是各自獨白",
+      "辯論會在固定輪數後自然結束，不會無限跑（一定要測）",
+      "瓶頸分析師只在事件觸發時出現，且每次都附風險警示",
+      "插話功能正常，不會驚動全員",
+      "完整跑完一場辯論後，分析師判斷有寫入 analyst_judgments 表"
+    ]}
+  ]
+},
+{
+  id:"p6", ph:"6", badge:"6", title:"知識教室 + 記憶接入", sub:"兩位老師上線，分析師開始記得", time:"2～3天",
+  meta:[["做出什麼","老師教學 + 跨場記憶連貫"],["驗收","老師守住界線，分析師記得舊判斷"]],
+  content:[
+    {type:"step", num:"1", label:"下指令", code:"請執行 docs/05_build_guide.md 的 Phase 6：實作經濟學老師與投資理論老師\n（依照 docs/03_agent_personas.md 的 system prompt），確認他們只在 thread 裡\n回答問題，而且問到買賣建議時會把問題導回知識面，不會越界給投資建議。\n同時實作分析師喚醒前的記憶組裝功能，依照 docs/04_data_schema.md\n「分析師讀取記憶的方式」那段規則，只附加相關的記憶切片，不要把整個資料庫塞進去。"},
+    {type:"step", num:"2", label:"測試老師的界線", body:"thread 裡問經濟學老師「殖利率倒掛是什麼意思」，看講解是否清楚。接著追問「那現在該買嗎」——這是關鍵測試，他應該婉拒並導回分析師，不是自己給建議。"},
+    {type:"step", num:"3", label:"測試記憶接入", body:"讓某位分析師先對某檔股票表態，隔一段時間再問同一位同一檔股票，看他會不會主動提到之前說過的話。"},
+    {type:"pitfall", text:"如果老師連知識性延伸都不肯回答，是規則設太嚴。反映「應該只擋買賣建議，不是擋所有延伸討論」。"},
+    {type:"checklist", items:[
+      "問老師理論問題，得到有教學感的回答",
+      "問老師買賣建議，他婉拒並導回知識面",
+      "老師回答只出現在 thread，不打斷主頻道",
+      "分析師對同一標的的後續討論會提到先前判斷",
+      "確認記憶部分不是把整個資料庫塞進去（只有相關幾條）"
+    ]}
+  ]
+},
+{
+  id:"p7", ph:"7", badge:"7", title:"雙稽核員上線", sub:"系統開始自己檢查自己", time:"2～3天",
+  meta:[["做出什麼","市場稽核 + 技術稽核報告"],["驗收","低頻運作，不越界給建議"]],
+  content:[
+    {type:"step", num:"1", label:"下指令", code:"請執行 docs/05_build_guide.md 的 Phase 7：實作系統稽核員與技術架構守門人\n（都用 Opus 模型，排程觸發，依照 docs/03_agent_personas.md 的規則）。\n系統稽核員要做勝率追蹤（比對 analyst_judgments 表裡的判斷與後續實際股價）、\n資料健康檢查、立場漂移檢查，每月做一次方法論時效性的 web 搜尋。\n技術架構守門人要做五個視角（PM、架構、後端、資料工程、前端）的稽核。\n報告都貼到 #system-review，用標籤區分「市場稽核」和「技術稽核」。"},
+    {type:"step", num:"2", label:"手動觸發看格式", code:"可以幫我手動觸發一次系統稽核員和技術架構守門人，讓我先看看報告格式嗎？"},
+    {type:"p", text:"剛上線系統若還沒累積足夠歷史判斷，「資料不足，暫無法統計」是正常的，不是錯誤。"},
+    {type:"pitfall", text:"最容易出問題：稽核員夾帶投資意見（例如「所以我覺得現在應該要 OOO」），這就越界了，發現要立刻反映修正，這是整個稽核機制中立性的核心。"},
+    {type:"checklist", items:[
+      "#system-review 出現至少一份市場稽核、一份技術稽核報告",
+      "兩份報告清楚標示類別",
+      "報告裡沒有任何「買這檔」「賣那檔」的投資建議",
+      "技術守門人報告有提到模型分配與浪費之處"
+    ]}
+  ]
+},
+{
+  id:"p8", ph:"8", badge:"8", title:"成本控制 + 正式上線", sub:"開關機制 · 費用儀表板 · 部署上雲", time:"3～5天",
+  meta:[["做出什麼","24 小時雲端運行，關電腦照樣動"],["驗收","畢業考：空跑一週系統穩定"]],
+  content:[
+    {type:"section", text:"第一部分：開關機制與費用儀表板（先在本機做）"},
+    {type:"step", num:"1", label:"下指令", code:"請先實作 docs/07_cost_dashboard_spec.md 描述的開關機制：依照\ndocs/04_data_schema.md 的 agent_switches 表，讓我可以暫停整個專案\n或暫停單一角色，排程器和事件處理器執行任何動作前都要先檢查這張表，\n被暫停的角色要直接跳過、不發送任何 API 請求。同時做一個簡單的費用\n儀表板網頁，顯示依照專案、角色、任務類型分類的花費。"},
+    {type:"step", num:"2", label:"測試開關真的有效", body:"「幫我暫停辯論室所有角色，然後手動跑一次排程，確認他們真的沒被觸發」，看終端機輸出有沒有「已跳過」訊息。"},
+    {type:"step", num:"3", label:"核對費用儀表板", body:"打開本機網址（如 http://localhost:3000），跟 Anthropic Console 後台帳單數字對一下。"},
+    {type:"section", text:"第二部分：正式部署上雲"},
+    {type:"step", num:"4", label:"申請 Railway 帳號", body:"railway.app 用 GitHub 帳號登入（沒有就先去 github.com 申請，免費）。"},
+    {type:"step", num:"5", label:"把程式碼放上 GitHub", code:"我要把這個專案部署到 Railway。請幫我初始化 git、確認 .gitignore 有正確排除\n.env 檔案和其他不該上傳的東西，然後告訴我接下來要怎麼建立 GitHub repo\n並且把程式碼推上去。"},
+    {type:"warn", text:"⚠️ 上傳後務必去 GitHub 頁面搜尋有沒有任何金鑰字串（sk-ant- 或 xoxb- 開頭）。萬一不小心傳上去，要立刻去 Anthropic Console 和 Slack App 後台刪掉重新生成。"},
+    {type:"step", num:"6", label:"Railway 連結專案", body:"New Project → Deploy from GitHub repo → 選你的 repo。"},
+    {type:"step", num:"7", label:"填入環境變數", body:"Railway 後台「Variables」分頁，把 .env 每一行逐項手動貼進網頁欄位。"},
+    {type:"step", num:"8", label:"轉換連線模式", code:"程式碼已經在 Railway 上了，環境變數也填好了。我們開發時用的是 Slack 的\nSocket Mode，部署到雲端後需要改成 HTTP Events 模式，請幫我做這個轉換，\n並告訴我需要回去 Slack App 後台調整什麼設定。"},
+    {type:"step", num:"9", label:"測試雲端版本", body:"關掉本機終端機程式，只靠 Railway 雲端版本。在 Slack @ 一下分析師，確認還會回應。"},
+    {type:"section", text:"第三部分：備份設定"},
+    {type:"step", num:"10", label:"設定自動備份", code:"請幫我設定每天自動把 SQLite 資料庫備份到 Google Drive 的排程，\n並且確認 SQLite 有開啟 WAL 模式，避免程式異常關閉時資料損毀。"},
+    {type:"warn", text:"🎓 畢業考：部署完成後接下來一週，每天花一分鐘打開 #system-log 看有沒有紅字錯誤或半夜默默掛掉的紀錄。這個驗收期不能省，很多問題只有連續運行超過 24 小時才會暴露。一週平靜無事、早報辯論都正常出現，系統就正式建成了。"},
+    {type:"checklist", items:[
+      "暫停某角色後，他真的不再發送 API 請求",
+      "費用儀表板能依專案、角色分類顯示花費",
+      "儀表板數字跟 Anthropic Console 帳單對得起來",
+      "每個角色卡片有開關按鈕，點擊能切換狀態",
+      "程式碼上傳 GitHub private repo，確認無金鑰外洩",
+      "Railway 顯示部署成功狀態",
+      "關掉本機電腦，Slack 分析師依然有回應",
+      "Google Drive 每天出現新的資料庫備份檔案",
+      "畢業考：空跑一週，#system-log 平靜無重大錯誤"
+    ]}
+  ]
+}
+];
+
+const PHASE_META = {
+  "0":{label:"地基／準備", color:"--ph0"},
+  "1":{label:"台股早報", color:"--ph1"},
+  "2":{label:"美股+情報", color:"--ph2"},
+  "3":{label:"低估股", color:"--ph3"},
+  "4":{label:"持倉觀測", color:"--ph4"},
+  "5":{label:"辯論室", color:"--ph5"},
+  "6":{label:"知識+記憶", color:"--ph6"},
+  "7":{label:"雙稽核", color:"--ph7"},
+  "8":{label:"上線部署", color:"--ph8"}
+};
+
+/* ===================== STORAGE ===================== */
+const STORAGE_KEY = "invest_handbook_checklist_v1";
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+function saveState(state){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+}
+let checkState = loadState();
+
+/* ===================== RENDER HELPERS ===================== */
+function escapeHtml(s){
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function renderContentBlock(block, phaseId, idx){
+  switch(block.type){
+    case "p":
+      return `<p>${escapeHtml(block.text)}</p>`;
+    case "section":
+      return `<div class="section-label">${escapeHtml(block.text)}</div>`;
+    case "filetree":
+      return `<div class="filetree">${escapeHtml(block.text)}</div>`;
+    case "code":
+      return renderCodeBox(block.text);
+    case "warn":
+      return `<div class="warnbox">${escapeHtml(block.text)}</div>`;
+    case "pitfall":
+      return `<div class="pitfall"><b>容易做錯：</b>${escapeHtml(block.text.replace(/^⚠️\s*/,''))}</div>`;
+    case "step":
+      return `<div class="step">
+        <div class="step-label"><span class="stepnum">${block.num}</span>${escapeHtml(block.label)}</div>
+        ${block.body ? `<p>${escapeHtml(block.body)}</p>` : ""}
+        ${block.code ? renderCodeBox(block.code) : ""}
+      </div>`;
+    case "substep":
+      return `<div class="substep">
+        <div class="ss-title">${escapeHtml(block.title)}</div>
+        ${block.body.map(b => renderSubBlock(b)).join("")}
+      </div>`;
+    case "checklist":
+      return renderChecklist(block.items, phaseId, idx);
+    default:
+      return "";
+  }
+}
+
+function renderSubBlock(b){
+  if(b.type === "code") return renderCodeBox(b.text);
+  if(b.type === "p") return `<p>${escapeHtml(b.text)}</p>`;
+  if(b.type === "verdict") return `<div class="miniverdict">${escapeHtml(b.text)}</div>`;
+  return "";
+}
+
+let codeBoxCounter = 0;
+function renderCodeBox(text){
+  const id = "code-" + (codeBoxCounter++);
+  return `<div class="codewrap">
+    <pre class="codebox" id="${id}">${escapeHtml(text)}</pre>
+    <button class="copybtn" data-target="${id}">複製</button>
+  </div>`;
+}
+
+function renderChecklist(items, phaseId, blockIdx){
+  const lis = items.map((text, i) => {
+    const key = `${phaseId}__cl${blockIdx}__${i}`;
+    const checked = !!checkState[key];
+    return `<li data-key="${key}" class="${checked ? 'checked':''}">
+      <span class="checkbox"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+      <span class="cl-text">${escapeHtml(text)}</span>
+    </li>`;
+  }).join("");
+  return `<div class="section-label">✅ 驗收清單</div><ul class="checklist">${lis}</ul>`;
+}
+
+/* ===================== BUILD PHASES ===================== */
+function getAllChecklistKeys(){
+  let keys = [];
+  DATA.forEach(phase => {
+    phase.content.forEach((block, idx) => {
+      if(block.type === "checklist"){
+        block.items.forEach((_, i) => keys.push(`${phase.id}__cl${idx}__${i}`));
+      }
+    });
+  });
+  return keys;
+}
+
+function phaseProgress(phase){
+  let total = 0, done = 0;
+  phase.content.forEach((block, idx) => {
+    if(block.type === "checklist"){
+      block.items.forEach((_, i) => {
+        total++;
+        const key = `${phase.id}__cl${idx}__${i}`;
+        if(checkState[key]) done++;
+      });
+    }
+  });
+  return {total, done};
+}
+
+function buildNav(){
+  const grid = document.getElementById("navGrid");
+  grid.innerHTML = DATA.map(phase => {
+    const {total, done} = phaseProgress(phase);
+    const pct = total ? Math.round(done/total*100) : 0;
+    const isDone = total > 0 && done === total;
+    return `<div class="navchip ${isDone?'done':''}" data-jump="${phase.id}">
+      <span class="nc-num">${phase.badge}</span>
+      <span class="nc-label">${phase.title}</span>
+      <div class="nc-bar" style="width:${pct}%"></div>
+    </div>`;
+  }).join("");
+  grid.querySelectorAll(".navchip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      const id = chip.dataset.jump;
+      const el = document.getElementById("phase-" + id);
+      if(el){
+        document.querySelectorAll(".phase").forEach(p => p.classList.remove("open"));
+        el.classList.add("open");
+        el.scrollIntoView({behavior:"smooth", block:"start"});
+      }
+    });
+  });
+}
+
+function buildPhases(){
+  const main = document.getElementById("main");
+  main.innerHTML = DATA.map((phase, pIdx) => {
+    const {total, done} = phaseProgress(phase);
+    return `<section class="phase" id="phase-${phase.id}" data-ph="${phase.ph}">
+      <div class="phase-head" data-toggle="${phase.id}">
+        <div class="phase-badge">${phase.badge}</div>
+        <div class="phase-headtext">
+          <div class="phase-title">${escapeHtml(phase.title)}</div>
+          <div class="phase-sub">${escapeHtml(phase.sub)} · 約 ${escapeHtml(phase.time)}</div>
+        </div>
+        <div class="phase-progress" data-progress-for="${phase.id}">
+          <span class="pp-frac">${done}/${total}</span><br>已完成
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+      <div class="phase-body">
+        <div class="phase-body-inner">
+          <div class="ph-meta-row">
+            ${phase.meta.map(m => `<span>${escapeHtml(m[0])}：<b>${escapeHtml(m[1])}</b></span>`).join("")}
+          </div>
+          ${phase.content.map((block, idx) => renderContentBlock(block, phase.id, idx)).join("")}
+        </div>
+      </div>
+    </section>`;
+  }).join("");
+
+  // toggle open/close
+  main.querySelectorAll(".phase-head").forEach(head => {
+    head.addEventListener("click", () => {
+      head.closest(".phase").classList.toggle("open");
+    });
+  });
+
+  // checklist click
+  main.querySelectorAll(".checklist li").forEach(li => {
+    li.addEventListener("click", () => {
+      const key = li.dataset.key;
+      checkState[key] = !checkState[key];
+      saveState(checkState);
+      li.classList.toggle("checked");
+      refreshProgress();
+    });
+  });
+
+  // copy buttons
+  main.querySelectorAll(".copybtn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const targetId = btn.dataset.target;
+      const codeEl = document.getElementById(targetId);
+      const text = codeEl.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = "已複製 ✓";
+        btn.classList.add("copied");
+        setTimeout(() => {
+          btn.textContent = "複製";
+          btn.classList.remove("copied");
+        }, 1600);
+      }).catch(() => {
+        // fallback
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        btn.textContent = "已複製 ✓";
+        setTimeout(() => { btn.textContent = "複製"; }, 1600);
+      });
+    });
+  });
+
+  // open first phase by default
+  const firstPhase = main.querySelector(".phase");
+  if(firstPhase) firstPhase.classList.add("open");
+}
+
+function refreshProgress(){
+  // overall
+  const allKeys = getAllChecklistKeys();
+  const doneCount = allKeys.filter(k => checkState[k]).length;
+  document.getElementById("progressCount").textContent = `${doneCount} / ${allKeys.length}`;
+  const pct = allKeys.length ? (doneCount/allKeys.length*100) : 0;
+  document.getElementById("progressFill").style.width = pct + "%";
+
+  // per-phase
+  DATA.forEach(phase => {
+    const {total, done} = phaseProgress(phase);
+    const el = document.querySelector(`[data-progress-for="${phase.id}"] .pp-frac`);
+    if(el) el.textContent = `${done}/${total}`;
+  });
+
+  // nav chips
+  buildNav();
+}
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if(confirm("確定要重置所有勾選嗎？這個動作無法復原。")){
+    checkState = {};
+    saveState(checkState);
+    buildPhases();
+    refreshProgress();
+  }
+});
+
+/* ===================== INIT ===================== */
+buildPhases();
+buildNav();
+refreshProgress();
+</script>
+</body>
+</html>
