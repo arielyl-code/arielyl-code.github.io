@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geode ── 執行驗收</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone:#E7E4DC; --surface:#F0EEE7; --surface-2:#F7F5EF;
+    --ink:#23272A; --ink-soft:#6C716D; --ink-faint:#9A9A90; --hair:#D4D0C6;
+    --amethyst:#6E5F86; --amethyst-soft:#9A8DB0; --amethyst-wash:#E3DEEA;
+    --pass:#5A7A63; --pass-wash:#DEE7DE;
+    --serif:"Noto Serif TC","Fraunces",Georgia,serif;
+    --sans:"Noto Sans TC",-apple-system,system-ui,sans-serif;
+    --mono:"Space Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--stone);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto;padding:56px 28px 96px;display:grid;grid-template-columns:132px 1fr;gap:44px}
+
+  .core{position:sticky;top:40px;align-self:start;height:min(78vh,720px);display:flex;flex-direction:column}
+  .core-head{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:12px}
+  .core-pct{font-family:var(--serif);font-size:34px;line-height:1;color:var(--ink);margin-bottom:2px}
+  .core-pct small{font-family:var(--mono);font-size:12px;color:var(--ink-soft);letter-spacing:.05em}
+  .core-tube{flex:1;position:relative;margin-top:16px;border:1px solid var(--hair);border-radius:14px;background:var(--surface-2);overflow:hidden;display:flex;flex-direction:column}
+  .strata{position:relative;flex:1;border-bottom:1px solid var(--hair);overflow:hidden;cursor:pointer}
+  .strata:last-child{border-bottom:none}
+  .strata-fill{position:absolute;left:0;bottom:0;width:100%;background:linear-gradient(180deg,var(--amethyst-soft),var(--amethyst));transition:height .5s cubic-bezier(.2,.7,.3,1);height:0}
+  .strata.done .strata-fill{background:linear-gradient(180deg,var(--amethyst),#574a6d)}
+  .strata-tag{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--ink-soft);z-index:2;pointer-events:none}
+  .strata.filled .strata-tag{color:#fff}
+  .core-foot{font-size:11px;color:var(--ink-faint);margin-top:14px;line-height:1.5}
+
+  header.mast{margin-bottom:8px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--amethyst);margin-bottom:14px}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(32px,5vw,46px);line-height:1.08;margin:0 0 10px;letter-spacing:-.01em}
+  h1 .alt{color:var(--ink-faint);font-weight:500}
+  .sub{color:var(--ink-soft);font-size:15px;max-width:52ch;margin:0}
+
+  .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:28px 0 8px;padding-bottom:22px;border-bottom:1px solid var(--hair)}
+  .filters{display:flex;gap:4px;background:var(--surface);border:1px solid var(--hair);border-radius:999px;padding:4px}
+  .filters button{font-family:var(--sans);font-size:13px;color:var(--ink-soft);border:none;background:none;padding:6px 14px;border-radius:999px;cursor:pointer}
+  .filters button.on{background:var(--ink);color:var(--surface-2)}
+  .spacer{flex:1}
+  .ghost{font-family:var(--sans);font-size:13px;color:var(--ink-soft);border:1px solid var(--hair);background:var(--surface);padding:7px 14px;border-radius:999px;cursor:pointer}
+  .ghost:hover{border-color:var(--amethyst);color:var(--amethyst)}
+  .js-note{font-size:11px;color:var(--ink-faint);font-family:var(--mono)}
+
+  .phase{margin-top:38px}
+  .phase-head{display:flex;align-items:baseline;gap:14px;margin-bottom:4px;flex-wrap:wrap}
+  .phase-code{font-family:var(--mono);font-size:13px;color:var(--amethyst);font-weight:700;letter-spacing:.04em}
+  .phase-title{font-family:var(--serif);font-size:23px;font-weight:600;margin:0}
+  .phase-count{font-family:var(--mono);font-size:11px;color:var(--ink-faint);margin-left:auto;white-space:nowrap}
+  .phase-note{color:var(--ink-soft);font-size:13.5px;margin:2px 0 16px;max-width:60ch}
+
+  .row{display:flex;gap:14px;align-items:flex-start;padding:13px 16px;background:var(--surface);border:1px solid var(--hair);border-radius:11px;margin-bottom:8px}
+  label.row{cursor:pointer;display:flex}
+  .row:hover{border-color:var(--amethyst-soft)}
+  .row input[type=checkbox]{appearance:none;-webkit-appearance:none;flex:none;width:19px;height:19px;margin:2px 0 0;border:1.5px solid var(--ink-faint);border-radius:6px;background:var(--surface);cursor:pointer;position:relative}
+  .row input[type=checkbox]:checked{background:var(--amethyst);border-color:var(--amethyst)}
+  .row input[type=checkbox]:checked::after{content:"";position:absolute;left:5px;top:1px;width:6px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .row-body{flex:1;min-width:0}
+  .row-code{font-family:var(--mono);font-size:11px;color:var(--ink-faint);margin-right:8px}
+  .row-text{font-size:14.5px;color:var(--ink)}
+  .row:has(input:checked) .row-text{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--amethyst-soft)}
+  .row:has(input:checked){background:var(--surface-2)}
+
+  .gate{background:var(--amethyst-wash);border:1px dashed var(--amethyst-soft);border-radius:11px;padding:13px 16px;margin:4px 0 2px;display:flex;gap:14px;align-items:flex-start;cursor:pointer}
+  .gate input[type=checkbox]{appearance:none;-webkit-appearance:none;flex:none;width:19px;height:19px;margin:2px 0 0;border:1.5px solid var(--amethyst);border-radius:6px;background:var(--surface-2);cursor:pointer;position:relative}
+  .gate input[type=checkbox]:checked{background:var(--pass);border-color:var(--pass)}
+  .gate input[type=checkbox]:checked::after{content:"";position:absolute;left:5px;top:1px;width:6px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .gate:has(input:checked){background:var(--pass-wash);border-style:solid;border-color:var(--pass)}
+  .gate-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amethyst);display:block;margin-bottom:2px}
+  .gate:has(input:checked) .gate-label{color:var(--pass)}
+  .gate-text{font-size:14px;color:var(--ink)}
+
+  .row.hide,.gate.hide,.phase.hide{display:none}
+
+  .footnote{margin-top:56px;padding-top:22px;border-top:1px solid var(--hair);font-size:12px;color:var(--ink-faint);line-height:1.7}
+  .footnote b{color:var(--ink-soft);font-weight:500}
+
+  @media (max-width:760px){
+    .wrap{grid-template-columns:1fr;gap:0;padding:36px 20px 72px}
+    .core{position:static;flex-direction:row;align-items:center;height:auto;gap:16px;margin-bottom:30px;padding-bottom:26px;border-bottom:1px solid var(--hair)}
+    .core-head{display:none}
+    .core-pct{margin:0}
+    .core-tube{flex-direction:row;height:26px;margin-top:0;flex:1}
+    .strata{border-bottom:none;border-right:1px solid var(--hair)}
+    .strata-fill{top:0;bottom:auto;height:100%!important;width:0;transition:width .5s}
+    .strata.filled .strata-fill{width:var(--w)}
+    .strata-tag,.core-foot{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <aside class="core">
+    <div class="core-head">岩芯進度</div>
+    <div class="core-pct" id="pct">0<small>%</small></div>
+    <div class="core-tube" id="tube">
+      <div class="strata" data-phase="0"><div class="strata-fill"></div><span class="strata-tag">P0</span></div>
+      <div class="strata" data-phase="1"><div class="strata-fill"></div><span class="strata-tag">P1</span></div>
+      <div class="strata" data-phase="2"><div class="strata-fill"></div><span class="strata-tag">P2</span></div>
+      <div class="strata" data-phase="3"><div class="strata-fill"></div><span class="strata-tag">P3</span></div>
+      <div class="strata" data-phase="4"><div class="strata-fill"></div><span class="strata-tag">P4</span></div>
+      <div class="strata" data-phase="5"><div class="strata-fill"></div><span class="strata-tag">P5</span></div>
+      <div class="strata" data-phase="6"><div class="strata-fill"></div><span class="strata-tag">P6</span></div>
+      <div class="strata" data-phase="7"><div class="strata-fill"></div><span class="strata-tag">P7</span></div>
+      <div class="strata" data-phase="8"><div class="strata-fill"></div><span class="strata-tag">P8</span></div>
+    </div>
+    <div class="core-foot">每完成一個 Phase，該層長出結晶。整根填滿＝全案交付。</div>
+  </aside>
+
+  <main>
+    <header class="mast">
+      <div class="eyebrow">Second Brain · Capture Vault</div>
+      <h1>Geode <span class="alt">執行驗收</span></h1>
+      <p class="sub">多平台視覺與文字收藏中樞。名字是暫定代號，可隨時替換；下方 40 個步驟＋9 道驗收關卡，勾選後自動存在這個瀏覽器。</p>
+    </header>
+
+    <div class="bar">
+      <div class="filters" id="filters">
+        <button data-f="all" class="on" type="button">全部</button>
+        <button data-f="todo" type="button">未完成</button>
+        <button data-f="done" type="button">已完成</button>
+      </div>
+      <div class="spacer"></div>
+      <span class="js-note" id="jsnote"></span>
+      <button class="ghost" id="reset" type="button">清空進度</button>
+    </div>
+
+    <section class="phase" data-phase="0">
+      <div class="phase-head">
+        <span class="phase-code">P0</span><h2 class="phase-title">命名與品牌</h2>
+        <span class="phase-count" data-count></span>
+      </div>
+      <p class="phase-note">地基前的地基。名字定案、確認沒撞名、把專案內識別換掉。</p>
+      <label class="row"><input type="checkbox" data-id="0-0"><span class="row-body"><span class="row-code">0.1</span><span class="row-text">從候選名（Geode / Cairn / Loom / Trove）選定最終名字</span></span></label>
+      <label class="row"><input type="checkbox" data-id="0-1"><span class="row-body"><span class="row-code">0.2</span><span class="row-text">查 App Store 名稱可用性，避免強碰撞</span></span></label>
+      <label class="row"><input type="checkbox" data-id="0-2"><span class="row-body"><span class="row-code">0.3</span><span class="row-text">更新專案內部識別與 bundle 命名策略</span></span></label>
+      <label class="row"><input type="checkbox" data-id="0-3"><span class="row-body"><span class="row-code">0.4</span><span class="row-text">（選配）佔位社群帳號 / 網域</span></span></label>
+      <label class="row"><input type="checkbox" data-id="0-4"><span class="row-body"><span class="row-code">0.5</span><span class="row-text">Logo 與符號方向，可延用既有 𓆸 / 𖤓 系統</span></span></label>
+      <label class="gate"><input type="checkbox" data-id="gate-0"><span><span class="gate-label">驗收關卡 P0</span><span class="gate-text">新名字定案、App Store 無強碰撞、專案內識別已全數更換</span></span></label>
+    </section>
+
+    <section class="phase" data-phase="1">
+      <div class="phase-head">
+        <span class="phase-code">P1</span><h2 class="phase-title">資料骨架</h2>
+        <span class="phase-count" data-count></span>
+      </div>
+      <p class="phase-note">整個系統的地基。只要進來的東西都是同一種格式，上層要換要加都不傷筋骨。</p>
+      <label class="row"><input type="checkbox" data-id="1-0"><span class="row-body"><span class="row-code">1.1</span><span class="row-text">定義標準化 item schema（id / content_type / media_path / source / author / tags…）</span></span></label>
+      <label class="row"><input type="checkbox" data-id="1-1"><span class="row-body"><span class="row-code">1.2</span><span class="row-text">選定 storage 方案（本地 SQLite 起步，或 Supabase / R2）</span></span></label>
+      <label class="row"><input type="checkbox" data-id="1-2"><span class="row-body"><span class="row-code">1.3</span><span class="row-text">圖片下載與存放邏輯——存本體，不存會過期的平台 CDN 連結</span></span></label>
+      <label class="row"><input type="checkbox" data-id="1-3"><span class="row-body"><span class="row-code">1.4</span><span class="row-text">content_type 分流（image / text）</span></span></label>
+      <label class="row"><input type="checkbox" data-id="1-4"><span class="row-body"><span class="row-code">1.5</span><span class="row-text">設定 App Group 共享容器（主 App 與 Extension 共用）</span></span></label>
+      <label class="row"><input type="checkbox" data-id="1-5"><span class="row-body"><span class="row-code">1.6</span><span class="row-text">待處理佇列（ingest queue）機制</span></span></label>
+      <label class="gate"><input type="checkbox" data-id="gate-1"><span><span class="gate-label">驗收關卡 P1</span><span class="gate-text">一筆假資料能完整走完「進佇列 → 下載 → 落地成標準格式」</span></span></label>
+    </section>
+
+    <section class="phase" data-phase="2">
+      <div class="phase-head">
+        <span class="phase-code">P2</span><h2 class="phase-title">iOS Share Extension（圖片平台）</h2>
+        <span class="phase-count" data-count></span>
+      </div>
+      <p class="phase-note">接住小紅書 / IG / 抖音 / Pinterest 的分享。Extension 記憶體吃緊，只做輕量落地。</p>
+      <label class="row"><input type="checkbox" data-id="2-0"><span class="row-body"><span class="row-code">2.1</span><span class="row-text">建立 Share Extension target</span></span></label>
+      <label class="row"><input type="checkbox" data-id="2-1"><span class="row-body"><span class="row-code">2.2</span><span class="row-text">Info.plist 宣告 activation rule（接受圖片 / URL）</span></span></label>
+      <label class="row"><input type="checkbox" data-id="2-2"><span class="row-body"><span class="row-code">2.3</span><span class="row-text">ShareViewController 接收 NSExtensionItem</span></span></label>
+      <label class="row"><input type="checkbox" data-id="2-3"><span class="row-body"><span class="row-code">2.4</span><span class="row-text">只做輕量落地：寫進 App Group 佇列後立刻結束</span></span></label>
+      <label class="row"><input type="checkbox" data-id="2-4"><span class="row-body"><span class="row-code">2.5</span><span class="row-text">主 App 讀佇列 → 下載 → 標準化</span></span></label>
+      <label class="row"><input type="checkbox" data-id="2-5"><span class="row-body"><span class="row-code">2.6</span><span class="row-text">逐平台實測（小紅書 → IG → 抖音封面 → Pinterest）</span></span></label>
+      <label class="gate"><input type="checkbox" data-id="gate-2"><span><span class="gate-label">驗收關卡 P2</span><span class="gate-text">四個圖片平台分享皆落地成標準 item；抖音能抓到影片封面</span></span></label>
+    </section>
+
+    <section class="phase" data-phase="3">
+      <div class="phase-head">
+        <span class="phase-code">P3</span><h2 class="phase-title">AI 自動標籤</h2>
+        <span class="phase-count" data-count></span>
+      </div>
+      <p class="phase-note">圖片進來自動打標籤。編織風格先走自由文字，聚類浮現後再定義正式分類。</p>
+      <label class="row"><input type="checkbox" data-id="3-0"><span class="row-body"><span class="row-code">3.1</span><span class="row-text">定義標籤維度（品項 / 材質 / 風格 / 色彩）</span></span></label>
+      <label class="row"><input type="checkbox" data-id="3-1"><span class="row-body"><span class="row-code">3.2</span><span class="row-text">接 vision model（Claude API）產生標籤</span></span></label>
+      <label class="row"><input type="checkbox" data-id="3-2"><span class="row-body"><span class="row-code">3.3</span><span class="row-text">用你的水晶知識庫初始化標籤庫</span></span></label>
+      <label class="row"><input type="checkbox" data-id="3-3"><span class="row-body"><span class="row-code">3.4</span><span class="row-text">編織風格走自由文字標籤，先不硬分類</span></span></label>
+      <label class="gate"><input type="checkbox" data-id="gate-3"><span><span class="gate-label">驗收關卡 P3</span><span class="gate-text">圖片進來自動產出可用的品項 / 材質 / 風格標籤</span></span></label>
+    </section>
+
+    <section class="phase" data-phase="4">
+      <div class="phase-head">
+        <span class="phase-code">P4</span><h2 class="phase-title">色彩萃取</h2>
+        <span class="phase-count" data-count></span>
+      </div>
+      <p class="phase-note">對設計選色直接有用。每張圖吐出可複製的色票。</p>
+      <label class="row"><input type="checkbox" data-id="4-0"><span class="row-body"><span class="row-code">4.1</span><span class="row-text">主色 + 輔色萃取（colorthief 或簡單 k-means）</span></span></label>
+      <label class="row"><input type="checkbox" data-id="4-1"><span class="row-body"><span class="row-code">4.2</span><span class="row-text">輸出 HEX 存進 palette 欄位</span></span></label>
+      <label class="row"><input type="checkbox" data-id="4-2"><span class="row-body"><span class="row-code">4.3</span><span class="row-text">App 內色票可一鍵複製</span></span></label>
+      <label class="gate"><input type="checkbox" data-id="gate-4"><span><span class="gate-label">驗收關卡 P4</span><span class="gate-text">每張圖都有可一鍵複製的主色 / 輔色色票</span></span></label>
+    </section>
+
+    <section class="phase" data-phase="5">
+      <div class="phase-head">
+        <span class="phase-code">P5</span><h2 class="phase-title">文字收藏路徑（FB / Threads / 網站）</h2>
+        <span class="phase-count" data-count></span>
+      </div>
+      <p class="phase-note">銜接 Keepbox 既有閱讀器，圖與文兩條路徑並行。</p>
+      <label class="row"><input type="checkbox" data-id="5-0"><span class="row-body"><span class="row-code">5.1</span><span class="row-text">文字型分享接收（純文字 / 連結）</span></span></label>
+      <label class="row"><input type="checkbox" data-id="5-1"><span class="row-body"><span class="row-code">5.2</span><span class="row-text">網頁正文抽取（Readability，去廣告雜訊）→ md/html</span></span></label>
+      <label class="row"><input type="checkbox" data-id="5-2"><span class="row-body"><span class="row-code">5.3</span><span class="row-text">銜接 Keepbox 既有 HTML/MD 閱讀器</span></span></label>
+      <label class="row"><input type="checkbox" data-id="5-3"><span class="row-body"><span class="row-code">5.4</span><span class="row-text">圖 / 文用 content_type 分流，互不打架</span></span></label>
+      <label class="gate"><input type="checkbox" data-id="gate-5"><span><span class="gate-label">驗收關卡 P5</span><span class="gate-text">好文 / 梗文分享能存成可讀清單，不與圖片路徑衝突</span></span></label>
+    </section>
+
+    <section class="phase" data-phase="6">
+      <div class="phase-head">
+        <span class="phase-code">P6</span><h2 class="phase-title">Notion sync</h2>
+        <span class="phase-count" data-count></span>
+      </div>
+      <p class="phase-note">Notion 只當檢索介面，圖本體留在自有 storage。</p>
+      <label class="row"><input type="checkbox" data-id="6-0"><span class="row-body"><span class="row-code">6.1</span><span class="row-text">Notion database schema 對應</span></span></label>
+      <label class="row"><input type="checkbox" data-id="6-1"><span class="row-body"><span class="row-code">6.2</span><span class="row-text">metadata + 縮圖 URL 同步（圖本體留 storage）</span></span></label>
+      <label class="row"><input type="checkbox" data-id="6-2"><span class="row-body"><span class="row-code">6.3</span><span class="row-text">決定單向 / 雙向同步策略</span></span></label>
+      <label class="row"><input type="checkbox" data-id="6-3"><span class="row-body"><span class="row-code">6.4</span><span class="row-text">檢索測試（依標籤 / 平台）</span></span></label>
+      <label class="gate"><input type="checkbox" data-id="gate-6"><span><span class="gate-label">驗收關卡 P6</span><span class="gate-text">收藏出現在 Notion，且可用標籤 / 平台檢索</span></span></label>
+    </section>
+
+    <section class="phase" data-phase="7">
+      <div class="phase-head">
+        <span class="phase-code">P7</span><h2 class="phase-title">設計工作流串接</h2>
+        <span class="phase-count" data-count></span>
+      </div>
+      <p class="phase-note">真正的殺手鐧——從收藏庫直接產出給客戶的設計初稿素材。</p>
+      <label class="row"><input type="checkbox" data-id="7-0"><span class="row-body"><span class="row-code">7.1</span><span class="row-text">選圖 → 反推可丟 Midjourney / Flux 的 prompt</span></span></label>
+      <label class="row"><input type="checkbox" data-id="7-1"><span class="row-body"><span class="row-code">7.2</span><span class="row-text">一組收藏 → AI 產出一份設計 brief（配色 / 線條 / 風格語言）</span></span></label>
+      <label class="row"><input type="checkbox" data-id="7-2"><span class="row-body"><span class="row-code">7.3</span><span class="row-text">mood board / 排圖輸出</span></span></label>
+      <label class="row"><input type="checkbox" data-id="7-3"><span class="row-body"><span class="row-code">7.4</span><span class="row-text">匯出設計初稿素材包</span></span></label>
+      <label class="gate"><input type="checkbox" data-id="gate-7"><span><span class="gate-label">驗收關卡 P7</span><span class="gate-text">從收藏庫能一鍵產出設計初稿素材包</span></span></label>
+    </section>
+
+    <section class="phase" data-phase="8">
+      <div class="phase-head">
+        <span class="phase-code">P8</span><h2 class="phase-title">第二大腦 / 對外化</h2>
+        <span class="phase-count" data-count></span>
+      </div>
+      <p class="phase-note">讓這個庫變成 Slack 多代理系統可查詢的素材源，並準備對外發布。</p>
+      <label class="row"><input type="checkbox" data-id="8-0"><span class="row-body"><span class="row-code">8.1</span><span class="row-text">Export / query 層，供 Slack @hohoho agents 查詢</span></span></label>
+      <label class="row"><input type="checkbox" data-id="8-1"><span class="row-body"><span class="row-code">8.2</span><span class="row-text">多使用者資料隔離設計</span></span></label>
+      <label class="row"><input type="checkbox" data-id="8-2"><span class="row-body"><span class="row-code">8.3</span><span class="row-text">定價與上架準備</span></span></label>
+      <label class="row"><input type="checkbox" data-id="8-3"><span class="row-body"><span class="row-code">8.4</span><span class="row-text">最小可發布版本打包</span></span></label>
+      <label class="gate"><input type="checkbox" data-id="gate-8"><span><span class="gate-label">驗收關卡 P8</span><span class="gate-text">有可對外發布的最小版本，且資料能被 agents 調用</span></span></label>
+    </section>
+
+    <div class="footnote">
+      <b>使用說明</b>　點整列即可勾選。每個 Phase 底部的「驗收」是通關條件——建議該 Phase 步驟都做完再勾。<br>
+      <b>彈性</b>　要改步驟、加平台、換名字，直接編輯這個 HTML 檔案裡對應的 <code>&lt;label class="row"&gt;</code> 區塊即可。<br>
+      <b>進度儲存</b>　若瀏覽器支援 localStorage，勾選會自動記住；不支援時，勾選狀態仍會停留在畫面上，只是重新整理後會重置。
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  var KEY = "geode_verify_v1";
+  var state = {};
+  var storageOK = true;
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (raw) state = JSON.parse(raw);
+  } catch(e) { storageOK = false; }
+
+  function save(){
+    if(!storageOK) return;
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){}
+  }
+
+  var noteEl = document.getElementById("jsnote");
+  if(noteEl) noteEl.textContent = storageOK ? "" : "（此瀏覽器無法儲存進度，關閉頁面後會重置）";
+
+  var checkboxes = Array.prototype.slice.call(document.querySelectorAll("input[type=checkbox][data-id]"));
+
+  checkboxes.forEach(function(cb){
+    var id = cb.getAttribute("data-id");
+    if(state[id]) cb.checked = true;
+  });
+
+  function phaseEls(){ return Array.prototype.slice.call(document.querySelectorAll(".phase")); }
+
+  function updateCounts(){
+    phaseEls().forEach(function(sec){
+      var rows = Array.prototype.slice.call(sec.querySelectorAll(".row input[type=checkbox]"));
+      var done = rows.filter(function(cb){ return cb.checked; }).length;
+      var countEl = sec.querySelector("[data-count]");
+      if(countEl) countEl.textContent = done + "/" + rows.length;
+
+      var gate = sec.querySelector(".gate");
+      var gateInput = gate ? gate.querySelector("input") : null;
+      var unlocked = done === rows.length;
+      if(gateInput){
+        gateInput.disabled = !unlocked && !gateInput.checked;
+        gate.style.opacity = (unlocked || gateInput.checked) ? "1" : ".5";
+        gate.style.cursor = (unlocked || gateInput.checked) ? "pointer" : "not-allowed";
+      }
+    });
+  }
+
+  function updateCore(){
+    var total = 0, done = 0;
+    phaseEls().forEach(function(sec){
+      var pi = sec.getAttribute("data-phase");
+      var rows = Array.prototype.slice.call(sec.querySelectorAll(".row input[type=checkbox]"));
+      var gateInput = sec.querySelector(".gate input");
+      total += rows.length + (gateInput ? 1 : 0);
+      done += rows.filter(function(cb){ return cb.checked; }).length;
+      if(gateInput && gateInput.checked) done++;
+
+      var prog = rows.length ? rows.filter(function(cb){return cb.checked;}).length / rows.length : 0;
+      var strata = document.querySelector('.strata[data-phase="'+pi+'"]');
+      if(strata){
+        var fillPct = Math.round(prog*100);
+        var fill = strata.querySelector(".strata-fill");
+        if(fill) fill.style.height = fillPct + "%";
+        strata.style.setProperty("--w", fillPct + "%");
+        strata.classList.toggle("filled", prog > 0);
+        strata.classList.toggle("done", !!(gateInput && gateInput.checked));
+      }
+    });
+    var pct = total ? Math.round(done/total*100) : 0;
+    var pctEl = document.getElementById("pct");
+    if(pctEl) pctEl.innerHTML = pct + "<small>%</small>";
+  }
+
+  function applyFilter(f){
+    document.querySelectorAll(".row, .gate").forEach(function(row){
+      var cb = row.querySelector("input[type=checkbox]");
+      var done = cb && cb.checked;
+      var show = f === "all" || (f === "done" && done) || (f === "todo" && !done);
+      row.classList.toggle("hide", !show);
+    });
+    phaseEls().forEach(function(sec){
+      var anyVisible = sec.querySelectorAll(".row:not(.hide), .gate:not(.hide)").length > 0;
+      sec.classList.toggle("hide", !anyVisible);
+    });
+  }
+
+  var currentFilter = "all";
+
+  checkboxes.forEach(function(cb){
+    cb.addEventListener("change", function(){
+      var id = cb.getAttribute("data-id");
+      var isGate = id.indexOf("gate-") === 0;
+      if(isGate && cb.disabled){ cb.checked = false; return; }
+      state[id] = cb.checked;
+      save();
+      updateCounts();
+      updateCore();
+      applyFilter(currentFilter);
+    });
+  });
+
+  var filterBar = document.getElementById("filters");
+  if(filterBar){
+    filterBar.addEventListener("click", function(e){
+      if(e.target.tagName !== "BUTTON") return;
+      currentFilter = e.target.getAttribute("data-f");
+      Array.prototype.slice.call(filterBar.querySelectorAll("button")).forEach(function(b){
+        b.classList.toggle("on", b === e.target);
+      });
+      applyFilter(currentFilter);
+    });
+  }
+
+  var resetBtn = document.getElementById("reset");
+  if(resetBtn){
+    resetBtn.addEventListener("click", function(){
+      if(!confirm("清空所有勾選進度？此動作無法復原。")) return;
+      state = {};
+      save();
+      checkboxes.forEach(function(cb){ cb.checked = false; });
+      currentFilter = "all";
+      Array.prototype.slice.call(filterBar.querySelectorAll("button")).forEach(function(b){
+        b.classList.toggle("on", b.getAttribute("data-f") === "all");
+      });
+      updateCounts();
+      updateCore();
+      applyFilter("all");
+    });
+  }
+
+  var tube = document.getElementById("tube");
+  if(tube){
+    tube.addEventListener("click", function(e){
+      var strata = e.target.closest(".strata");
+      if(!strata) return;
+      var pi = strata.getAttribute("data-phase");
+      var sec = document.querySelector('.phase[data-phase="'+pi+'"]');
+      if(sec) sec.scrollIntoView({behavior:"smooth", block:"start"});
+    });
+  }
+
+  updateCounts();
+  updateCore();
+})();
+</script>
+</body>
+</html>
