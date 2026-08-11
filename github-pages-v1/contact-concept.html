@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>聯絡小麥醫師｜小麥醫師</title>
+  <link rel="stylesheet" href="shared/site-shell.css">
+  <style>
+    :root{--ink:#17375d;--soft:#607486;--paper:#fcfaf6;--gold:#c79a53;--line:rgba(23,55,93,.12)}
+    *{box-sizing:border-box}body{margin:0}.contact-main{padding:clamp(70px,8vw,120px) 5vw 110px}.contact-wrap{width:min(1120px,100%);margin:auto}.eyebrow{margin:0 0 14px;color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.17em}.contact-head{max-width:760px;margin-bottom:48px}.contact-head h1{margin:0 0 20px;font-family:"Songti TC","Noto Serif TC",serif;font-size:clamp(42px,5vw,70px);line-height:1.3}.contact-head p{color:var(--soft);font-size:16px;line-height:1.9}.contact-form{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:clamp(24px,4vw,48px);border:1px solid var(--line);border-radius:32px;background:rgba(255,255,255,.82);box-shadow:0 22px 65px rgba(23,55,93,.06)}.field{display:grid;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:750}.field input,.field select,.field textarea{width:100%;padding:15px 16px;border:1px solid var(--line);border-radius:13px;background:#fff;color:var(--ink);font:inherit}.field textarea{min-height:145px;resize:vertical}.submit{grid-column:1/-1;min-height:50px;border:0;border-radius:999px;color:#fff;background:var(--ink);font-size:14px;font-weight:750}.note{grid-column:1/-1;margin:0;color:var(--soft);font-size:11px;line-height:1.8}.social-section{padding-top:80px}.social-section h2{margin:0 0 12px;font-family:"Songti TC","Noto Serif TC",serif;font-size:clamp(30px,3.5vw,48px)}.social-intro{margin:0 0 32px;color:var(--soft)}.social-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}.social-item{min-width:0;padding:26px 18px 22px;border-top:1px solid var(--line);text-align:center;text-decoration:none;color:var(--ink);transition:transform .25s ease,background .25s ease}.social-item:hover{transform:translateY(-5px);background:rgba(255,255,255,.7)}.social-icon{display:grid;place-items:center;width:70px;height:70px;margin:0 auto 18px;border:1px solid var(--line);border-radius:50%;background:#fff;font-size:17px;font-weight:800;box-shadow:0 10px 28px rgba(23,55,93,.06)}.social-item strong{display:block;margin-bottom:7px;font-size:15px}.social-item small{display:block;color:var(--soft);font-size:11px;line-height:1.7}.mail{margin-top:35px;color:var(--soft);font-size:13px}.mail a{color:var(--ink)}
+    @media(max-width:900px){.social-grid{grid-template-columns:repeat(2,1fr)}.social-item:last-child{grid-column:1/-1}}
+    @media(max-width:620px){.contact-main{padding-inline:5vw}.contact-form{grid-template-columns:1fr;border-radius:24px}.contact-form>*{grid-column:1!important}.social-grid{grid-template-columns:1fr}.social-item:last-child{grid-column:auto}.social-item{display:grid;grid-template-columns:70px 1fr;gap:16px;text-align:left;align-items:center}.social-icon{margin:0;grid-row:1/3}.social-item strong,.social-item small{margin:0}}
+  </style>
+  <script defer src="shared/site-shell.js"></script>
+</head>
+<body>
+  <main class="contact-main">
+    <div class="contact-wrap">
+      <header class="contact-head">
+        <p class="eyebrow">CONTACT DR. WHEAT</p>
+        <h1>聯絡小麥醫師</h1>
+        <p>歡迎提供內容建議、媒體或合作邀請與一般聯絡。此處不提供線上問診，也請不要填寫病歷、檢查報告或其他敏感健康資料。</p>
+      </header>
+
+      <form class="contact-form" onsubmit="event.preventDefault()">
+        <div class="field"><label for="contact-name">稱呼</label><input id="contact-name" placeholder="如何稱呼您"></div>
+        <div class="field"><label for="contact-email">Email</label><input id="contact-email" type="email" placeholder="example@email.com"></div>
+        <div class="field full"><label for="contact-topic">聯絡主題</label><select id="contact-topic"><option>內容建議</option><option>媒體或合作邀請</option><option>網站意見</option><option>其他</option></select></div>
+        <div class="field full"><label for="contact-message">想說的內容</label><textarea id="contact-message" placeholder="請輸入內容"></textarea></div>
+        <button class="submit" type="submit">送出內容</button>
+        <p class="note">審閱版表單不會傳送資料。正式版將加入隱私同意、垃圾訊息防護與送出結果提示。</p>
+      </form>
+
+      <section class="social-section" aria-labelledby="social-title">
+        <p class="eyebrow">FOLLOW & CONNECT</p>
+        <h2 id="social-title">也可以從熟悉的平台找到小麥醫師</h2>
+        <p class="social-intro">正式社群網址確認後會直接連到各平台。</p>
+        <div class="social-grid">
+          <a class="social-item" href="#" onclick="return false"><span class="social-icon">FB</span><strong>Facebook</strong><small>閱讀健康知識、活動消息與較完整的內容分享。</small></a>
+          <a class="social-item" href="#" onclick="return false"><span class="social-icon">LINE</span><strong>LINE 官方帳號</strong><small>接收最新資訊，未來也可銜接預先帶入訊息的聯絡方式。</small></a>
+          <a class="social-item" href="#" onclick="return false"><span class="social-icon">IG</span><strong>Instagram</strong><small>用圖像與短內容，輕鬆認識內分泌與日常健康。</small></a>
+          <a class="social-item" href="#" onclick="return false"><span class="social-icon">TH</span><strong>Threads</strong><small>追蹤小麥醫師的即時想法、短篇提醒與日常觀察。</small></a>
+          <a class="social-item" href="mailto:ilovemedicalnews@gmail.com"><span class="social-icon">@</span><strong>Email</strong><small>適合媒體、合作邀請與需要留下完整資訊的一般聯絡。</small></a>
+        </div>
+        <p class="mail">Email：<a href="mailto:ilovemedicalnews@gmail.com">ilovemedicalnews@gmail.com</a></p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
